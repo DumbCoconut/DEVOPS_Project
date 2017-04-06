@@ -16,11 +16,15 @@ public class Client {
      * Display the help message.
      */
     private void help() {
-        // TODO : fix display
+        // TODO : fix display to be more constant.
         System.out.println("Help");
         Collection<Option> options = opt.getOptions();
         for (Option o : options) {
-                System.out.println(o.getOpt() + "\t" + "\t" + o.getDescription());
+            if (o.hasLongOpt()) {
+                System.out.println("-" + o.getOpt() + "\t\t--" + o.getLongOpt() + "\t\t" + o.getDescription());
+            } else {
+                System.out.println("-" + o.getOpt() + "\t\t\t\t" + o.getDescription());
+            }
         }
     }
 

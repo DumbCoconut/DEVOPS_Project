@@ -29,13 +29,6 @@ public class Client {
     }
 
     /**
-     * Terminates the client.
-     */
-    private void quit() {
-        System.exit(0);
-    }
-
-    /**
      * Test if the specified key exists.
      * @param key The key to test.
      * @return True if the key exists, false otherwise.
@@ -223,15 +216,7 @@ public class Client {
                             .hasArg(false)
                             .desc("Display this information")
                             .build();
-
-        Option quit = Option.builder("q")
-                            .longOpt("quit")
-                            .hasArg(false)
-                            .desc("Quit this client")
-                            .build();
-
         opt.addOption(help);
-        opt.addOption(quit);
     }
 
     /**

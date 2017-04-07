@@ -135,6 +135,14 @@ public class StorageTest {
     }
 
     @Test
+    public void replaceValueInCache() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = createAndStoreHelper(2L);
+        String newValue = "Same job, different outfit.";
+        s.replace("key2", newValue);
+        assertEquals(s.get("key2"), newValue);
+    }
+
+    @Test
     public void basicKeyException() throws KeyException {
         thrown.expect(KeyException.class);
         thrown.expectMessage("key");

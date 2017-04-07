@@ -102,4 +102,13 @@ public class Storage {
         }
         cache.remove(key);
     }
+
+    /**
+     * Replace the old value of key by a new value.
+     * @param key The key holding the old value.
+     * @param value The new value.
+     */
+    public synchronized void replace(String key, Object value) {
+        cache.replace(key, value);
+    }
 }

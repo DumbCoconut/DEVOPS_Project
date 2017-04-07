@@ -166,7 +166,7 @@ public class Server implements RedisLikeServer {
      */
     public void set(String key, Object value) {
         try {
-            storage.store(value, key);
+            storage.store(key, value);
         } catch (DuplicatedKeyException e) {
             storage.replace(key, value);
         }

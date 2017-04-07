@@ -17,7 +17,7 @@ public class StorageTest {
     private Storage createAndStoreHelper(Long nbObjects) throws DuplicatedKeyException {
         Storage s = new Storage(nbObjects);
         for (Long i = 0L; i < nbObjects; i++) {
-            s.store("object" + (i + 1), "key" + (i + 1));
+            s.store("key" + (i + 1), "object" + (i + 1));
         }
         return s;
     }
@@ -80,13 +80,13 @@ public class StorageTest {
         thrown.expectMessage(matcherDuplicateKeyHelper());
 
         Storage s = createAndStoreHelper(3L);
-        s.store("object4", "key3");
+        s.store("key3", "object4");
     }
 
     @Test
     public void storeOverTheSizeLimit() throws KeyException {
         Storage s = createAndStoreHelper(3L);
-        s.store("object4", "key4");
+        s.store("key4", "object4");
         containsHelper(s, new boolean[]{false, true, true, true});
     }
 

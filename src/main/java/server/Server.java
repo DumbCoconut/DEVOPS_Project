@@ -11,7 +11,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
-public class Server implements Remote {
+public class Server implements RedisLikeServer {
     public static final int DEFAULT_PORT = 9000;
     public static int NUM_SERV = 0;
 
@@ -160,9 +160,8 @@ public class Server implements Remote {
      * @param value The value to set.
      * @return True if we set the value, false otherwise.
      */
-    public boolean set(String key, Object value) {
+    public void set(String key, Object value) {
         // TODO
-        return false;
     }
 
     /**

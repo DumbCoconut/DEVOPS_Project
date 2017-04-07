@@ -1,6 +1,8 @@
 package server;
 
 import org.apache.commons.cli.*;
+import storage.DuplicatedKeyException;
+import storage.NonExistentKeyException;
 import storage.Storage;
 
 import java.rmi.AlreadyBoundException;
@@ -150,18 +152,24 @@ public class Server implements RedisLikeServer {
      * @return The value of the key if it exists, null otherwise.
      */
     public Object get(String key) {
-        // TODO
-        return null;
+        try {
+            return storage.get(key);
+        } catch (NonExistentKeyException e) {
+            return null;
+        }
     }
 
     /**
      * Set key to hold the string value. If key already holds a value, it is overwritten, regardless of its type.
      * @param key The key holding the value.
      * @param value The value to set.
-     * @return True if we set the value, false otherwise.
      */
     public void set(String key, Object value) {
-        // TODO
+        try {
+            storage.store(value, key);
+        } catch (DuplicatedKeyException e) {
+            storage.replace(key, value);
+        }
     }
 
     /**
@@ -170,50 +178,77 @@ public class Server implements RedisLikeServer {
      * @return one of "none", "string", "int", "list". "none" is returned if the key does not exist.
      */
     public String type(String key) {
-        // TODO
-        return null;
+        try {
+            return storage.get(key).getClass().getSimpleName();
+        } catch (NonExistentKeyException e) {
+            return "none";
+        }
     }
 
     /**
      * Decrement the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @return the new value of key after the decrement.
      */
     public int decr(String key) {
-        // TODO
-        return 0;
+        return incrBy(key, -1);
     }
 
     /**
      * Decrement the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @param integer The increment value.
      * @return the new value of key after the decrement.
      */
     public int decrBy(String key, int integer) {
-        // TODO
-        return 0;
+        return incrBy(key, -integer);
     }
 
     /**
      * Increment the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @return the new value of key after the Increment.
      */
     public int incr(String key) {
-        // TODO
-        return 0;
+        return incrBy(key, 1);
     }
 
     /**
      * Increment the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @param integer The increment value.
      * @return the new value of key after the Increment.
      */
     public int incrBy(String key, int integer) {
-        // TODO
-        return 0;
+        int newValue = integer;
+        try {
+            Object o = storage.get(key);
+            if (o instanceof Integer) {
+                newValue += (Integer) o;
+                set(key, newValue);
+            } else {
+                set(key, integer);
+            }
+        } catch (NonExistentKeyException e) {
+            set(key, integer);
+        }
+        return newValue;
     }
 
     /**
@@ -222,8 +257,12 @@ public class Server implements RedisLikeServer {
      * @return True if the key existed and has been removed, false otherwise.
      */
     public boolean del(String key) {
-        // TODO
-        return false;
+        try {
+            storage.remove(key);
+            return true;
+        } catch (NonExistentKeyException e) {
+            return false;
+        }
     }
 
     /**

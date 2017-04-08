@@ -1,15 +1,26 @@
 package server;
 
 import org.apache.commons.cli.ParseException;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 
 import static org.junit.Assert.*;
 
 public class ServerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private static final String EOL = System.getProperty("line.separator");
+
+    private ByteArrayOutputStream testOutput;
+    private PrintStream console = System.out;
 
     private String defaultKey = "key";
     private String nonExistentKey = "non_existent_key";
@@ -38,6 +49,16 @@ public class ServerTest {
         Server s = new Server();
         s.set(defaultKey, defaultInt);
         return s;
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        testOutput = new ByteArrayOutputStream();
+    }
+
+    @After
+    public void tearDown() throws IOException {
+        testOutput.close();
     }
 
     @Test
@@ -71,6 +92,11 @@ public class ServerTest {
     }
 
     @Test
+    public void serverNameParserShouldNotExit() throws ParseException {
+        assertEquals(new Server().parse(new String[]{"--name", "name"}), false);
+    }
+
+    @Test
     public void serverPortParserShortOpt() throws ParseException {
         Server s = new Server();
         String port = "118218";
@@ -92,6 +118,38 @@ public class ServerTest {
         String port = "What is it with steel wool?";
         s.parse(new String[]{"-p", port});
         assertEquals(s.getPort(), Server.DEFAULT_PORT);
+    }
+
+    @Test
+    public void serverPortParserShouldNotExit() throws ParseException {
+        assertEquals(new Server().parse(new String[]{"--port", "999"}), false);
+    }
+
+    @Test
+    public void helpPrintedToStdOut() {
+        try {
+            System.setOut(new PrintStream(testOutput));
+            new Server().help();
+        } finally {
+            System.setOut(System.out);
+        }
+        assertEquals("Options:" + EOL
+                        + "\t-h\t--help\tDisplay this information." + EOL
+                        + "\t-n\t--name\tSet the name of this server." + EOL
+                        + "\t-p\t--port\tSet the port of this server." + EOL,
+                     testOutput.toString());
+    }
+
+    @Test
+    public void parseOnlyHelpShouldPrint() throws ParseException {
+        System.setOut(new PrintStream(testOutput)); // To throw away the display
+        assertEquals(new Server().parse(new String[]{"--help"}), true);
+    }
+
+    @Test
+    public void parseWithHelpShouldPrint() throws ParseException {
+        System.setOut(new PrintStream(testOutput)); // To throw away the display
+        assertEquals(new Server().parse(new String[]{"--name", "jean", "--help"}), true);
     }
 
     @Test

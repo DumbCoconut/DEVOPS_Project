@@ -52,11 +52,9 @@ public class Client {
      * Set key to hold the string value. If key already holds a value, it is overwritten, regardless of its type.
      * @param key The key holding the value.
      * @param value The value to set.
-     * @return True if we set the value, false otherwise.
      */
-    private boolean set(String key, Object value) {
+    private void set(String key, Object value) {
         // TODO
-        return false;
     }
 
     /**
@@ -71,6 +69,10 @@ public class Client {
 
     /**
      * Decrement the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @return the new value of key after the decrement.
      */
@@ -81,6 +83,10 @@ public class Client {
 
     /**
      * Decrement the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @param integer The increment value.
      * @return the new value of key after the decrement.
@@ -92,6 +98,10 @@ public class Client {
 
     /**
      * Increment the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @return the new value of key after the Increment.
      */
@@ -102,6 +112,10 @@ public class Client {
 
     /**
      * Increment the number stored at key by one.
+     * <p>
+     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
+     *     before to perform the increment or decrement operation.
+     * </p>
      * @param key The key holding the value.
      * @param integer The increment value.
      * @return the new value of key after the Increment.
@@ -119,81 +133,5 @@ public class Client {
     private boolean del(String key) {
         // TODO
         return false;
-    }
-
-    /**
-     * Return the specified element of the list stored at the specified key.
-     * @param key The key holding the list.
-     * @param index The index of the value in the list.
-     * @return The requested element.
-     */
-    private Object lIndex(String key, int index) {
-        // TODO
-        return null;
-    }
-
-    /**
-     * Set the list element at index (see LINDEX for information about the index argument) with the new value.
-     * Out of range indexes will generate an error.
-     * @param key The key holding the list.
-     * @param index The index of the value in the list.
-     * @param value The value to set.
-     * @return True if we set the value, false otherwise.
-     */
-    private boolean lSet(String key, int index, Object value) {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Add the value to the tail of the list stored at key.
-     * @param key The key holding the list.
-     * @param value The value to add to the tail of the list.
-     * @return true if it has been added, false otherwise.
-     */
-    private boolean lPush(String key, Object value) {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Add the value to the head of the list stored at key.
-     * @param key The key holding the list.
-     * @param value The value to add to the head of the list.
-     * @return true if it has been added, false otherwise.
-     */
-    private boolean rPush(String key, Object value) {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Atomically return and remove the first element of the list.
-     * @param key The key holding the list.
-     * @return The element that has been removed if it existed, null otherwise.
-     */
-    private Object lPop(String key) {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Atomically return and remove the last element of the list.
-     * @param key The key holding the list.
-     * @return The element that has been removed if it existed, null otherwise.
-     */
-    private Object rPop(String key) {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Return the length of the list stored at the specified key.
-     * @param key The key holding the list.
-     * @return the length of the list stored at the specified key.
-     */
-    private int lLen(String key) {
-        // TODO
-        return 0;
     }
 }

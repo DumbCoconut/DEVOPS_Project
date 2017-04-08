@@ -11,7 +11,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Collection;
 
 public class Server implements RedisLikeServer {
     public static final int DEFAULT_PORT = 9000;
@@ -27,14 +26,18 @@ public class Server implements RedisLikeServer {
     public static void main(String[] args) {
         Server server = new Server();
         try {
-            server.parse(args);
+            boolean help = server.parse(args);
+            if (help) {
+                server.help();
+                System.exit(0);
+            }
             Registry registry = LocateRegistry.getRegistry();
             Remote remote = UnicastRemoteObject.exportObject(server, server.getPort());
             registry.bind(server.getName(), remote);
         } catch (RemoteException | AlreadyBoundException e) {
             e.printStackTrace();
         } catch (ParseException e) {
-            System.err.println("Parsing failed.  Reason: " + e.getMessage());
+            System.err.println("Parsing failed. Reason: " + e.getMessage());
             server.help();
         }
     }
@@ -74,7 +77,7 @@ public class Server implements RedisLikeServer {
         Option help = Option.builder("h")
                             .longOpt("help")
                             .hasArg(false)
-                            .desc("Display this information")
+                            .desc("Display this information.")
                             .build();
 
         Option name = Option.builder("n")
@@ -101,13 +104,16 @@ public class Server implements RedisLikeServer {
      *     i.e the name and the port will keep their default values.
      * </p>
      * @param args The arguments of the command line.
+     * @return True if the server should display the help after parsing, false otherwise.
      * @throws ParseException If there are any problems encountered while parsing the command line tokens.
      */
-    public void parse(String[] args) throws ParseException {
+    public boolean parse(String[] args) throws ParseException {
         CommandLineParser parser = new DefaultParser();
         commandLine = parser.parse(opt, args);
+        if (commandLine.hasOption("help")) return true;
         if (commandLine.hasOption("name")) name = getNameFromCommandLine();
         if (commandLine.hasOption("port")) port = getPortFromCommandLine();
+        return false;
     }
 
     /**
@@ -134,16 +140,10 @@ public class Server implements RedisLikeServer {
      * Display the help message.
      */
     public void help() {
-        // TODO : fix display to be more constant.
-        System.out.println("Help");
-        Collection<Option> options = opt.getOptions();
-        for (Option o : options) {
-            if (o.hasLongOpt()) {
-                System.out.println("-" + o.getOpt() + "\t\t--" + o.getLongOpt() + "\t\t" + o.getDescription());
-            } else {
-                System.out.println("-" + o.getOpt() + "\t\t\t\t" + o.getDescription());
-            }
-        }
+        System.out.println("Options:");
+        System.out.println("\t-h\t--help\tDisplay this information.");
+        System.out.println("\t-n\t--name\tSet the name of this server.");
+        System.out.println("\t-p\t--port\tSet the port of this server.");
     }
 
     /**

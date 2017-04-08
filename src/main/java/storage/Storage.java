@@ -67,11 +67,11 @@ public class Storage {
 
     /**
      * Store an object in the storage.
-     * @param o The object to store.
      * @param key The key corresponding to the object.
+     * @param o The object to store.
      * @throws DuplicatedKeyException When the key is already used.
      */
-    public synchronized void store(Object o, String key) throws DuplicatedKeyException {
+    public synchronized void store(String key, Object o) throws DuplicatedKeyException {
         if (cache.containsKey(key)) {
             throw new DuplicatedKeyException(key);
         }
@@ -101,5 +101,14 @@ public class Storage {
             throw new NonExistentKeyException(key);
         }
         cache.remove(key);
+    }
+
+    /**
+     * Replace the old value of key by a new value.
+     * @param key The key holding the old value.
+     * @param value The new value.
+     */
+    public synchronized void replace(String key, Object value) {
+        cache.replace(key, value);
     }
 }

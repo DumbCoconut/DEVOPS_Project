@@ -1,5 +1,6 @@
 package client.requests;
 
+import client.requests.exceptions.InvalidNbArgException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,7 +26,7 @@ public class RequestWithKeyTest {
 
     @Test
     public void reqWithKeyNotEnoughToken() throws Exception {
-        thrown.expect(Exception.class);
+        thrown.expect(InvalidNbArgException.class);
         createRequest(minNbTokens - 1);
     }
 

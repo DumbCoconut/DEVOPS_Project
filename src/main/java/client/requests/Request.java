@@ -1,16 +1,18 @@
 package client.requests;
 
+import client.requests.exceptions.NoTokensException;
+
 import java.util.ArrayList;
 
 public abstract class Request {
     protected ArrayList<String> tokens;
     private int nbArgs;
 
-    public Request(ArrayList<String> tokens) throws Exception {
+    public Request(ArrayList<String> tokens) throws NoTokensException {
         this.tokens = tokens;
         nbArgs = tokens.size() - 1;
         if (tokens.isEmpty()) {
-            throw new Exception();
+            throw new NoTokensException();
         }
     }
 

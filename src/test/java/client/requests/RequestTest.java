@@ -1,5 +1,6 @@
 package client.requests;
 
+import client.requests.exceptions.NoTokensException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,7 +28,8 @@ public class RequestTest {
 
     @Test
     public void constructorWith0Tokens() throws Exception {
-        thrown.expect(Exception.class);
+        thrown.expect(NoTokensException.class);
+        thrown.expectMessage("(error) no tokens were provided to the request.");
 
         createMockObject(-1);
     }

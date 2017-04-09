@@ -2,6 +2,8 @@ package client;
 
 import client.requests.RequestName;
 import client.requests.dataTypes.*;
+import client.requests.exceptions.InvalidNbArgException;
+import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -50,64 +52,64 @@ public class Client {
                 try {
                     RequestGet r = new RequestGet(tokens);
                     get(r.getKey());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case RequestName.SET:
                 try {
                     RequestSet r = new RequestSet(tokens);
                     set(r.getKey(), r.getObject());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case RequestName.TYPE:
                 try {
                     RequestType r = new RequestType(tokens);
                     type(r.getKey());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                  break;
             case RequestName.DECR:
                 try {
                     RequestDecr r = new RequestDecr(tokens);
                     decr(r.getKey());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case RequestName.DECRBY:
                 try {
                     RequestDecrBy r = new RequestDecrBy(tokens);
                     decrBy(r.getKey(), Integer.valueOf(r.getInteger()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case RequestName.INCR:
                 try {
                     RequestIncr r = new RequestIncr(tokens);
                     incr(r.getKey());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case RequestName.INCRBY:
                 try {
                     RequestIncrBy r = new RequestIncrBy(tokens);
                     incrBy(r.getKey(), Integer.valueOf(r.getInteger()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case RequestName.DEL:
                 try {
                     RequestDel r = new RequestDel(tokens);
                     del(r.getKey());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             default:

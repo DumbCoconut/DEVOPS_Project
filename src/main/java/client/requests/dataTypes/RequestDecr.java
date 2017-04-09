@@ -1,19 +1,23 @@
 package client.requests.dataTypes;
 
 import client.requests.RequestWithKey;
+import client.requests.exceptions.InvalidNbArgException;
+import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
 public class RequestDecr extends RequestWithKey {
-    public RequestDecr(ArrayList<String> tokens) throws Exception {
+    private final int minNbArgs = 1;
+
+    public RequestDecr(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
-        setNbArgs(1);
+        setNbArgs(minNbArgs);
         parse();
     }
 
-    public void parse() throws Exception {
+    public void parse() throws InvalidNbArgException {
         if (tokens.size() != nbExpectedTokens()) {
-            throw new Exception();
+            throw new InvalidNbArgException(tokens.size() - 1, minNbArgs);
         }
     }
 

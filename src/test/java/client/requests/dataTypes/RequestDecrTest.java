@@ -1,5 +1,6 @@
 package client.requests.dataTypes;
 
+import client.requests.exceptions.InvalidNbArgException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,7 +26,9 @@ public class RequestDecrTest {
 
     @Test
     public void reqDecrNotEnoughToken() throws Exception {
-        thrown.expect(Exception.class);
+        thrown.expect(InvalidNbArgException.class);
+        thrown.expectMessage("(error) wrong number of arguments (given " + (legitNbTokens - 2)
+                + ", expected " + (legitNbTokens - 1) + ")");
         createRequest(legitNbTokens - 1);
     }
 
@@ -36,7 +39,9 @@ public class RequestDecrTest {
 
     @Test
     public void reqDecrTooManyToken() throws Exception {
-        thrown.expect(Exception.class);
+        thrown.expect(InvalidNbArgException.class);
+        thrown.expectMessage("(error) wrong number of arguments (given " + legitNbTokens
+                + ", expected " + (legitNbTokens - 1) + ")");
         createRequest(legitNbTokens + 1);
     }
 

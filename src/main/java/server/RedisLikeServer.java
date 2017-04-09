@@ -2,7 +2,7 @@ package server;
 
 import java.rmi.Remote;
 
-interface RedisLikeServer extends Remote {
+public interface RedisLikeServer extends Remote {
     /**
      * Get the value of the specified key.
      * @param key The key we want the value of.

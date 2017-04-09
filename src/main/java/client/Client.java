@@ -1,19 +1,25 @@
 package client;
 
 import client.requests.RequestName;
+import client.requests.client.RequestAddServer;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
+import server.RedisLikeServer;
+import server.Server;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Client {
-    public static final String QUIT     = "quit";
-    public static final String EXIT     = "exit";
-
+    private RedisLikeServer server;
+    private Registry registry;
 
     private boolean exitRequested;
     private ArrayList<String> tokens;
@@ -43,10 +49,20 @@ public class Client {
         switch (cmd) {
             case RequestName.HELP:
                 break;
-            case QUIT:
-            case EXIT:
+            case RequestName.QUIT:
+            case RequestName.EXIT:
                 exitRequested = true;
                 System.out.println("Bye!");
+                break;
+            case RequestName.ADD_SERVER:
+                try {
+                    RequestAddServer r = new RequestAddServer(tokens);
+                    addServer(r.getIp(), r.getName());
+                } catch (InvalidNbArgException | NoTokensException e) {
+                    System.out.println(e.getMessage());
+                } catch (RemoteException | NotBoundException e) {
+                    e.printStackTrace();
+                }
                 break;
             case RequestName.GET:
                 try {
@@ -151,6 +167,11 @@ public class Client {
 
     }
 
+    private void addServer(String ip, String name) throws RemoteException, NotBoundException {
+        registry = LocateRegistry.getRegistry(ip);
+        server = (RedisLikeServer) registry.lookup(name);
+    }
+
     /**
      * Test if the specified key exists.
      * @param key The key to test.
@@ -167,8 +188,7 @@ public class Client {
      * @return The value of the key if it exists, null otherwise.
      */
     private Object get(String key) {
-        // TODO
-        return null;
+        return server.get(key);
     }
 
     /**
@@ -177,7 +197,7 @@ public class Client {
      * @param value The value to set.
      */
     private void set(String key, Object value) {
-        // TODO
+        server.set(key, value);
     }
 
     /**
@@ -186,8 +206,7 @@ public class Client {
      * @return one of "none", "string", "int", "list". "none" is returned if the key does not exist.
      */
     private String type(String key) {
-        // TODO
-        return null;
+        return server.type(key);
     }
 
     /**
@@ -200,8 +219,7 @@ public class Client {
      * @return the new value of key after the decrement.
      */
     private int decr(String key) {
-        // TODO
-        return 0;
+        return server.decr(key);
     }
 
     /**
@@ -215,8 +233,7 @@ public class Client {
      * @return the new value of key after the decrement.
      */
     private int decrBy(String key, int integer) {
-        // TODO
-        return 0;
+        return server.decrBy(key, integer);
     }
 
     /**
@@ -229,8 +246,7 @@ public class Client {
      * @return the new value of key after the Increment.
      */
     private int incr(String key) {
-        // TODO
-        return 0;
+        return server.incr(key);
     }
 
     /**
@@ -244,8 +260,7 @@ public class Client {
      * @return the new value of key after the Increment.
      */
     private int incrBy(String key, int integer) {
-        // TODO
-        return 0;
+        return server.incrBy(key, integer);
     }
 
     /**
@@ -254,7 +269,6 @@ public class Client {
      * @return True if the key existed and has been removed, false otherwise.
      */
     private boolean del(String key) {
-        // TODO
-        return false;
+        return server.del(key);
     }
 }

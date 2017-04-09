@@ -13,6 +13,7 @@ public class RequestAddServer extends Request {
 
     public RequestAddServer(ArrayList<String> tokens) throws NoTokensException, InvalidNbArgException {
         super(tokens);
+        setNbArgs(minNbArgs);
         parse();
     }
 

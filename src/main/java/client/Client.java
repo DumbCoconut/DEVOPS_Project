@@ -1,7 +1,9 @@
 package client;
 
+import client.requests.Request;
 import client.requests.RequestName;
 import client.requests.client.RequestAddServer;
+import client.requests.client.RequestHelp;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -48,6 +50,12 @@ public class Client {
         String cmd = tokens.get(0).toLowerCase();
         switch (cmd) {
             case RequestName.HELP:
+                try {
+                    RequestHelp r = new RequestHelp(tokens);
+                    System.out.println(r.getMessage());
+                } catch (NoTokensException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case RequestName.QUIT:
             case RequestName.EXIT:

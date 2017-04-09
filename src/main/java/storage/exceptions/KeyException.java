@@ -1,4 +1,4 @@
-package storage;
+package storage.exceptions;
 
 public class KeyException extends Exception {
     private String key;

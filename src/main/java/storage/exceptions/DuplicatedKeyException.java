@@ -1,4 +1,4 @@
-package storage;
+package storage.exceptions;
 
 public class DuplicatedKeyException extends KeyException {
     public DuplicatedKeyException(String key) {

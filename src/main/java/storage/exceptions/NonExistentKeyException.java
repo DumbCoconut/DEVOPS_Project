@@ -1,4 +1,4 @@
-package storage;
+package storage.exceptions;
 
 public class NonExistentKeyException extends KeyException {
     public NonExistentKeyException(String key) {

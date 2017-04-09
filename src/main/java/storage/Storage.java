@@ -1,6 +1,8 @@
 package storage;
 
 import com.google.common.cache.CacheBuilder;
+import storage.exceptions.DuplicatedKeyException;
+import storage.exceptions.NonExistentKeyException;
 
 import java.util.concurrent.ConcurrentMap;
 

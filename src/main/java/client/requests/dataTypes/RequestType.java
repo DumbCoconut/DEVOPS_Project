@@ -1,9 +1,10 @@
-package client.requests;
+package client.requests.dataTypes;
+
+import client.requests.RequestWithKey;
 
 import java.util.ArrayList;
 
-public class RequestType extends Request {
-    private String key;
+public class RequestType extends RequestWithKey {
 
     public RequestType(ArrayList<String> tokens) throws Exception {
         super(tokens);
@@ -11,16 +12,11 @@ public class RequestType extends Request {
         parse();
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    private void parse() throws Exception {
+    public void parse() throws Exception {
         if (tokens.size() != nbExpectedTokens()) {
             throw new Exception();
         }
-        key = tokens.get(1);
-    }
+     }
 
     @Override
     public String toString() {

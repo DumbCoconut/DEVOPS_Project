@@ -1,37 +1,31 @@
-package client.requests;
+package client.requests.dataTypes;
+
+import client.requests.RequestWithKey;
 
 import java.util.ArrayList;
 
-public class RequestIncrBy extends Request {
-    private String key;
+public class RequestDecrBy extends RequestWithKey {
     private String integer;
 
-    public RequestIncrBy(ArrayList<String> tokens) throws Exception {
+    public RequestDecrBy(ArrayList<String> tokens) throws Exception {
         super(tokens);
         setNbArgs(2);
         parse();
-    }
-
-
-    public String getKey() {
-        return key;
     }
 
     public String getInteger() {
         return integer;
     }
 
-    private void parse() throws Exception {
+    public void parse() throws Exception {
         if (tokens.size() != nbExpectedTokens()) {
             throw new Exception();
         }
-
-        key = tokens.get(1);
         integer = tokens.get(2);
     }
 
     @Override
     public String toString() {
-        return "incrBy(\"" + key + "\", " + integer + ")";
+        return "decrby(\"" + key + "\", " + integer + ")";
     }
 }

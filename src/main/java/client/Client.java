@@ -1,6 +1,7 @@
 package client;
 
-import client.requests.*;
+import client.requests.RequestName;
+import client.requests.dataTypes.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -8,17 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Client {
-    public static final String HELP     = "help";
     public static final String QUIT     = "quit";
     public static final String EXIT     = "exit";
-    public static final String GET      = "get";
-    public static final String SET      = "set";
-    public static final String TYPE     = "type";
-    public static final String DECR     = "decr";
-    public static final String DECRBY   = "decrby";
-    public static final String INCR     = "incr";
-    public static final String INCRBY   = "incrby";
-    public static final String DEL      = "del";
+
 
     private boolean exitRequested;
     private ArrayList<String> tokens;
@@ -46,14 +39,14 @@ public class Client {
 
         String cmd = tokens.get(0).toLowerCase();
         switch (cmd) {
-            case HELP:
+            case RequestName.HELP:
                 break;
             case QUIT:
             case EXIT:
                 exitRequested = true;
                 System.out.println("Bye!");
                 break;
-            case GET:
+            case RequestName.GET:
                 try {
                     RequestGet r = new RequestGet(tokens);
                     get(r.getKey());
@@ -61,7 +54,7 @@ public class Client {
                     e.printStackTrace();
                 }
                 break;
-            case SET:
+            case RequestName.SET:
                 try {
                     RequestSet r = new RequestSet(tokens);
                     set(r.getKey(), r.getObject());
@@ -69,7 +62,7 @@ public class Client {
                     e.printStackTrace();
                 }
                 break;
-            case TYPE:
+            case RequestName.TYPE:
                 try {
                     RequestType r = new RequestType(tokens);
                     type(r.getKey());
@@ -77,7 +70,7 @@ public class Client {
                     e.printStackTrace();
                 }
                  break;
-            case DECR:
+            case RequestName.DECR:
                 try {
                     RequestDecr r = new RequestDecr(tokens);
                     decr(r.getKey());
@@ -85,15 +78,15 @@ public class Client {
                     e.printStackTrace();
                 }
                 break;
-            case DECRBY:
+            case RequestName.DECRBY:
                 try {
                     RequestDecrBy r = new RequestDecrBy(tokens);
-                    decrBy(r.getKey(), Integer.getInteger(r.getInteger()));
+                    decrBy(r.getKey(), Integer.valueOf(r.getInteger()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case INCR:
+            case RequestName.INCR:
                 try {
                     RequestIncr r = new RequestIncr(tokens);
                     incr(r.getKey());
@@ -101,15 +94,15 @@ public class Client {
                     e.printStackTrace();
                 }
                 break;
-            case INCRBY:
+            case RequestName.INCRBY:
                 try {
                     RequestIncrBy r = new RequestIncrBy(tokens);
-                    incrBy(r.getKey(), Integer.getInteger(r.getInteger()));
+                    incrBy(r.getKey(), Integer.valueOf(r.getInteger()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
-            case DEL:
+            case RequestName.DEL:
                 try {
                     RequestDel r = new RequestDel(tokens);
                     del(r.getKey());

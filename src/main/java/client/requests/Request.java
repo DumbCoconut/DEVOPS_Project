@@ -22,7 +22,7 @@ public abstract class Request {
         return nbArgs + 1;
     }
 
-    protected void setNbArgs(int nbArgs) throws IllegalArgumentException {
+    public void setNbArgs(int nbArgs) throws IllegalArgumentException {
         if (nbArgs < 0) {
             throw new IllegalArgumentException("The number of arguments must be >= 0.");
         }

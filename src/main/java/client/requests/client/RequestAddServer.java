@@ -34,6 +34,6 @@ public class RequestAddServer extends Request {
 
     @Override
     public String toString() {
-        return null;
+        return ip + ":" + name;
     }
 }

@@ -54,6 +54,7 @@ public class RequestAddServerTest {
     @Test
     public void reqAddServerName() throws Exception {
         createRequest(legitNbTokens);
+        assertEquals("token2", r.getName());
     }
 
     @Test

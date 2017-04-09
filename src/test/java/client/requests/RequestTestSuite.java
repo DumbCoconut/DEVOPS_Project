@@ -1,6 +1,6 @@
 package client.requests;
 
-import client.requests.dataTypes.DataTypesTestSuite;
+import client.requests.dataTypes.RequestDataTypesTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -8,6 +8,6 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         RequestTest.class,
         RequestWithKeyTest.class,
-        DataTypesTestSuite.class
+        RequestDataTypesTestSuite.class
 })
 public class RequestTestSuite {}

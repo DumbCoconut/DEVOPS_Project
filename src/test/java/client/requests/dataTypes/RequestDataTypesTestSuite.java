@@ -14,6 +14,4 @@ import org.junit.runners.Suite;
         RequestIncrByTest.class,
         RequestDelTest.class
 })
-public class DataTypesTestSuite {
-
-}
+public class RequestDataTypesTestSuite {}

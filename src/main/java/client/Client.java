@@ -26,6 +26,10 @@ public class Client {
     private boolean exitRequested;
     private ArrayList<String> tokens;
 
+    public static void main(String[] args) {
+        Client c = new Client();
+    }
+
     public Client() {
         enterLoop();
     }
@@ -48,97 +52,31 @@ public class Client {
         }
 
         String cmd = tokens.get(0).toLowerCase();
-        switch (cmd) {
-            case RequestName.HELP:
-                try {
-                    RequestHelp r = new RequestHelp(tokens);
-                    System.out.println(r.getMessage());
-                } catch (NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.QUIT:
-            case RequestName.EXIT:
-                exitRequested = true;
-                System.out.println("Bye!");
-                break;
-            case RequestName.ADD_SERVER:
-                try {
-                    RequestAddServer r = new RequestAddServer(tokens);
-                    addServer(r.getIp(), r.getName());
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                } catch (RemoteException | NotBoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case RequestName.GET:
-                try {
-                    RequestGet r = new RequestGet(tokens);
-                    System.out.println(get(r.getKey()));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.SET:
-                try {
-                    RequestSet r = new RequestSet(tokens);
-                    set(r.getKey(), r.getObject());
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.TYPE:
-                try {
-                    RequestType r = new RequestType(tokens);
-                    System.out.println(type(r.getKey()));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                 break;
-            case RequestName.DECR:
-                try {
-                    RequestDecr r = new RequestDecr(tokens);
-                    System.out.println(decr(r.getKey()));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.DECRBY:
-                try {
-                    RequestDecrBy r = new RequestDecrBy(tokens);
-                    System.out.println(decrBy(r.getKey(), Integer.valueOf(r.getInteger())));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.INCR:
-                try {
-                    RequestIncr r = new RequestIncr(tokens);
-                    System.out.println(incr(r.getKey()));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.INCRBY:
-                try {
-                    RequestIncrBy r = new RequestIncrBy(tokens);
-                    System.out.println(incrBy(r.getKey(), Integer.valueOf(r.getInteger())));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case RequestName.DEL:
-                try {
-                    RequestDel r = new RequestDel(tokens);
-                    System.out.println(del(r.getKey()));
-                } catch (InvalidNbArgException | NoTokensException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            default:
-                System.out.println("(error) I'm sorry, I don't recognize that command.");
-                break;
+
+        if (cmd.equals(RequestName.getInstance().getHelpCmd())) {
+            doHelp();
+        } else if (cmd.equals(RequestName.getInstance().getQuitCmd()) || cmd.equals(RequestName.getInstance().getExitCmd())) {
+            doExit();
+        } else if (cmd.equals(RequestName.getInstance().getAddServerCmd())) {
+            doAddServer();
+        } else if (cmd.equals(RequestName.getInstance().getGetCmd())) {
+            doGet();
+        } else if (cmd.equals(RequestName.getInstance().getSetCmd())) {
+            doSet();
+        } else if (cmd.equals(RequestName.getInstance().getTypeCmd())) {
+            doType();
+        } else if (cmd.equals(RequestName.getInstance().getDecrCmd())) {
+            doDecr();
+        } else if (cmd.equals(RequestName.getInstance().getDecrByCmd())) {
+            doDecrBy();
+        } else if (cmd.equals(RequestName.getInstance().getIncrCmd())) {
+            doIncr();
+        } else if (cmd.equals(RequestName.getInstance().getIncrByCmd())) {
+            doIncrBy();
+        } else if (cmd.equals(RequestName.getInstance().getDelCmd())) {
+            doDel();
+        } else {
+            doUndefinedCmd(cmd);
         }
     }
 
@@ -168,16 +106,151 @@ public class Client {
         return list;
     }
 
-    /**
-     * Display the help message.
-     */
-    private void help() {
+    private void doHelp() {
+        try {
+            RequestHelp r = new RequestHelp(tokens);
+            System.out.println(r.getMessage());
+        } catch (NoTokensException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
+    private void doExit() {
+        exitRequested = true;
+        System.out.println("Bye!");
+    }
+
+    private void doAddServer() {
+        try {
+            RequestAddServer r = new RequestAddServer(tokens);
+            addServer(r.getIp(), r.getName());
+        } catch (InvalidNbArgException | NoTokensException e) {
+            System.out.println(e.getMessage());
+        } catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doGet() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestGet r = new RequestGet(tokens);
+                System.out.println(get(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSet() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSet r = new RequestSet(tokens);
+                set(r.getKey(), r.getObject());
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doType() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestType r = new RequestType(tokens);
+                System.out.println(type(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doDecr() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestDecr r = new RequestDecr(tokens);
+                System.out.println(decr(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doDecrBy() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestDecrBy r = new RequestDecrBy(tokens);
+                System.out.println(decrBy(r.getKey(), Integer.valueOf(r.getInteger())));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doIncr() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestIncr r = new RequestIncr(tokens);
+                System.out.println(incr(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doIncrBy() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestIncrBy r = new RequestIncrBy(tokens);
+                System.out.println(incrBy(r.getKey(), Integer.valueOf(r.getInteger())));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doDel() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestDel r = new RequestDel(tokens);
+                System.out.println(del(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doUndefinedCmd(String cmd) {
+        System.out.println("(error) I'm sorry, I don't recognize that command. "
+                + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
+    }
+
+    private boolean isServerSet() {
+        return !(server == null);
     }
 
     private void addServer(String ip, String name) throws RemoteException, NotBoundException {
         registry = LocateRegistry.getRegistry(ip);
         server = (RedisLikeServer) registry.lookup(name);
+    }
+
+    private void printServerNotSet() {
+        System.out.println("Server is not set. Please add a server. Type \"help add_server\" if you need help.");
     }
 
     /**

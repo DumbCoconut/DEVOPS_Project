@@ -34,68 +34,47 @@ public class RequestHelp extends Request {
         } else {
             String res = "";
             for (String cmd : requests) {
-                switch (cmd) {
-                    case RequestName.HELP:
-                        res += helpHelp() + "\n";
-                        break;
-                    case RequestName.QUIT:
-                    case RequestName.EXIT:
-                        res += helpQuit() + "\n";
-                        break;
-                    case RequestName.ADD_SERVER:
-                        res += helpAddServer() + "\n";
-                        break;
-                    case RequestName.GET:
-                        res += helpGet() + "\n";
-                        break;
-                    case RequestName.SET:
-                        res += helpSet() + "\n";
-                        break;
-                    case RequestName.DECR:
-                        res += helpDecr() + "\n";
-                        break;
-                    case RequestName.DECRBY:
-                        res += helpDecrBy() + "\n";
-                        break;
-                    case RequestName.INCR:
-                        res += helpIncr() + "\n";
-                        break;
-                    case RequestName.INCRBY:
-                        res += helpIncrBy() + "\n";
-                        break;
-                    case RequestName.TYPE:
-                        res += helpType() + "\n";
-                        break;
-                    case RequestName.DEL:
-                        res += helpDel() + "\n";
-                        break;
-                    default:
-                        res += "(error) I'm sorry, I don't recognize the command \"" + cmd + "\". "
-                                + "Did you mean \"" + findClosestCmdMatch(cmd) + "\"?";
-                        break;
+                if (cmd.equals(RequestName.getInstance().getHelpCmd())) {
+                    res += helpHelp() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getQuitCmd()) || cmd.equals(RequestName.getInstance().getExitCmd())) {
+                    res += helpQuit() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getAddServerCmd())) {
+                    res += helpAddServer() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getGetCmd())) {
+                    res += helpGet() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getSetCmd())) {
+                    res += helpSet() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getDecrCmd())) {
+                    res += helpDecr() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getDecrByCmd())) {
+                    res += helpDecrBy() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getIncrCmd())) {
+                    res += helpIncr() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getIncrByCmd())) {
+                    res += helpIncrBy() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getTypeCmd())) {
+                    res += helpType() + "\n";
+
+                } else if (cmd.equals(RequestName.getInstance().getDelCmd())) {
+                    res += helpDel() + "\n";
+
+                } else {
+                    res += "(error) I'm sorry, I don't recognize the command \"" + cmd + "\". "
+                            + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?";
+
                 }
             }
             return res;
         }
-    }
-
-    private String findClosestCmdMatch(String cmd) {
-        HashMap<String, Integer> distances = new HashMap<>();
-        distances.put(RequestName.HELP, getLevenshteinDistance(cmd, RequestName.HELP));
-        distances.put(RequestName.QUIT, getLevenshteinDistance(cmd, RequestName.QUIT));
-        distances.put(RequestName.ADD_SERVER, getLevenshteinDistance(cmd, RequestName.ADD_SERVER));
-        distances.put(RequestName.GET, getLevenshteinDistance(cmd, RequestName.GET));
-        distances.put(RequestName.SET, getLevenshteinDistance(cmd, RequestName.SET));
-        distances.put(RequestName.DECR, getLevenshteinDistance(cmd, RequestName.DECR));
-        distances.put(RequestName.DECRBY, getLevenshteinDistance(cmd, RequestName.DECRBY));
-        distances.put(RequestName.INCR, getLevenshteinDistance(cmd, RequestName.INCR));
-        distances.put(RequestName.INCRBY, getLevenshteinDistance(cmd, RequestName.INCRBY));
-        distances.put(RequestName.TYPE, getLevenshteinDistance(cmd, RequestName.TYPE));
-        distances.put(RequestName.DEL, getLevenshteinDistance(cmd, RequestName.DEL));
-        Object[] entrySet = distances.entrySet().toArray();
-        Arrays.sort(entrySet, (o1, o2) -> ((Entry<String, Integer>) o2).getValue()
-                .compareTo(((Entry<String, Integer>) o1).getValue()));
-        return ((Entry<String, Integer>) entrySet[entrySet.length - 1]).getKey();
     }
 
     private String help() {

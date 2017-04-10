@@ -64,8 +64,8 @@ public class ServerTest {
     @Test
     public void serverWithoutParsing() {
         Server s = new Server();
-        assertEquals(s.getPort(), Server.DEFAULT_PORT);
-        assertEquals(s.getName(), "server_" + (Server.NUM_SERV - 1));
+        assertEquals(Server.DEFAULT_PORT, s.getPort());
+        assertEquals("server_" + (Server.NUM_SERV - 1), s.getName());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class ServerTest {
         Server s = new Server();
         String name = "Ladies and gentlemen, allow me to present, Man Not Caring.";
         s.parse(new String[]{"-n", name});
-        assertEquals(s.getName(), name);
+        assertEquals(name, s.getName());
     }
 
     @Test
@@ -88,12 +88,12 @@ public class ServerTest {
         Server s = new Server();
         String name = "Ladies and gentlemen, allow me to present, Man Not Caring.";
         s.parse(new String[]{"--name", name});
-        assertEquals(s.getName(), name);
+        assertEquals(name, s.getName());
     }
 
     @Test
     public void serverNameParserShouldNotExit() throws ParseException {
-        assertEquals(new Server().parse(new String[]{"--name", "name"}), false);
+        assertEquals(false, new Server().parse(new String[]{"--name", "name"}));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ServerTest {
         Server s = new Server();
         String port = "118218";
         s.parse(new String[]{"-p", port});
-        assertEquals(s.getPort(), Integer.parseInt(port));
+        assertEquals(Integer.parseInt(port), s.getPort());
     }
 
     @Test
@@ -109,7 +109,7 @@ public class ServerTest {
         Server s = new Server();
         String port = "118218";
         s.parse(new String[]{"--port", port});
-        assertEquals(s.getPort(), Integer.parseInt(port));
+        assertEquals(Integer.parseInt(port), s.getPort());
     }
 
     @Test
@@ -117,12 +117,12 @@ public class ServerTest {
         Server s = new Server();
         String port = "What is it with steel wool?";
         s.parse(new String[]{"-p", port});
-        assertEquals(s.getPort(), Server.DEFAULT_PORT);
+        assertEquals(Server.DEFAULT_PORT, s.getPort());
     }
 
     @Test
     public void serverPortParserShouldNotExit() throws ParseException {
-        assertEquals(new Server().parse(new String[]{"--port", "999"}), false);
+        assertEquals(false, new Server().parse(new String[]{"--port", "999"}));
     }
 
     @Test
@@ -143,13 +143,13 @@ public class ServerTest {
     @Test
     public void parseOnlyHelpShouldPrint() throws ParseException {
         System.setOut(new PrintStream(testOutput)); // To throw away the display
-        assertEquals(new Server().parse(new String[]{"--help"}), true);
+        assertEquals(true, new Server().parse(new String[]{"--help"}));
     }
 
     @Test
     public void parseWithHelpShouldPrint() throws ParseException {
         System.setOut(new PrintStream(testOutput)); // To throw away the display
-        assertEquals(new Server().parse(new String[]{"--name", "jean", "--help"}), true);
+        assertEquals(true, new Server().parse(new String[]{"--name", "jean", "--help"}));
     }
 
     @Test
@@ -162,13 +162,13 @@ public class ServerTest {
     @Test
     public void getWithExistentKey() {
         Server s = createAndPopulateServer(2);
-        assertEquals(s.get("key1"), "object1");
+        assertEquals("object1", s.get("key1"));
     }
 
     @Test
     public void getWithNonExistentKey() {
         Server s = createAndPopulateServer(2);
-        assertEquals(s.get(nonExistentKey), null);
+        assertEquals(null, s.get(nonExistentKey));
     }
 
     @Test
@@ -176,125 +176,125 @@ public class ServerTest {
         Server s = createAndPopulateServer(2);
         String newValue = "Oh, my God! I look like Alice Cooper!";
         s.set("key2", newValue);
-        assertEquals(s.get("key2"), newValue);
+        assertEquals(newValue, s.get("key2"));
     }
 
     @Test
     public void setWithNonExistentKey() {
         Server s = createAndPopulateServer(2);
         s.set("key3", "object3");
-        assertEquals(s.get("key3"), "object3");
+        assertEquals("object3", s.get("key3"));
     }
 
     @Test
     public void typeWithExistentKey() {
         Server s = new Server();
         s.set("key", 3);
-        assertEquals(s.type("key"), "Integer");
+        assertEquals("Integer", s.type("key"));
     }
 
     @Test
     public void typeWithNonExistentKey() {
         Server s = new Server();
-        assertEquals(s.type(nonExistentKey), "none");
+        assertEquals("none", s.type(nonExistentKey));
     }
 
     @Test
     public void decrWithValidExistentKey() {
         Server s = createAndStoreDefaultInt();
         s.decr(defaultKey);
-        assertEquals(s.get(defaultKey), defaultInt - 1);
+        assertEquals(defaultInt - 1, s.get(defaultKey));
     }
 
     @Test
     public void decrWithInvalidExistentKey() {
         Server s = createAndStoreDefaultString();
         s.decr(defaultKey);
-        assertEquals(s.get(defaultKey), -1);
+        assertEquals(-1, s.get(defaultKey));
     }
 
     @Test
     public void decrWithNonExistentKey() {
         Server s = new Server();
         s.decr(defaultKey);
-        assertEquals(s.get(defaultKey), -1);
+        assertEquals(-1, s.get(defaultKey));
     }
 
     @Test
     public void decrByWithValidExistentKey() {
         Server s = createAndStoreDefaultInt();
         s.decrBy(defaultKey, defaultIncDec);
-        assertEquals(s.get(defaultKey), defaultInt - defaultIncDec);
+        assertEquals(defaultInt - defaultIncDec, s.get(defaultKey));
     }
 
     @Test
     public void decrByWithInValidExistentKey() {
         Server s = createAndStoreDefaultString();
         s.decrBy(defaultKey, defaultIncDec);
-        assertEquals(s.get(defaultKey), -defaultIncDec);
+        assertEquals(-defaultIncDec, s.get(defaultKey));
     }
 
     @Test
     public void decrByWithNonExistentKey() {
         Server s = new Server();
         s.decrBy(defaultKey, defaultIncDec);
-        assertEquals(s.get(defaultKey), -defaultIncDec);
+        assertEquals(-defaultIncDec, s.get(defaultKey));
     }
 
     @Test
     public void incrWithValidExistentKey() {
         Server s = createAndStoreDefaultInt();
         s.incr(defaultKey);
-        assertEquals(s.get(defaultKey), defaultInt + 1);
+        assertEquals(defaultInt + 1, s.get(defaultKey));
     }
 
     @Test
     public void incrWithInvalidExistentKey() {
         Server s = createAndStoreDefaultString();
         s.incr(defaultKey);
-        assertEquals(s.get(defaultKey), 1);
+        assertEquals(1, s.get(defaultKey));
     }
 
     @Test
     public void incrWithNonExistentKey() {
         Server s = new Server();
         s.incr(defaultKey);
-        assertEquals(s.get(defaultKey), 1);
+        assertEquals(1, s.get(defaultKey));
     }
 
     @Test
     public void incrByWithValidExistentKey() {
         Server s = createAndStoreDefaultInt();
         s.incrBy(defaultKey, defaultIncDec);
-        assertEquals(s.get(defaultKey), defaultInt + defaultIncDec);
+        assertEquals(defaultInt + defaultIncDec, s.get(defaultKey));
     }
 
     @Test
     public void incrByWithInValidExistentKey() {
         Server s = createAndStoreDefaultString();
         s.incrBy(defaultKey, defaultIncDec);
-        assertEquals(s.get(defaultKey), defaultIncDec);
+        assertEquals(defaultIncDec, s.get(defaultKey));
     }
 
     @Test
     public void incrByWithNonExistentKey() {
         Server s = new Server();
         s.incrBy(defaultKey, defaultIncDec);
-        assertEquals(s.get(defaultKey), defaultIncDec);
+        assertEquals(defaultIncDec, s.get(defaultKey));
     }
 
     @Test
     public void delExistentKey() {
         Server s = createAndPopulateServer(2);
         boolean hasBeenDeleted = s.del("key1");
-        assertEquals(hasBeenDeleted, true);
-        assertEquals(s.get("key1"), null);
+        assertEquals(true, hasBeenDeleted);
+        assertEquals(null, s.get("key1"));
     }
 
     @Test
     public void delNonExistentKey() {
         Server s = createAndPopulateServer(2);
         boolean hasBeenDeleted = s.del(nonExistentKey);
-        assertEquals(hasBeenDeleted, false);
+        assertEquals(false, hasBeenDeleted);
     }
 }

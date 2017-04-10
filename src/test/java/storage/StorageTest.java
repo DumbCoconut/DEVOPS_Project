@@ -153,7 +153,7 @@ public class StorageTest {
         Storage s = createAndStoreHelper(2L);
         String newValue = "Same job, different outfit.";
         s.replace("key2", newValue);
-        assertEquals(s.get("key2"), newValue);
+        assertEquals(newValue, s.get("key2"));
     }
 
     @Test

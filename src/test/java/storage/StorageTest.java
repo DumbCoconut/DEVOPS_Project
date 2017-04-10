@@ -75,6 +75,20 @@ public class StorageTest {
     }
 
     @Test
+    public void storeInteger() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "42");
+        assertEquals(Integer.class, s.get("key").getClass());
+    }
+
+    @Test
+    public void storeIntegerWithLeadingZeros() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "000042");
+        assertEquals(Integer.class, s.get("key").getClass());
+    }
+
+    @Test
     public void storeKeyAlreadyExists() throws DuplicatedKeyException {
         thrown.expect(DuplicatedKeyException.class);
         thrown.expectMessage(matcherDuplicateKeyHelper());

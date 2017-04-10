@@ -28,11 +28,10 @@ public class Client {
 
     public static void main(String[] args) {
         Client c = new Client();
+        c.enterLoop();
     }
 
-    public Client() {
-        enterLoop();
-    }
+    public Client() {}
 
     public void enterLoop() {
         Scanner terminal = new Scanner(System.in);

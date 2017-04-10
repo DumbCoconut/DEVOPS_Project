@@ -75,7 +75,16 @@ public class Storage {
         if (cache.containsKey(key)) {
             throw new DuplicatedKeyException(key);
         }
-        cache.put(key, o);
+        if (o instanceof String) {
+            try {
+                int i = Integer.parseInt((String) o);
+                cache.put(key, i);
+            } catch (NumberFormatException e) {
+                cache.put(key, o);
+            }
+        } else {
+            cache.put(key, o);
+        }
     }
 
     /**

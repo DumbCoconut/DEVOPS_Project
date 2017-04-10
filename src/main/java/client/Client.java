@@ -75,7 +75,7 @@ public class Client {
             case RequestName.GET:
                 try {
                     RequestGet r = new RequestGet(tokens);
-                    get(r.getKey());
+                    System.out.println(get(r.getKey()));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -91,7 +91,7 @@ public class Client {
             case RequestName.TYPE:
                 try {
                     RequestType r = new RequestType(tokens);
-                    type(r.getKey());
+                    System.out.println(type(r.getKey()));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -99,7 +99,7 @@ public class Client {
             case RequestName.DECR:
                 try {
                     RequestDecr r = new RequestDecr(tokens);
-                    decr(r.getKey());
+                    System.out.println(decr(r.getKey()));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -107,7 +107,7 @@ public class Client {
             case RequestName.DECRBY:
                 try {
                     RequestDecrBy r = new RequestDecrBy(tokens);
-                    decrBy(r.getKey(), Integer.valueOf(r.getInteger()));
+                    System.out.println(decrBy(r.getKey(), Integer.valueOf(r.getInteger())));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -115,7 +115,7 @@ public class Client {
             case RequestName.INCR:
                 try {
                     RequestIncr r = new RequestIncr(tokens);
-                    incr(r.getKey());
+                    System.out.println(incr(r.getKey()));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -123,7 +123,7 @@ public class Client {
             case RequestName.INCRBY:
                 try {
                     RequestIncrBy r = new RequestIncrBy(tokens);
-                    incrBy(r.getKey(), Integer.valueOf(r.getInteger()));
+                    System.out.println(incrBy(r.getKey(), Integer.valueOf(r.getInteger())));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -131,7 +131,7 @@ public class Client {
             case RequestName.DEL:
                 try {
                     RequestDel r = new RequestDel(tokens);
-                    del(r.getKey());
+                    System.out.println(del(r.getKey()));
                 } catch (InvalidNbArgException | NoTokensException e) {
                     System.out.println(e.getMessage());
                 }
@@ -196,7 +196,12 @@ public class Client {
      * @return The value of the key if it exists, null otherwise.
      */
     private Object get(String key) {
-        return server.get(key);
+        try {
+            return server.get(key);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -205,7 +210,11 @@ public class Client {
      * @param value The value to set.
      */
     private void set(String key, Object value) {
-        server.set(key, value);
+        try {
+            server.set(key, value);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -214,7 +223,12 @@ public class Client {
      * @return one of "none", "string", "int", "list". "none" is returned if the key does not exist.
      */
     private String type(String key) {
-        return server.type(key);
+        try {
+            return server.type(key);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     /**
@@ -227,7 +241,12 @@ public class Client {
      * @return the new value of key after the decrement.
      */
     private int decr(String key) {
-        return server.decr(key);
+        try {
+            return server.decr(key);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     /**
@@ -241,7 +260,12 @@ public class Client {
      * @return the new value of key after the decrement.
      */
     private int decrBy(String key, int integer) {
-        return server.decrBy(key, integer);
+        try {
+            return server.decrBy(key, integer);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     /**
@@ -254,7 +278,12 @@ public class Client {
      * @return the new value of key after the Increment.
      */
     private int incr(String key) {
-        return server.incr(key);
+        try {
+            return server.incr(key);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     /**
@@ -268,7 +297,12 @@ public class Client {
      * @return the new value of key after the Increment.
      */
     private int incrBy(String key, int integer) {
-        return server.incrBy(key, integer);
+        try {
+            return server.incrBy(key, integer);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     /**
@@ -277,6 +311,11 @@ public class Client {
      * @return True if the key existed and has been removed, false otherwise.
      */
     private boolean del(String key) {
-        return server.del(key);
+        try {
+            return server.del(key);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

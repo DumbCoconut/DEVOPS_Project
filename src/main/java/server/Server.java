@@ -13,7 +13,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 public class Server implements RedisLikeServer {
-    public static final int DEFAULT_PORT = 9000;
+    public static final int DEFAULT_PORT = 42933;
     public static int NUM_SERV = 0;
 
     private Options opt;
@@ -34,6 +34,7 @@ public class Server implements RedisLikeServer {
             Registry registry = LocateRegistry.getRegistry();
             Remote remote = UnicastRemoteObject.exportObject(server, server.getPort());
             registry.bind(server.getName(), remote);
+            System.out.println("Hello. I am server \"" + server.getName() + "\" and I'm running on port " + server.getPort());
         } catch (RemoteException | AlreadyBoundException e) {
             e.printStackTrace();
         } catch (ParseException e) {

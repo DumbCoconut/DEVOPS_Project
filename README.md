@@ -1,5 +1,7 @@
 # DEVOPS_Project
 
+NOTE : tout se passe sur la branche client pour le moment, la branche master a plusieurs jours de retard
+
 # FONCTIONNEMENT
 
 En attendant que le pom soit modifié (cf TODO), pour faire fonctionner le programme :

@@ -50,7 +50,7 @@ public class Client {
             return;
         }
 
-        String cmd = tokens.get(0).toLowerCase();
+        String cmd = tokens.get(0).toUpperCase();
 
         if (cmd.equals(RequestName.getInstance().getHelpCmd())) {
             doHelp();

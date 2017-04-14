@@ -39,52 +39,52 @@ public class RequestName {
     }
 
     public String getQuitCmd() {
-        return cmds.get(Cmd.QUIT);
+        return cmds.get(Cmd.QUIT).toUpperCase();
     }
 
     public String getExitCmd() {
-        return cmds.get(Cmd.EXIT);
+        return cmds.get(Cmd.EXIT).toUpperCase();
     }
 
 
     public String getHelpCmd() {
-        return cmds.get(Cmd.HELP);
+        return cmds.get(Cmd.HELP).toUpperCase();
     }
 
     public String getAddServerCmd() {
-        return cmds.get(Cmd.ADD_SERVER);
+        return cmds.get(Cmd.ADD_SERVER).toUpperCase();
     }
 
     public String getGetCmd() {
-        return cmds.get(Cmd.GET);
+        return cmds.get(Cmd.GET).toUpperCase();
     }
 
     public String getSetCmd() {
-        return cmds.get(Cmd.SET);
+        return cmds.get(Cmd.SET).toUpperCase();
     }
 
     public String getTypeCmd() {
-        return cmds.get(Cmd.TYPE);
+        return cmds.get(Cmd.TYPE).toUpperCase();
     }
 
     public String getDecrCmd() {
-        return cmds.get(Cmd.DECR);
+        return cmds.get(Cmd.DECR).toUpperCase();
     }
 
     public String getDecrByCmd() {
-        return cmds.get(Cmd.DECRBY);
+        return cmds.get(Cmd.DECRBY).toUpperCase();
     }
 
     public String getIncrCmd() {
-        return cmds.get(Cmd.INCR);
+        return cmds.get(Cmd.INCR).toUpperCase();
     }
 
     public String getIncrByCmd() {
-        return cmds.get(Cmd.INCRBY);
+        return cmds.get(Cmd.INCRBY).toUpperCase();
     }
 
     public String getDelCmd() {
-        return cmds.get(Cmd.DEL);
+        return cmds.get(Cmd.DEL).toUpperCase();
     }
 
     public String findClosestCmdMatch(String cmd) {
@@ -95,6 +95,6 @@ public class RequestName {
         Object[] entrySet = distances.entrySet().toArray();
         Arrays.sort(entrySet, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue()
                 .compareTo(((Map.Entry<String, Integer>) o1).getValue()));
-        return ((Map.Entry<String, Integer>) entrySet[entrySet.length - 1]).getKey();
+        return ((Map.Entry<String, Integer>) entrySet[entrySet.length - 1]).getKey().toUpperCase();
     }
 }

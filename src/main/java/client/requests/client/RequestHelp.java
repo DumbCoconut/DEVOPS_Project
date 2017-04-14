@@ -118,7 +118,8 @@ public class RequestHelp extends Request {
         String res = "";
         res += "HELP [cmd1, cmd2, ... cmdN]" + "\n\n"
 
-            +  "DESCRIPTION: TODO";
+            +  "DESCRIPTION: Display the help for the given commands. If no command is provided, display " +
+               "the help for all the commands.";
 
         return res;
     }
@@ -127,7 +128,7 @@ public class RequestHelp extends Request {
         String res = "";
         res += "EXIT" + "\n\n"
 
-            +  "DESCRIPTION: TODO";
+            +  "DESCRIPTION: Terminate the client. This command is the same as QUIT.";
 
         return res;
     }
@@ -136,7 +137,7 @@ public class RequestHelp extends Request {
         String res = "";
         res += "QUIT" + "\n\n"
 
-            +  "DESCRIPTION: TODO";
+            +  "DESCRIPTION: Terminate the client. This command is the same as EXIT.";
 
         return res;
     }
@@ -145,7 +146,8 @@ public class RequestHelp extends Request {
         String res = "";
         res += "ADD_SERVER server_ip server_name" + "\n\n"
 
-            +  "DESCRIPTION: TODO";
+            +  "DESCRIPTION: Connect to the given server. server_ip is the IP of the server (if local, 127.0.0.1). " +
+               "server_name is the name of the server on the host (example: server_0)";
 
         return res;
     }

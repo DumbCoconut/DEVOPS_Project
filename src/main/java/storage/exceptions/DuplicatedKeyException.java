@@ -7,6 +7,6 @@ public class DuplicatedKeyException extends KeyException {
 
     @Override
     public String getMessage() {
-        return "The key '" + getKey() + "' is already used in the cache.";
+        return "The key \"" + getKey() + "\" is already used in the cache.";
     }
 }

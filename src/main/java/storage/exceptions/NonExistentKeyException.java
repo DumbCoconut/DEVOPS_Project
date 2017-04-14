@@ -7,6 +7,6 @@ public class NonExistentKeyException extends KeyException {
 
     @Override
     public String getMessage() {
-        return "The key " + getKey() + " does not exist in the cache.";
+        return "The key \"" + getKey() + "\" does not exist in the cache.";
     }
 }

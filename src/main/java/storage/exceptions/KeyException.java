@@ -14,6 +14,6 @@ public class KeyException extends Exception {
 
     @Override
     public String getMessage() {
-        return "An operation using the key " + key + " has encountered an exception.";
+        return "An operation using the key \"" + key + "\" has encountered an exception.";
     }
 }

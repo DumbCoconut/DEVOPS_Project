@@ -1,14 +1,17 @@
 package client.requests.client;
 
-import client.requests.Request;
 import client.requests.RequestName;
 import client.requests.exceptions.NoTokensException;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -23,6 +26,11 @@ public class RequestHelpTest {
         ArrayList<String> tokens = new ArrayList<>();
         Collections.addAll(tokens, args);
         r = new RequestHelp(tokens);
+    }
+
+    @Before
+    public void init() throws Exception {
+        createRequest(new String[]{"help"});
     }
 
     @Test
@@ -124,4 +132,226 @@ public class RequestHelpTest {
         createRequest(new String[]{"help"});
         assertEquals("\n--------------------\n", r.getSeparator());
     }
+
+    @Test
+    public void testGetHelpHelp() throws Exception {
+        String expected = "HELP [cmd1, cmd2, ... cmdN]" + "\n\n"
+                        + "DESCRIPTION: Display the help for the given commands. If no command is provided, display " +
+                          "the help for all the commands.";
+        assertEquals(expected, r.getHelpHelp());
+    }
+
+    @Test
+    public void testGetHelpAddServer() throws Exception {
+        String expected = "ADD_SERVER server_ip server_name" + "\n\n"
+                        +  "DESCRIPTION: Connect to the given server. server_ip is the IP of the server (if local, 127.0.0.1). " +
+                           "server_name is the name of the server on the host (example: server_0)";
+        assertEquals(expected, r.getHelpAddServer());
+    }
+
+    @Test
+    public void getTestGetQuit() throws Exception {
+        String expected = "QUIT" + "\n\n"
+                        + "DESCRIPTION: Terminate the client. This command is the same as EXIT.";
+        assertEquals(expected, r.getHelpQuit());
+    }
+
+    @Test
+    public void getTestGetExit() throws Exception {
+        String expected = "EXIT" + "\n\n"
+                        + "DESCRIPTION: Terminate the client. This command is the same as QUIT.";
+        assertEquals(expected, r.getHelpExit());
+    }
+
+    @Test
+    public void testGetHelpGet() throws Exception {
+        String expected = "GET key" + "\n\n"
+                        + "DESCRIPTION: Get the value of the specified key. If the key does not exist " +
+                          "the special value 'null' is returned.";
+        assertEquals(expected, r.getHelpGet());
+    }
+
+    @Test
+    public void testGetHelpSet() throws Exception {
+        String expected =  "SET key value" + "\n\n"
+                        +  "DESCRIPTION: Set key to hold the value. If key already holds a value, it is overwritten, " +
+                           "regardless of its type.";
+        assertEquals(expected, r.getHelpSet());
+    }
+
+    @Test
+    public void testGetHelpDecr() throws Exception {
+        String expected =  "DECR key" + "\n\n"
+                        +  "DESCRIPTION: Increment or decrement the number stored at key by one. " +
+                           "If the key does not exist or contains a value of a wrong type, set the key to the value of \"0\" " +
+                           "before to perform the increment or decrement operation." + "\n\n"
+                        +  "INCRBY and DECRBY work just like INCR and DECR but instead to increment/decrement by 1 " +
+                           "the increment/decrement is integer.";
+        assertEquals(expected, r.getHelpDecr());
+    }
+
+    @Test
+    public void testGetHelpDecrBy() throws Exception {
+        String expected = "DECRBY key integer" + "\n\n"
+                        +  "DESCRIPTION: Increment or decrement the number stored at key by one. " +
+                           "If the key does not exist or contains a value of a wrong type, set the key to the value of \"0\" " +
+                           "before to perform the increment or decrement operation." + "\n\n"
+                        +  "INCRBY and DECRBY work just like INCR and DECR but instead to increment/decrement by 1 " +
+                           "the increment/decrement is integer.";
+        assertEquals(expected, r.getHelpDecrBy());
+    }
+
+    @Test
+    public void testGetHelpIncr() throws Exception {
+        String expected = "INCR key" + "\n\n"
+                        +  "DESCRIPTION: Increment or decrement the number stored at key by one. " +
+                           "If the key does not exist or contains a value of a wrong type, set the key to the value of \"0\" " +
+                           "before to perform the increment or decrement operation." + "\n\n"
+                        +  "INCRBY and DECRBY work just like INCR and DECR but instead to increment/decrement by 1 " +
+                           "the increment/decrement is integer.";
+        assertEquals(expected, r.getHelpIncr());
+    }
+
+    @Test
+    public void testGetHelpIncrBy() throws Exception {
+        String expected = "INCRBY key integer" + "\n\n"
+                        + "DESCRIPTION: Increment or decrement the number stored at key by one. " +
+                          "If the key does not exist or contains a value of a wrong type, set the key to the value of \"0\" " +
+                          "before to perform the increment or decrement operation." + "\n\n"
+                        + "INCRBY and DECRBY work just like INCR and DECR but instead to increment/decrement by 1 " +
+                          "the increment/decrement is integer.";
+        assertEquals(expected, r.getHelpIncrBy());
+    }
+
+    @Test
+    public void testGetHelpType() throws Exception {
+        String expected = "TYPE key" + "\n\n"
+                        + "Return the type of the value stored at key in form of a string. The type can be one of \"none\", " +
+                          "\"string\", \"list\", \"set\". \"none\" is returned if the key does not exist.";
+        assertEquals(expected, r.getHelpType());
+    }
+
+    @Test
+    public void testGetDel() throws Exception {
+        String expected = "DEL key" + "\n\n"
+                        + "DESCRIPTION: Remove the specified keys. If a given key does not exist no operation is performed " +
+                          "for this key. The command returns the number of keys removed.";
+        assertEquals(expected, r.getHelpDel());
+    }
+
+    @Test
+    public void testGetHelp() throws Exception {
+        /* ugly code ahead */
+        ArrayList<String> tokens = new ArrayList<>();
+        tokens.add("help");
+        tokens.addAll(RequestName.getInstance().getAllCmds().values());
+        int tSize = tokens.size();
+        String[] tokensArray = new String[tSize];
+        for (int i = 1; i < tSize; i++) {
+            tokensArray[i] = tokens.get(i);
+        }
+        createRequest(tokensArray);
+        String helpMessage = r.getHelp();
+        for (String s : tokens.subList(1, tokens.size())) {
+            assert helpMessage.contains(s) || helpMessage.contains(s.toUpperCase()) || helpMessage.contains(s.toLowerCase());
+        }
+    }
+
+    @Test
+    public void testGetMessageWithHelp() throws Exception {
+        createRequest(new String[]{"help", "help"});
+        assert r.getMessage().contains("HELP");
+    }
+
+    @Test
+    public void testGetMessageWithQuit() throws Exception {
+        createRequest(new String[]{"help", "QUIT"});
+        assert r.getMessage().contains("QUIT");
+    }
+
+    @Test
+    public void testGetMessageWithExit() throws Exception {
+        createRequest(new String[]{"help", "EXIT"});
+        assert r.getMessage().contains("EXIT");
+    }
+
+    @Test
+    public void testGetMessageWithAddServer() throws Exception {
+        createRequest(new String[]{"help", "ADD_SERVER"});
+        assert r.getMessage().contains("ADD_SERVER");
+    }
+
+    @Test
+    public void testGetMessageWithGet() throws Exception {
+        createRequest(new String[]{"help", "GET"});
+        assert r.getMessage().contains("GET");
+    }
+
+    @Test
+    public void testGetMessageWithSet() throws Exception {
+        createRequest(new String[]{"help", "SET"});
+        assert r.getMessage().contains("SET");
+    }
+
+    @Test
+    public void testGetMessageWithDecr() throws Exception {
+        createRequest(new String[]{"help", "DECR"});
+        assert r.getMessage().contains("DECR");
+    }
+
+    @Test
+    public void testGetMessageWithDecrBy() throws Exception {
+        createRequest(new String[]{"help", "DECRBY"});
+        assert r.getMessage().contains("DECRBY");
+    }
+
+    @Test
+    public void testGetMessageWithIncr() throws Exception {
+        createRequest(new String[]{"help", "INCR"});
+        assert r.getMessage().contains("INCR");
+    }
+
+    @Test
+    public void testGetMessageWithIncrBy() throws Exception {
+        createRequest(new String[]{"help", "INCRBY"});
+        assert r.getMessage().contains("INCRBY");
+    }
+
+    @Test
+    public void testGetMessageWithType() throws Exception {
+        createRequest(new String[]{"help", "TYPE"});
+        assert r.getMessage().contains("TYPE");
+    }
+
+    @Test
+    public void testGetMessageWithDel() throws Exception {
+        createRequest(new String[]{"help", "DEL"});
+        assert r.getMessage().contains("DEL");
+    }
+
+    @Test
+    public void testGetMessageWithMultipleCmd() throws Exception {
+        createRequest(new String[]{"help", "help", "del", "get"});
+        assert (
+               r.getMessage().contains("HELP") &&
+               r.getMessage().contains("DEL") &&
+               r.getMessage().contains("GET")
+        );
+    }
+
+    @Test
+    public void testGetMessageWithInvalidCmd() throws Exception {
+        createRequest(new String[]{"help", "OWOWOW"});
+        assert (
+                r.getMessage().contains("OWOWOW") &&
+                r.getMessage().contains("error")
+        );
+    }
+
+    @Test
+    public void testGetMessageWithNoCmd() throws Exception {
+        createRequest(new String[]{"help"});
+        assertEquals(r.getMessage(), r.getHelp());
+    }
+
 }

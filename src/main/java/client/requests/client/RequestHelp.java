@@ -27,6 +27,7 @@ public class RequestHelp extends Request {
 
     public void parse() {
         /* sublist because we skip "help" */
+        /* remove the duplicates */
         /* put everything to lower case */
         List lowerCase = tokens.subList(1, tokens.size()).stream()
                                                          .map(String::toLowerCase)

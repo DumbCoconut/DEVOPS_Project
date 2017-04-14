@@ -51,16 +51,33 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testParseToLowerCase() throws Exception {
+        String[] tokens = new String[] {"help", "Add_Server", "gEt", "seT"};
+        String[] expected = new String[] {"add_server", "get", "set"};
+        createRequest(tokens);
+        assertArrayEquals(expected, r.getRequests().toArray());
+    }
+
+    @Test
+    public void testParseSortedAlphabetically() throws Exception {
+        String[] tokens = new String[] {"help", "get", "add_server", "set", "del"};
+        String[] expected = new String[] {"add_server", "del", "get", "set"};
+        createRequest(tokens);
+        assertArrayEquals(expected, r.getRequests().toArray());
+    }
+
+    @Test
+    public void testParseSortedAlphabeticallyWithUperAndLowerCase() throws Exception {
+        String[] tokens = new String[] {"help", "Get", "Add_server", "sET", "Del"};
+        String[] expected = new String[] {"add_server", "del", "get", "set"};
+        createRequest(tokens);
+        assertArrayEquals(expected, r.getRequests().toArray());
+    }
+
+    @Test
     public void testHelpToString() throws Exception {
         String[] tokens = new String[] {"help", "help", "get", "set"};
         createRequest(tokens);
         assertEquals(r.getMessage(), r.toString());
-    }
-
-    @Test
-    public void testHelpHelp() throws Exception {
-        String[] tokens = new String[] {"help", "help"};
-        createRequest(tokens);
-        assertEquals("", r.getMessage());
     }
 }

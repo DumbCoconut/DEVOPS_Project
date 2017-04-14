@@ -75,6 +75,22 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testRemoveDistinct() throws Exception {
+        String[] tokens = new String[] {"help", "get", "get", "get", "get", "add_server", "add_server"};
+        String[] expected = new String[] {"add_server", "get"};
+        createRequest(tokens);
+        assertArrayEquals(expected, r.getRequests().toArray());
+    }
+
+    @Test
+    public void testRemoveDistinctWithUpperAndLowerCase() throws Exception {
+        String[] tokens = new String[] {"help", "get", "GeT", "GET", "gEt", "add_server", "Add_Server"};
+        String[] expected = new String[] {"add_server", "get"};
+        createRequest(tokens);
+        assertArrayEquals(expected, r.getRequests().toArray());
+    }
+
+    @Test
     public void testHelpToString() throws Exception {
         String[] tokens = new String[] {"help", "help", "get", "set"};
         createRequest(tokens);

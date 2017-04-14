@@ -30,6 +30,7 @@ public class RequestHelp extends Request {
         /* put everything to lower case */
         List lowerCase = tokens.subList(1, tokens.size()).stream()
                                                          .map(String::toLowerCase)
+                                                         .distinct()
                                                          .collect(Collectors.toList());
 
         /* add the sublist as our requests */

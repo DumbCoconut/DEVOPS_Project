@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
         RequestWithKeyTest.class,
         RequestClientTestSuite.class,
         RequestDataTypesTestSuite.class,
-        ClientExceptionsTestSuite.class
+        ClientExceptionsTestSuite.class,
+        RequestNameTest.class
 })
 public class RequestTestSuite {}

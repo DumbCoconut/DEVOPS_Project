@@ -28,6 +28,10 @@ public class RequestHelp extends Request {
         requests.addAll(tokens.subList(1, tokens.size()));
     }
 
+    public ArrayList<String> getRequests() {
+        return requests;
+    }
+
     public String getMessage() {
         if (tokens.size() == 1) {
             return help();
@@ -79,7 +83,7 @@ public class RequestHelp extends Request {
 
     private String help() {
         String res =    helpHelp()      + "\n"
-                    +   helpQuit() + "\n"
+                    +   helpQuit()      + "\n"
                     +   helpAddServer() + "\n"
                     +   helpGet()       + "\n"
                     +   helpSet()       + "\n"
@@ -100,6 +104,7 @@ public class RequestHelp extends Request {
     private String helpQuit() {
         return "QUIT | EXIT";
     }
+
     private String helpAddServer() {
         return "ADD_SERVER server_ip server_name";
     }

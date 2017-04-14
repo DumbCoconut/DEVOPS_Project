@@ -53,7 +53,7 @@ public class RequestHelpTest {
     @Test
     public void testParseToLowerCase() throws Exception {
         String[] tokens = new String[] {"help", "Add_Server", "gEt", "seT"};
-        String[] expected = new String[] {"add_server", "get", "set"};
+        String[] expected = new String[] {"ADD_SERVER", "GET", "SET"};
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -61,7 +61,7 @@ public class RequestHelpTest {
     @Test
     public void testParseSortedAlphabetically() throws Exception {
         String[] tokens = new String[] {"help", "get", "add_server", "set", "del"};
-        String[] expected = new String[] {"add_server", "del", "get", "set"};
+        String[] expected = new String[] {"ADD_SERVER", "DEL", "GET", "SET"};
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -69,7 +69,7 @@ public class RequestHelpTest {
     @Test
     public void testParseSortedAlphabeticallyWithUperAndLowerCase() throws Exception {
         String[] tokens = new String[] {"help", "Get", "Add_server", "sET", "Del"};
-        String[] expected = new String[] {"add_server", "del", "get", "set"};
+        String[] expected = new String[] {"ADD_SERVER", "DEL", "GET", "SET"};
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -77,7 +77,7 @@ public class RequestHelpTest {
     @Test
     public void testRemoveDistinct() throws Exception {
         String[] tokens = new String[] {"help", "get", "get", "get", "get", "add_server", "add_server"};
-        String[] expected = new String[] {"add_server", "get"};
+        String[] expected = new String[] {"ADD_SERVER", "GET"};
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -85,7 +85,7 @@ public class RequestHelpTest {
     @Test
     public void testRemoveDistinctWithUpperAndLowerCase() throws Exception {
         String[] tokens = new String[] {"help", "get", "GeT", "GET", "gEt", "add_server", "Add_Server"};
-        String[] expected = new String[] {"add_server", "get"};
+        String[] expected = new String[] {"ADD_SERVER", "GET"};
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -95,5 +95,11 @@ public class RequestHelpTest {
         String[] tokens = new String[] {"help", "help", "get", "set"};
         createRequest(tokens);
         assertEquals(r.getMessage(), r.toString());
+    }
+
+    @Test
+    public void testGetSeparator() throws Exception {
+        createRequest(new String[]{"help"});
+        assertEquals("\n--------------------\n", r.getSeparator());
     }
 }

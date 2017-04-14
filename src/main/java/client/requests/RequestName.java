@@ -88,9 +88,11 @@ public class RequestName {
     }
 
     public String findClosestCmdMatch(String cmd) {
+        String cmdToUpper = cmd.toUpperCase();
+
         HashMap<String, Integer> distances = new HashMap<>();
         for (Map.Entry<Cmd, String> e : cmds.entrySet()) {
-            distances.put(e.getValue(), getLevenshteinDistance(cmd, e.getValue()));
+            distances.put(e.getValue(), getLevenshteinDistance(cmdToUpper, e.getValue()));
         }
         Object[] entrySet = distances.entrySet().toArray();
         Arrays.sort(entrySet, (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue()

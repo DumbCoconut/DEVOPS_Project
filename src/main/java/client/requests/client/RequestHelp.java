@@ -6,6 +6,8 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.getLevenshteinDistance;
 
@@ -25,7 +27,14 @@ public class RequestHelp extends Request {
 
     public void parse() {
         /* sublist because we skip "help" */
-        requests.addAll(tokens.subList(1, tokens.size()));
+        /* put everything to lower case */
+        List lowerCase = tokens.subList(1, tokens.size()).stream()
+                                                         .map(String::toLowerCase)
+                                                         .collect(Collectors.toList());
+
+        /* add the sublist as our requests */
+        requests.addAll(lowerCase);
+
         /* sort requests alphabetically */
         requests.sort(String::compareToIgnoreCase);
     }

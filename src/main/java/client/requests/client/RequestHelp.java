@@ -26,6 +26,8 @@ public class RequestHelp extends Request {
     public void parse() {
         /* sublist because we skip "help" */
         requests.addAll(tokens.subList(1, tokens.size()));
+        /* sort requests alphabetically */
+        requests.sort(String::compareToIgnoreCase);
     }
 
     public ArrayList<String> getRequests() {

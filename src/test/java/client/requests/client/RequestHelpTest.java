@@ -1,5 +1,7 @@
 package client.requests.client;
 
+import client.requests.Request;
+import client.requests.RequestName;
 import client.requests.exceptions.NoTokensException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,7 +55,11 @@ public class RequestHelpTest {
     @Test
     public void testParseToLowerCase() throws Exception {
         String[] tokens = new String[] {"help", "Add_Server", "gEt", "seT"};
-        String[] expected = new String[] {"ADD_SERVER", "GET", "SET"};
+        String[] expected = new String[] {
+                RequestName.getInstance().getAddServerCmd(),
+                RequestName.getInstance().getGetCmd(),
+                RequestName.getInstance().getSetCmd()
+        };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -61,7 +67,12 @@ public class RequestHelpTest {
     @Test
     public void testParseSortedAlphabetically() throws Exception {
         String[] tokens = new String[] {"help", "get", "add_server", "set", "del"};
-        String[] expected = new String[] {"ADD_SERVER", "DEL", "GET", "SET"};
+        String[] expected = new String[] {
+                RequestName.getInstance().getAddServerCmd(),
+                RequestName.getInstance().getDelCmd(),
+                RequestName.getInstance().getGetCmd(),
+                RequestName.getInstance().getSetCmd()
+        };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -69,7 +80,12 @@ public class RequestHelpTest {
     @Test
     public void testParseSortedAlphabeticallyWithUperAndLowerCase() throws Exception {
         String[] tokens = new String[] {"help", "Get", "Add_server", "sET", "Del"};
-        String[] expected = new String[] {"ADD_SERVER", "DEL", "GET", "SET"};
+        String[] expected = new String[] {
+                RequestName.getInstance().getAddServerCmd(),
+                RequestName.getInstance().getDelCmd(),
+                RequestName.getInstance().getGetCmd(),
+                RequestName.getInstance().getSetCmd()
+        };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -77,7 +93,10 @@ public class RequestHelpTest {
     @Test
     public void testRemoveDistinct() throws Exception {
         String[] tokens = new String[] {"help", "get", "get", "get", "get", "add_server", "add_server"};
-        String[] expected = new String[] {"ADD_SERVER", "GET"};
+        String[] expected = new String[] {
+                RequestName.getInstance().getAddServerCmd(),
+                RequestName.getInstance().getGetCmd()
+        };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }
@@ -85,7 +104,10 @@ public class RequestHelpTest {
     @Test
     public void testRemoveDistinctWithUpperAndLowerCase() throws Exception {
         String[] tokens = new String[] {"help", "get", "GeT", "GET", "gEt", "add_server", "Add_Server"};
-        String[] expected = new String[] {"ADD_SERVER", "GET"};
+        String[] expected = new String[] {
+                RequestName.getInstance().getAddServerCmd(),
+                RequestName.getInstance().getGetCmd()
+        };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
     }

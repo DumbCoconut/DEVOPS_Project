@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class NonExistentKeyExceptionTest {
-    NonExistentKeyException e;
+    private NonExistentKeyException e;
 
     @Before
     public void init() {

@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DuplicatedKeyExceptionTest {
-    DuplicatedKeyException e;
+    private DuplicatedKeyException e;
 
     @Before
     public void init() {

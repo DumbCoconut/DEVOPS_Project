@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class KeyExceptionTest {
-    KeyException e;
+    private KeyException e;
 
     @Before
     public void init() {

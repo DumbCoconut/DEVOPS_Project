@@ -27,6 +27,9 @@ public class RequestName {
         cmds.put(Cmd.INCR, "incr");
         cmds.put(Cmd.INCRBY, "incrby");
         cmds.put(Cmd.DEL, "del");
+
+        // All commands are upper case
+        cmds.replaceAll((k,v) -> v.toUpperCase());
     }
 
     private static RequestName ourInstance = null;
@@ -38,53 +41,56 @@ public class RequestName {
         return ourInstance;
     }
 
+    public HashMap<Cmd, String> getAllCmds() {
+        return cmds;
+    }
+
     public String getQuitCmd() {
-        return cmds.get(Cmd.QUIT).toUpperCase();
+        return cmds.get(Cmd.QUIT);
     }
 
     public String getExitCmd() {
-        return cmds.get(Cmd.EXIT).toUpperCase();
+        return cmds.get(Cmd.EXIT);
     }
 
-
     public String getHelpCmd() {
-        return cmds.get(Cmd.HELP).toUpperCase();
+        return cmds.get(Cmd.HELP);
     }
 
     public String getAddServerCmd() {
-        return cmds.get(Cmd.ADD_SERVER).toUpperCase();
+        return cmds.get(Cmd.ADD_SERVER);
     }
 
     public String getGetCmd() {
-        return cmds.get(Cmd.GET).toUpperCase();
+        return cmds.get(Cmd.GET);
     }
 
     public String getSetCmd() {
-        return cmds.get(Cmd.SET).toUpperCase();
+        return cmds.get(Cmd.SET);
     }
 
     public String getTypeCmd() {
-        return cmds.get(Cmd.TYPE).toUpperCase();
+        return cmds.get(Cmd.TYPE);
     }
 
     public String getDecrCmd() {
-        return cmds.get(Cmd.DECR).toUpperCase();
+        return cmds.get(Cmd.DECR);
     }
 
     public String getDecrByCmd() {
-        return cmds.get(Cmd.DECRBY).toUpperCase();
+        return cmds.get(Cmd.DECRBY);
     }
 
     public String getIncrCmd() {
-        return cmds.get(Cmd.INCR).toUpperCase();
+        return cmds.get(Cmd.INCR);
     }
 
     public String getIncrByCmd() {
-        return cmds.get(Cmd.INCRBY).toUpperCase();
+        return cmds.get(Cmd.INCRBY);
     }
 
     public String getDelCmd() {
-        return cmds.get(Cmd.DEL).toUpperCase();
+        return cmds.get(Cmd.DEL);
     }
 
     public String findClosestCmdMatch(String cmd) {

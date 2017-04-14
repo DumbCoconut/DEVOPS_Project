@@ -46,7 +46,7 @@ public class RequestAddServerTest {
     }
 
     @Test
-    public void reqAddServerKey() throws Exception {
+    public void reqAddServerIp() throws Exception {
         createRequest(legitNbTokens);
         assertEquals("token1", r.getIp());
     }

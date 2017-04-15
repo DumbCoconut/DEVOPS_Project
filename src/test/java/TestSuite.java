@@ -1,3 +1,4 @@
+import client.ClientTestSuite;
 import client.requests.RequestTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -6,7 +7,7 @@ import storage.StorageTestSuite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        RequestTestSuite.class,
+        ClientTestSuite.class,
         ServerTestSuite.class,
         StorageTestSuite.class
 })

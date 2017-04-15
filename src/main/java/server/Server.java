@@ -1,8 +1,8 @@
 package server;
 
 import org.apache.commons.cli.*;
-import storage.DuplicatedKeyException;
-import storage.NonExistentKeyException;
+import storage.exceptions.DuplicatedKeyException;
+import storage.exceptions.NonExistentKeyException;
 import storage.Storage;
 
 import java.rmi.AlreadyBoundException;

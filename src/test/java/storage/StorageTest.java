@@ -4,6 +4,10 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import storage.exceptions.DuplicatedKeyException;
+import storage.exceptions.KeyException;
+import storage.exceptions.NonExistentKeyException;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 

@@ -7,6 +7,9 @@ import storage.exceptions.NonExistentKeyException;
 import java.util.concurrent.ConcurrentMap;
 
 public class Storage {
+    /**
+     * The maximum number of objects to keep in the cache.
+     */
     static public final long MAX_SIZE = 10L;
 
     /**
@@ -28,8 +31,9 @@ public class Storage {
     public Storage(long size) throws IllegalArgumentException {
         setMaxSize(size);
         cache = CacheBuilder.newBuilder()
-                .maximumSize(maxSize)
-                .<String, Object>build().asMap();
+                            .maximumSize(maxSize)
+                            .<String, Object>build()
+                            .asMap();
     }
 
     /**

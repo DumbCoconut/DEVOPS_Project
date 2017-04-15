@@ -8,21 +8,38 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class RequestHelp extends Request {
-    ArrayList<String> requests;
-
+    /**
+     * Separate the different blocks (one per request).
+     */
     private final String SEPARATOR = "\n--------------------\n";
 
+    /**
+     * List containing all the commands where help has been requested.
+     */
+    ArrayList<String> requests;
+
+    /**
+     * Constructor
+     * @param tokens The different words of the request, e.g {"help", "get", "set"}.
+     * @throws NoTokensException When no tokens are provided to the request.
+     */
     public RequestHelp(ArrayList<String> tokens) throws NoTokensException {
         super(tokens);
         requests = new ArrayList<>();
         parse();
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
         return getMessage();
     }
 
+    /**
+     * Parse the tokens and retrieve the commands where help has been requested.
+     */
     public void parse() {
         /* sublist because we skip "help" */
         /* remove the duplicates */
@@ -39,14 +56,26 @@ public class RequestHelp extends Request {
         requests.sort(String::compareToIgnoreCase);
     }
 
+    /**
+     * Get the separator.
+     * @return The separator.
+     */
     public String getSeparator() {
         return SEPARATOR;
     }
 
+    /**
+     * Get all the commands where help has been requested.
+     * @return all the commands where help has been requested.
+     */
     public ArrayList<String> getRequests() {
         return requests;
     }
 
+    /**
+     * Get the message containing information about all the commands where help has been requested.
+     * @return Help containing information about all the commands where help has been requested.
+     */
     public String getMessage() {
         if (tokens.size() == 1) {
             return getHelp();
@@ -91,6 +120,10 @@ public class RequestHelp extends Request {
         return String.join(SEPARATOR, res);
     }
 
+    /**
+     * Get the help message of all the commands.
+     * @return The help message of all the commands.
+     */
     public String getHelp() {
         // create the help
         ArrayList<String> l = new ArrayList<>();
@@ -114,6 +147,10 @@ public class RequestHelp extends Request {
         return String.join(SEPARATOR, l);
     }
 
+    /**
+     * Get the help message of HELP.
+     * @return The help message of HELP.
+     */
     public String getHelpHelp() {
         String res = "";
         res += "HELP [cmd1, cmd2, ... cmdN]" + "\n\n"
@@ -124,6 +161,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of EXIT.
+     * @return The help message of EXIT.
+     */
     public String getHelpExit() {
         String res = "";
         res += "EXIT" + "\n\n"
@@ -133,6 +174,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of QUIT.
+     * @return The help message of QUIT.
+     */
     public String getHelpQuit() {
         String res = "";
         res += "QUIT" + "\n\n"
@@ -142,6 +187,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of ADD_SERVER.
+     * @return The help message of ADD_SERVER.
+     */
     public String getHelpAddServer() {
         String res = "";
         res += "ADD_SERVER server_ip server_name" + "\n\n"
@@ -152,6 +201,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of GET.
+     * @return The help message of GET.
+     */
     public String getHelpGet() {
         String res = "";
         res += "GET key" + "\n\n"
@@ -162,6 +215,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of SET.
+     * @return The help message of SET.
+     */
     public String getHelpSet() {
         String res = "";
         res += "SET key value" + "\n\n"
@@ -172,6 +229,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of DECR.
+     * @return The help message of DECR.
+     */
     public String getHelpDecr() {
         String res = "";
         res += "DECR key" + "\n\n"
@@ -186,6 +247,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of DECRBY.
+     * @return The help message of DECRBY.
+     */
     public String getHelpDecrBy() {
         String res = "";
         res += "DECRBY key integer" + "\n\n"
@@ -200,6 +265,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of INCR.
+     * @return The help message of INCR.
+     */
     public String getHelpIncr() {
         String res = "";
         res += "INCR key" + "\n\n"
@@ -214,6 +283,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of INCRBY.
+     * @return The help message of INCRBY.
+     */
     public String getHelpIncrBy() {
         String res = "";
         res += "INCRBY key integer" + "\n\n"
@@ -228,6 +301,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of TYPE.
+     * @return The help message of TYPE.
+     */
     public String getHelpType() {
         String res = "";
         res += "TYPE key" + "\n\n"
@@ -238,6 +315,10 @@ public class RequestHelp extends Request {
         return res;
     }
 
+    /**
+     * Get the help message of DEL.
+     * @return The help message of DEL.
+     */
     public String getHelpDel() {
         String res = "";
         res += "DEL key" + "\n\n"

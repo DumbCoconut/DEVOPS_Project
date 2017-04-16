@@ -11,7 +11,9 @@ public class RequestName {
      * Enumeration of the available commands.
      */
     public enum Cmd {
-        QUIT, EXIT, HELP, ADD_SERVER, GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL;
+        QUIT, EXIT, HELP, ADD_SERVER,
+        GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
+        LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH
     }
 
     /**
@@ -24,10 +26,28 @@ public class RequestName {
      */
     private RequestName() {
         cmds = new HashMap<>();
+        addClientRequests();
+        addDataTypesRequests();
+        addDataStructuresRequests();
+
+        // All commands are upper case
+        cmds.replaceAll((k,v) -> v.toUpperCase());
+    }
+
+    /**
+     * Add requests related to the client.
+     */
+    private void addClientRequests() {
         cmds.put(Cmd.QUIT, "quit");
         cmds.put(Cmd.EXIT, "exit");
         cmds.put(Cmd.HELP, "help");
         cmds.put(Cmd.ADD_SERVER, "add_server");
+    }
+
+    /**
+     * Add requests related to data types.
+     */
+    private void addDataTypesRequests() {
         cmds.put(Cmd.GET, "get");
         cmds.put(Cmd.SET, "set");
         cmds.put(Cmd.TYPE, "type");
@@ -36,9 +56,22 @@ public class RequestName {
         cmds.put(Cmd.INCR, "incr");
         cmds.put(Cmd.INCRBY, "incrby");
         cmds.put(Cmd.DEL, "del");
+    }
 
-        // All commands are upper case
-        cmds.replaceAll((k,v) -> v.toUpperCase());
+    /**
+     * Add requests related to data structures.
+     */
+    private void addDataStructuresRequests() {
+        cmds.put(Cmd.LINDEX, "lindex");
+        cmds.put(Cmd.LLEN, "llen");
+        cmds.put(Cmd.LPOP, "lpop");
+        cmds.put(Cmd.LPUSH, "lpush");
+        cmds.put(Cmd.LRANGE, "lrange");
+        cmds.put(Cmd.LREM, "lrem");
+        cmds.put(Cmd.LSET, "lset");
+        cmds.put(Cmd.LTRIM, "ltrim");
+        cmds.put(Cmd.RPOP, "rpop");
+        cmds.put(Cmd.RPUSH, "rpush");
     }
 
     /**
@@ -161,6 +194,86 @@ public class RequestName {
         return cmds.get(Cmd.DEL);
     }
 
+    /**
+     * Get the natural name of the LINDEX command.
+     * @return The natural name of the LINDEX command.
+     */
+    public String getLIndexCmd() {
+        return cmds.get(Cmd.LINDEX);
+    }
+
+    /**
+     * Get the natural name of the LLEN command.
+     * @return The natural name of the LLEN command.
+     */
+    public String getLLenCmd() {
+        return cmds.get(Cmd.LLEN);
+    }
+
+    /**
+     * Get the natural name of the LPOP command.
+     * @return The natural name of the LPOP command.
+     */
+    public String getLPopCmd() {
+        return cmds.get(Cmd.LPOP);
+    }
+
+    /**
+     * Get the natural name of the LPUSH command.
+     * @return The natural name of the LPUSH command.
+     */
+    public String getLPushCmd() {
+        return cmds.get(Cmd.LPUSH);
+    }
+
+    /**
+     * Get the natural name of the LRANGE command.
+     * @return The natural name of the LRANGE command.
+     */
+    public String getLRangeCmd() {
+        return cmds.get(Cmd.LRANGE);
+    }
+
+    /**
+     * Get the natural name of the LREM command.
+     * @return The natural name of the LREM command.
+     */
+    public String getLRemCmd() {
+        return cmds.get(Cmd.LREM);
+    }
+
+    /**
+     * Get the natural name of the LSET command.
+     * @return The natural name of the LSET command.
+     */
+    public String getLSetCmd() {
+        return cmds.get(Cmd.LSET);
+    }
+
+    /**
+     * Get the natural name of the LTRIM command.
+     * @return The natural name of the LTRIM command.
+     */
+    public String getLTrimCmd() {
+        return cmds.get(Cmd.LTRIM);
+    }
+
+    /**
+     * Get the natural name of the RPOP command.
+     * @return The natural name of the RPOP command.
+     */
+    public String getRPopCmd() {
+        return cmds.get(Cmd.RPOP);
+    }
+
+    /**
+     * Get the natural name of the RPUSH command.
+     * @return The natural name of the RPUSH command.
+     */
+    public String getRPushCmd() {
+        return cmds.get(Cmd.RPUSH);
+    }
+    
     /**
      * Find the closest match of the given command using Levenshtein distance (e.g "DEL" for "dal".
      * @param cmd The command we want to find a match of.

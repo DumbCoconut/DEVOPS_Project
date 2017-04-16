@@ -127,10 +127,13 @@ public class RequestHelp extends Request {
     public String getHelp() {
         // create the help
         ArrayList<String> l = new ArrayList<>();
+
+        // client
         l.add(getHelpHelp());
         l.add(getHelpQuit());
         l.add(getHelpExit());
         l.add(getHelpAddServer());
+        // data types
         l.add(getHelpGet());
         l.add(getHelpSet());
         l.add(getHelpDecr());
@@ -139,6 +142,17 @@ public class RequestHelp extends Request {
         l.add(getHelpIncrBy());
         l.add(getHelpType());
         l.add(getHelpDel());
+        // data structures
+        l.add(getHelpLIndex());
+        l.add(getHelpLLen());
+        l.add(getHelpLPop());
+        l.add(getHelpLPush());
+        l.add(getHelpLRange());
+        l.add(getHelpLRem());
+        l.add(getHelpLSet());
+        l.add(getHelpLTrim());
+        l.add(getHelpRPop());
+        l.add(getHelpRPush());
 
         // sort the help by alphabetical order
         l.sort(String::compareTo);
@@ -325,6 +339,175 @@ public class RequestHelp extends Request {
 
             +  "DESCRIPTION: Remove the specified keys. If a given key does not exist no operation is performed " +
                "for this key. The command returns the number of keys removed.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LINDEX.
+     * @return The help message of LINDEX.
+     */
+    public String getHelpLIndex() {
+        String res = "";
+        res += "LINDEX key index" + "\n\n"
+
+             +  "DESCRIPTION: Return the specified element of the list stored at the specified key. 0 is the " +
+                "first element, 1 the second and so on." + "\n\n"
+
+             +  "If the value stored at key is not of list type an error is returned. " +
+                "If the index is out of range an empty string is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LLEN.
+     * @return The help message of LLEN.
+     */
+    public String getHelpLLen() {
+        String res = "";
+        res += "LLEN key" + "\n\n"
+
+            +  "DESCRIPTION: Return the length of the list stored at the specified key." +
+               " If the key does not exist zero is returned (the same behaviour as for empty lists). " +
+               "If the value stored at key is not a list an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LPOP.
+     * @return The help message of LPOP.
+     */
+    public String getHelpLPop() {
+        String res = "";
+        res += "LPOP key" + "\n\n"
+
+            +  "DESCRIPTION: Atomically return and remove the first (LPOP) or last (RPOP) element of the list. " +
+               "For example if the list contains the elements \"a\",\"b\",\"c\" LPOP will return \"a\" and the list " +
+                "will become \"b\",\"c\".\n" + "\n\n"
+
+            +  "If the key does not exist or the list is already empty the special value 'nil' is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LPUSH.
+     * @return The help message of LPUSH.
+     */
+    public String getHelpLPush() {
+        String res = "";
+        res += "LPUSH key string" + "\n\n"
+
+            +  "DESCRIPTION: Add the string value to the head (RPUSH) or tail (LPUSH) of the list stored at key. " +
+               "If the key does not exist an empty list is created just before the append operation. " +
+               "If the key exists but is not a List an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LRANGE.
+     * @return The help message of LRANGE.
+     */
+    public String getHelpLRange() {
+        String res = "";
+        res += "LRANGE key start end" + "\n\n"
+
+            +  "DESCRIPTION: Return the specified elements of the list stored at the specified key. " +
+               "Start and end are zero-based indexes. 0 is the first element of the list (the list head), " +
+               "1 the next element and so on." + "\n\n"
+
+            +  "For example LRANGE foobar 0 2 will return the first three elements of the list." + "\n\n"
+
+            +  "Indexes out of range will not produce an error: if start is over the end of the list, or start > end," +
+               " an empty list is returned. If end is over the end of the list RedisLike will threat it just like the " +
+               "last element of the list.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LREM.
+     * @return The help message of LREM.
+     */
+    public String getHelpLRem() {
+        String res = "";
+        res += "LREM key count value" + "\n\n"
+
+            +  "DESCRIPTION: Remove the first count occurrences of the value element from the list. If count is zero " +
+               "all the elements are removed. " + "\n\n"
+
+            + "Note that non existing keys are considered like empty lists by LREM, so LREM against non existing " +
+              "keys will always return 0.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LSET.
+     * @return The help message of LSET.
+     */
+    public String getHelpLSet() {
+        String res = "";
+        res += "LSET key index value" + "\n\n"
+
+            +  "DESCRIPTION: Set the list element at index with the new value.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of LTRIM.
+     * @return The help message of LTRIM.
+     */
+    public String getHelpLTrim() {
+        String res = "";
+        res += "LTRIM key start end" + "\n\n"
+
+            +  "Trim an existing list so that it will contain only the specified range of elements specified. Start" +
+               " and end are zero-based indexes. 0 is the first element of the list (the list head), " +
+               "1 the next element and so on." + "\n\n"
+
+            +  "For example LTRIM foobar 0 2 will modify the list stored at foobar key so that only the first three " +
+               "elements of the list will remain." + "\n\n"
+
+            +  "Indexes out of range will not produce an error: if start is over the end of the list, or start > end," +
+               " an empty list is left as value. If end over the end of the list Redis will threat it just like the " +
+               "last element of the list.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of RPOP.
+     * @return The help message of RPOP.
+     */
+    public String getHelpRPop() {
+        String res = "";
+        res += "RPOP key" + "\n\n"
+
+                +  "DESCRIPTION: Atomically return and remove the first (LPOP) or last (RPOP) element of the list. " +
+                "For example if the list contains the elements \"a\",\"b\",\"c\" LPOP will return \"a\" and the list " +
+                "will become \"b\",\"c\".\n" + "\n\n"
+
+                +  "If the key does not exist or the list is already empty the special value 'nil' is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of RPUSH.
+     * @return The help message of RPUSH.
+     */
+    public String getHelpRPush() {
+        String res = "";
+        res += "RPUSH key string" + "\n\n"
+
+            +  "DESCRIPTION: Add the string value to the head (RPUSH) or tail (LPUSH) of the list stored at key. " +
+               "If the key does not exist an empty list is created just before the append operation. " +
+               "If the key exists but is not a List an error is returned.";
 
         return res;
     }

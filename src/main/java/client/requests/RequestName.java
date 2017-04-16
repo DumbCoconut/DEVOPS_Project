@@ -273,7 +273,7 @@ public class RequestName {
     public String getRPushCmd() {
         return cmds.get(Cmd.RPUSH);
     }
-    
+
     /**
      * Find the closest match of the given command using Levenshtein distance (e.g "DEL" for "dal".
      * @param cmd The command we want to find a match of.

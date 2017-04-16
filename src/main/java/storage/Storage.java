@@ -124,6 +124,15 @@ public class Storage {
      * @param value The new value.
      */
     public synchronized void replace(String key, Object value) {
-        cache.replace(key, value);
+        if (value instanceof String) {
+            try {
+                int i = Integer.parseInt((String) value);
+                cache.replace(key, i);
+            } catch (NumberFormatException e) {
+                cache.replace(key, value);
+            }
+        } else {
+            cache.replace(key, value);
+        }
     }
 }

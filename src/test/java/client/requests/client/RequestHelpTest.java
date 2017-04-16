@@ -330,6 +330,66 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithLIndex() throws Exception {
+        createRequest(new String[]{"help", "LINDEX"});
+        assert r.getMessage().contains("LINDEX");
+    }
+
+    @Test
+    public void testGetMessageWithLLen() throws Exception {
+        createRequest(new String[]{"help", "LLEN"});
+        assert r.getMessage().contains("LLEN");
+    }
+
+    @Test
+    public void testGetMessageWithLPop() throws Exception {
+        createRequest(new String[]{"help", "LPOP"});
+        assert r.getMessage().contains("LPOP");
+    }
+
+    @Test
+    public void testGetMessageWithLPush() throws Exception {
+        createRequest(new String[]{"help", "LPUSH"});
+        assert r.getMessage().contains("LPUSH");
+    }
+
+    @Test
+    public void testGetMessageWithLRange() throws Exception {
+        createRequest(new String[]{"help", "LRANGE"});
+        assert r.getMessage().contains("LRANGE");
+    }
+
+    @Test
+    public void testGetMessageWithLRem() throws Exception {
+        createRequest(new String[]{"help", "LREM"});
+        assert r.getMessage().contains("LREM");
+    }
+
+    @Test
+    public void testGetMessageWithLSet() throws Exception {
+        createRequest(new String[]{"help", "LSET"});
+        assert r.getMessage().contains("LSET");
+    }
+
+    @Test
+    public void testGetMessageWithLTrim() throws Exception {
+        createRequest(new String[]{"help", "LTRIM"});
+        assert r.getMessage().contains("LTRIM");
+    }
+
+    @Test
+    public void testGetMessageWithRPop() throws Exception {
+        createRequest(new String[]{"help", "RPOP"});
+        assert r.getMessage().contains("RPOP");
+    }
+
+    @Test
+    public void testGetMessageWithRPush() throws Exception {
+        createRequest(new String[]{"help", "RPUSH"});
+        assert r.getMessage().contains("RPUSH");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

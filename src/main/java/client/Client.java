@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 public class Client {
     private RedisLikeServer server;
     private Registry registry;
+    private String serverIp;
+    private String serverName;
 
     private boolean exitRequested;
     private ArrayList<String> tokens;
@@ -120,13 +122,50 @@ public class Client {
     }
 
     private void doAddServer() {
+        if (! shouldWeDisconnectFromCurrentServer()) {
+            return;
+        }
+
         try {
             RequestAddServer r = new RequestAddServer(tokens);
-            addServer(r.getIp(), r.getName());
+            serverIp = r.getIp();
+            serverName = r.getName();
+            addServer(serverIp, serverName);
         } catch (InvalidNbArgException | NoTokensException e) {
             System.out.println(e.getMessage());
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean shouldWeDisconnectFromCurrentServer() {
+        if (server != null) {
+            System.out.println(
+                    "You are already connected to a server (" + serverName + "@" + serverIp + "). " +
+                    "This client can only handle one server at a time.\n" +
+                    "Are you sure you want to exit the current server and connect to the new one? (yes/no)");
+            Scanner terminal = new Scanner(System.in);
+            boolean answered = false;
+            boolean shouldConnectAnw = true;
+            while (!answered) {
+                String answer = terminal.nextLine().toLowerCase();
+                switch (answer) {
+                    case "no":
+                        shouldConnectAnw = false;
+                        answered = true;
+                        break;
+                    case "yes":
+                        shouldConnectAnw = true;
+                        answered = true;
+                        break;
+                    default:
+                        System.out.println("Please answer \"yes\" or \"no\".");
+                        break;
+                }
+            }
+            return shouldConnectAnw;
+        } else {
+            return true;
         }
     }
 

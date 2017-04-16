@@ -58,7 +58,7 @@ public class Server implements RedisLikeServer {
      * Get the name of this server.
      * @return the name of this server.
      */
-    public String getName() {
+    public String getName() throws RemoteException {
         return name;
     }
 

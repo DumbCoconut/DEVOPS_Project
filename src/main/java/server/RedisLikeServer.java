@@ -5,6 +5,12 @@ import java.rmi.RemoteException;
 
 public interface RedisLikeServer extends Remote {
     /**
+     * Get the server's name.
+     * @return The server's name.
+     */
+    String getName() throws RemoteException;
+
+    /**
      * Get the value of the specified key.
      * @param key The key we want the value of.
      * @return The value of the key if it exists, null otherwise.

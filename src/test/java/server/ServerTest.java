@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.rmi.RemoteException;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +21,6 @@ public class ServerTest {
     private static final String EOL = System.getProperty("line.separator");
 
     private ByteArrayOutputStream testOutput;
-    private PrintStream console = System.out;
 
     private String defaultKey = "key";
     private String nonExistentKey = "non_existent_key";
@@ -62,21 +62,14 @@ public class ServerTest {
     }
 
     @Test
-    public void serverWithoutParsing() {
+    public void serverWithoutParsing() throws RemoteException {
         Server s = new Server();
         assertEquals(Server.DEFAULT_PORT, s.getPort());
-        assertEquals("server_" + (Server.NUM_SERV - 1), s.getName());
+        assertEquals(Server.DEFAULT_NAME, s.getName());
     }
 
     @Test
-    public void twoServerNamesWithoutParsing() {
-        Server s = new Server();
-        Server s2 = new Server();
-        assertNotEquals(s.getName(), s2.getName());
-    }
-
-    @Test
-    public void serverNameParserShortOpt() throws ParseException {
+    public void serverNameParserShortOpt() throws ParseException, RemoteException {
         Server s = new Server();
         String name = "Ladies and gentlemen, allow me to present, Man Not Caring.";
         s.parse(new String[]{"-n", name});
@@ -84,7 +77,7 @@ public class ServerTest {
     }
 
     @Test
-    public void serverNameParserLongOpt() throws ParseException {
+    public void serverNameParserLongOpt() throws ParseException, RemoteException {
         Server s = new Server();
         String name = "Ladies and gentlemen, allow me to present, Man Not Caring.";
         s.parse(new String[]{"--name", name});

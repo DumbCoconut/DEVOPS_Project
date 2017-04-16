@@ -14,7 +14,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Server implements RedisLikeServer {
     public static final int DEFAULT_PORT = 42933;
-    public static int NUM_SERV = 0;
+    public static final long DEFAULT_CACHE_SIZE = 10L;
+    public static final String DEFAULT_NAME = "redis-like";
 
     private Options opt;
     private CommandLine commandLine;
@@ -49,8 +50,8 @@ public class Server implements RedisLikeServer {
     public Server() {
         initOptions();
         port = DEFAULT_PORT;
-        name = "server_" + NUM_SERV++;
-        storage = new Storage(10L);
+        name = DEFAULT_NAME;
+        storage = new Storage(DEFAULT_CACHE_SIZE);
     }
 
     /**

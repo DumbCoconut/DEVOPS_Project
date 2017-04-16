@@ -20,7 +20,7 @@ public class RequestRPush extends RequestWithKey {
     /**
      * Constructor.
      *
-     * @param tokens The different words of the request, e.g {"lindex", "key", "index"}.
+     * @param tokens The different words of the request, e.g {"rpush", "key", "string"}.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */

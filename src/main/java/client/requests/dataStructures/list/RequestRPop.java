@@ -15,7 +15,7 @@ public class RequestRPop extends RequestWithKey {
     /**
      * Constructor.
      *
-     * @param tokens The different words of the request, e.g {"lpop", "key"}.
+     * @param tokens The different words of the request, e.g {"rpop", "key"}.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */

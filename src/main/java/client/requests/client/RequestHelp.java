@@ -109,13 +109,32 @@ public class RequestHelp extends Request {
                 res.add(getHelpType());
             } else if (cmd.equals(RequestName.getInstance().getDelCmd())) {
                 res.add(getHelpDel());
+            } else if (cmd.equals(RequestName.getInstance().getLIndexCmd())) {
+                res.add(getHelpLIndex());
+            } else if (cmd.equals(RequestName.getInstance().getLLenCmd())) {
+                res.add(getHelpLLen());
+            } else if (cmd.equals(RequestName.getInstance().getLPopCmd())) {
+                res.add(getHelpLPop());
+            } else if (cmd.equals(RequestName.getInstance().getLPushCmd())) {
+                res.add(getHelpLPush());
+            } else if (cmd.equals(RequestName.getInstance().getLRangeCmd())) {
+                res.add(getHelpLRange());
+            } else if (cmd.equals(RequestName.getInstance().getLRemCmd())) {
+                res.add(getHelpLRem());
+            } else if (cmd.equals(RequestName.getInstance().getLSetCmd())) {
+                res.add(getHelpLSet());
+            } else if (cmd.equals(RequestName.getInstance().getLTrimCmd())) {
+                res.add(getHelpLTrim());
+            } else if (cmd.equals(RequestName.getInstance().getRPopCmd())) {
+                res.add(getHelpRPop());
+            } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
+                res.add(getHelpRPush());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
                                             RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
             }
         }
-
         // return the reconstituted string
         return String.join(SEPARATOR, res);
     }

@@ -140,6 +140,22 @@ public class StorageTest {
         containsHelper(s, new boolean[]{true, false, true, true});
     }
 
+    @Test
+    public void replaceValueInCacheStringToInteger() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        s.replace("key", "3");
+        assertEquals(s.get("key").getClass(), Integer.class);
+    }
+
+    @Test
+    public void replaceValueInCacheIntegerToString() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "3");
+        s.replace("key", "value");
+        assertEquals(s.get("key").getClass(), String.class);
+    }
+
     /* --------------------------------------------------------------------------------------------------
      * The following tests are most likely useless. They test things that do not need to be tested,
      * E.G overloaded methods that do nothing but call the "real" method using different parameters.
@@ -150,14 +166,6 @@ public class StorageTest {
     public void constructorWithoutSize() {
         Storage s = new Storage();
         assertEquals(Storage.MAX_SIZE, s.getMaxSize());
-    }
-
-    @Test
-    public void replaceValueInCache() throws DuplicatedKeyException, NonExistentKeyException {
-        Storage s = createAndStoreHelper(2L);
-        String newValue = "Same job, different outfit.";
-        s.replace("key2", newValue);
-        assertEquals(newValue, s.get("key2"));
     }
 
     @Test

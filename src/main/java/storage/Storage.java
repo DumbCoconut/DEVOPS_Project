@@ -158,18 +158,18 @@ public class Storage {
     /*                                                                                                                */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    public synchronized boolean lPush(String key, String value) {
+    public synchronized boolean lPush(String key, Object value) {
         return insertHelper(key, value, -1);
     }
 
-    public synchronized boolean rPush(String key, String value) {
+    public synchronized boolean rPush(String key, Object value) {
         return insertHelper(key, value, 0);
     }
 
-    private boolean insertHelper(String key, String value, int index) {
+    private boolean insertHelper(String key, Object value, int index) {
         boolean success;
         if (!cache.containsKey(key)) {
-            ArrayList<String> list = new ArrayList<>();
+            ArrayList<Object> list = new ArrayList<>();
             list.add(value);
             cache.put(key, list);
             success = true;

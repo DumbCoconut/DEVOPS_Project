@@ -765,7 +765,7 @@ public class StorageTest {
     @Test
     public void lrangeOnNonExistingKey() {
         Storage s = new Storage();
-        assertEquals(null, s.lrange("key", 0, 5));
+        assertArrayEquals(new Object[]{}, s.lrange("key", 0, 5).toArray());
     }
 
     @Test

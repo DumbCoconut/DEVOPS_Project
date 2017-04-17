@@ -266,7 +266,7 @@ public class Storage {
     }
 
     public synchronized ArrayList<Object> lrange(String key, int start, int end) {
-        ArrayList<Object> range = null;
+        ArrayList<Object> range = new ArrayList<>();
         if (cache.containsKey(key)) {
             Object l = cache.get(key);
             if (l instanceof ArrayList) {
@@ -275,10 +275,11 @@ public class Storage {
                 if (end > len) {
                     end = len;
                 }
-                range = new ArrayList<>();
                 if (!(start > len - 1 || start > end || start < 0)) {
                     range.addAll(((ArrayList) l).subList(start, end));
                 }
+            } else {
+                range = null;
             }
         }
         return range;

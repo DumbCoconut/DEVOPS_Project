@@ -3,6 +3,7 @@ package client;
 import client.requests.RequestName;
 import client.requests.client.RequestAddServer;
 import client.requests.client.RequestHelp;
+import client.requests.dataStructures.list.*;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -74,6 +75,26 @@ public class Client {
             doIncrBy();
         } else if (cmd.equals(RequestName.getInstance().getDelCmd())) {
             doDel();
+        } else if (cmd.equals(RequestName.getInstance().getLIndexCmd())) {
+            doLindex();
+        } else if (cmd.equals(RequestName.getInstance().getLLenCmd())) {
+            doLLen();
+        } else if (cmd.equals(RequestName.getInstance().getLPopCmd())) {
+            doLPop();
+        } else if (cmd.equals(RequestName.getInstance().getLPushCmd())) {
+            doLPush();
+        } else if (cmd.equals(RequestName.getInstance().getLRangeCmd())) {
+            doLRange();
+        } else if (cmd.equals(RequestName.getInstance().getLRemCmd())) {
+            doLRem();
+        } else if (cmd.equals(RequestName.getInstance().getLSetCmd())) {
+            doLSet();
+        } else if (cmd.equals(RequestName.getInstance().getLTrimCmd())) {
+            doLTrim();
+        } else if (cmd.equals(RequestName.getInstance().getRPopCmd())) {
+            doRPop();
+        } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
+            doRPush();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -271,6 +292,136 @@ public class Client {
         }
     }
 
+    private void doLindex() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLIndex r = new RequestLIndex(tokens);
+                System.out.println(lindex(r.getKey(), r.getIndex()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLLen() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLLen r = new RequestLLen(tokens);
+                System.out.println(llen(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLPop() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLPop r = new RequestLPop(tokens);
+                System.out.println(lpop(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLPush() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLPush r = new RequestLPush(tokens);
+                System.out.println(lpush(r.getKey(), r.getString()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLRange() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLRange r = new RequestLRange(tokens);
+                System.out.println(lrange(r.getKey(), r.getStart(), r.getEnd()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLRem() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLRem r = new RequestLRem(tokens);
+                System.out.println(lrem(r.getKey(), r.getCount(), r.getValue()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLSet() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLSet r = new RequestLSet(tokens);
+                System.out.println(lset(r.getKey(), r.getIndex(), r.getValue()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLTrim() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLTrim r = new RequestLTrim(tokens);
+                System.out.println(ltrim(r.getKey(), r.getStart(), r.getEnd()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doRPop() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestRPop r = new RequestRPop(tokens);
+                System.out.println(rpop(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doRPush() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestRPush r = new RequestRPush(tokens);
+                System.out.println(rpush(r.getKey(), r.getString()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -425,6 +576,133 @@ public class Client {
         } catch (RemoteException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private String lindex(String key, String index) {
+        try {
+            int realIndex = Integer.parseInt(index);
+            Object o = server.lindex(key, realIndex);
+            if (o == null) {
+                return "(nil)";
+            } else if (o.equals("")) {
+                return "(empty string)";
+            } else {
+                return o.toString();
+            }
+        } catch (NumberFormatException e) {
+            return "(error) value is not an integer";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String llen(String key) {
+        try {
+            int len = server.llen(key);
+            return len >= 0 ? String.valueOf(len) : "(error) not a list";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lpop(String key) {
+        try {
+            Object o = server.lpop(key);
+            if (o == null) {
+                return "(nil)";
+            } else {
+                return o.toString();
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lpush(String key, Object value) {
+        try {
+            return server.lpush(key, value) ? "OK" : "(error) Operation against a key holding the wrong kind of value";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lrange(String key, String start, String end) {
+        try {
+            int realStart = Integer.parseInt(start);
+            int realEnd = Integer.parseInt(end);
+            ArrayList<Object> objects = server.lrange(key, realStart, realEnd);
+            if (objects == null) {
+                return "(error) Operation against a key holding the wrong kind of value";
+            } else if (objects.isEmpty()) {
+                return ("(empty list)");
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (NumberFormatException e) {
+            return "(error) value is not an integer";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lrem(String key, String count, String value) {
+        try {
+            int realCount = Integer.parseInt(count);
+            return String.valueOf(server.lrem(key, realCount, value));
+        } catch (NumberFormatException e) {
+            return "(error) value is not an integer";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lset(String key, String index, String value) {
+        try {
+            int realIndex = Integer.parseInt(index);
+            return server.lset(key, realIndex, value) ? "OK" : "NOT OK";
+        } catch (NumberFormatException e) {
+            return "(error) value is not an integer";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String ltrim(String key, String start, String end) {
+        try {
+            int realStart = Integer.parseInt(start);
+            int realEnd = Integer.parseInt(end);
+            return server.ltrim(key, realStart, realEnd) ? "OK" : "NOT OK";
+        } catch (NumberFormatException e) {
+            return "(error) value is not an integer";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String rpush(String key, Object value) {
+        try {
+            return server.rpush(key, value) ? "OK" : "(error) Operation against a key holding the wrong kind of value";
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String rpop(String key) {
+        try {
+            Object o = server.rpop(key).toString();
+            if (o == null) {
+                return "(nil)";
+            } else {
+                return o.toString();
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
         }
     }
 }

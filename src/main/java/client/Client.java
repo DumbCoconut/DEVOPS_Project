@@ -20,12 +20,20 @@ import java.util.regex.Pattern;
 
 public class Client {
     private RedisLikeServer server;
-    private Registry registry;
     private String serverIp;
     private String serverName;
 
     private boolean exitRequested;
     private ArrayList<String> tokens;
+
+    private final String OK = "OK";
+    private final String NOT_OK = "NOT OK";
+    private final String EMPTY_STRING = "(empty string)";
+    private final String EMPTY_LIST = "(empty list)";
+    private final String ERROR_PARSE_INT = "(error) value is not an integer";
+    private final String ERROR_WRONG_TYPE = "(error) Operation dagainst a key holding the wrong kind of value";
+    private final String ERROR_NOT_LIST = "(error) not a list";
+    private final String NIL = "(nil)";
 
     public static void main(String[] args) {
         Client c = new Client();
@@ -207,7 +215,7 @@ public class Client {
         } else {
             try {
                 RequestSet r = new RequestSet(tokens);
-                set(r.getKey(), r.getObject());
+                System.out.println(set(r.getKey(), r.getObject()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -246,7 +254,7 @@ public class Client {
         } else {
             try {
                 RequestDecrBy r = new RequestDecrBy(tokens);
-                System.out.println(decrBy(r.getKey(), Integer.valueOf(r.getInteger())));
+                System.out.println(decrBy(r.getKey(), r.getInteger()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -272,7 +280,7 @@ public class Client {
         } else {
             try {
                 RequestIncrBy r = new RequestIncrBy(tokens);
-                System.out.println(incrBy(r.getKey(), Integer.valueOf(r.getInteger())));
+                System.out.println(incrBy(r.getKey(), r.getInteger()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -432,7 +440,7 @@ public class Client {
     }
 
     private void addServer(String ip, String name) throws RemoteException, NotBoundException {
-        registry = LocateRegistry.getRegistry(ip);
+        Registry registry = LocateRegistry.getRegistry(ip);
         server = (RedisLikeServer) registry.lookup(name);
     }
 
@@ -440,20 +448,21 @@ public class Client {
         System.out.println("Server is not set. Please add a server. Type \"help add_server\" if you need help.");
     }
 
-    private Object get(String key) {
+    private String get(String key) {
         try {
-            return server.get(key);
+            Object o = server.get(key);
+            return o != null ? o.toString() : NIL;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return null;
+            return e.getMessage();
         }
     }
 
-    private void set(String key, Object value) {
+    private String set(String key, Object value) {
         try {
             server.set(key, value);
+            return OK;
         } catch (RemoteException e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 
@@ -461,53 +470,53 @@ public class Client {
         try {
             return server.type(key);
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return "";
+            return e.getMessage();
         }
     }
 
-    private int decr(String key) {
+    private String decr(String key) {
         try {
-            return server.decr(key);
+            return String.valueOf(server.decr(key));
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    private int decrBy(String key, int integer) {
+    private String decrBy(String key, String integer) {
         try {
-            return server.decrBy(key, integer);
+            int realInteger = Integer.parseInt(integer);
+            return String.valueOf(server.decrBy(key, realInteger));
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    private int incr(String key) {
+    private String incr(String key) {
         try {
-            return server.incr(key);
+            return String.valueOf(server.incr(key));
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    private int incrBy(String key, int integer) {
+    private String incrBy(String key, String integer) {
         try {
-            return server.incrBy(key, integer);
+            int realInteger = Integer.parseInt(integer);
+            return String.valueOf(server.incrBy(key, realInteger));
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    private boolean del(String key) {
+    private String del(String key) {
         try {
-            return server.del(key);
+            return server.del(key) ? OK : NOT_OK;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return false;
+            return e.getMessage();
         }
     }
 
@@ -516,14 +525,14 @@ public class Client {
             int realIndex = Integer.parseInt(index);
             Object o = server.lindex(key, realIndex);
             if (o == null) {
-                return "(nil)";
+                return NIL;
             } else if (o.equals("")) {
-                return "(empty string)";
+                return EMPTY_STRING;
             } else {
                 return o.toString();
             }
         } catch (NumberFormatException e) {
-            return "(error) value is not an integer";
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -532,7 +541,7 @@ public class Client {
     private String llen(String key) {
         try {
             int len = server.llen(key);
-            return len >= 0 ? String.valueOf(len) : "(error) not a list";
+            return len >= 0 ? String.valueOf(len) : ERROR_NOT_LIST;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -542,7 +551,7 @@ public class Client {
         try {
             Object o = server.lpop(key);
             if (o == null) {
-                return "(nil)";
+                return NIL;
             } else {
                 return o.toString();
             }
@@ -553,7 +562,7 @@ public class Client {
 
     private String lpush(String key, Object value) {
         try {
-            return server.lpush(key, value) ? "OK" : "(error) Operation against a key holding the wrong kind of value";
+            return server.lpush(key, value) ? OK : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -565,9 +574,9 @@ public class Client {
             int realEnd = Integer.parseInt(end);
             ArrayList<Object> objects = server.lrange(key, realStart, realEnd);
             if (objects == null) {
-                return "(error) Operation against a key holding the wrong kind of value";
+                return ERROR_WRONG_TYPE;
             } else if (objects.isEmpty()) {
-                return ("(empty list)");
+                return EMPTY_LIST;
             } else {
                 int len = objects.size();
                 String res = "";
@@ -577,7 +586,7 @@ public class Client {
                 return res;
             }
         } catch (NumberFormatException e) {
-            return "(error) value is not an integer";
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -588,7 +597,7 @@ public class Client {
             int realCount = Integer.parseInt(count);
             return String.valueOf(server.lrem(key, realCount, value));
         } catch (NumberFormatException e) {
-            return "(error) value is not an integer";
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -597,9 +606,9 @@ public class Client {
     private String lset(String key, String index, String value) {
         try {
             int realIndex = Integer.parseInt(index);
-            return server.lset(key, realIndex, value) ? "OK" : "NOT OK";
+            return server.lset(key, realIndex, value) ? OK : NOT_OK;
         } catch (NumberFormatException e) {
-            return "(error) value is not an integer";
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -609,9 +618,9 @@ public class Client {
         try {
             int realStart = Integer.parseInt(start);
             int realEnd = Integer.parseInt(end);
-            return server.ltrim(key, realStart, realEnd) ? "OK" : "NOT OK";
+            return server.ltrim(key, realStart, realEnd) ? OK : NOT_OK;
         } catch (NumberFormatException e) {
-            return "(error) value is not an integer";
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -619,7 +628,7 @@ public class Client {
 
     private String rpush(String key, Object value) {
         try {
-            return server.rpush(key, value) ? "OK" : "(error) Operation against a key holding the wrong kind of value";
+            return server.rpush(key, value) ? OK : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();
         }
@@ -627,12 +636,8 @@ public class Client {
 
     private String rpop(String key) {
         try {
-            Object o = server.rpop(key).toString();
-            if (o == null) {
-                return "(nil)";
-            } else {
-                return o.toString();
-            }
+            Object o = server.rpop(key);
+            return o != null ? o.toString(): NIL;
         } catch (RemoteException e) {
             return e.getMessage();
         }

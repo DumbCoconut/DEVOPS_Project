@@ -532,6 +532,13 @@ public class StorageTest {
     }
 
     @Test
+    public void lsetNotAList() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(false, s.lset("key", 0, "value"));
+    }
+
+    @Test
     public void lsetOnNotListDoesNotModifyOld() throws DuplicatedKeyException, NonExistentKeyException {
         Storage s = new Storage();
         s.store("key", "value");
@@ -651,6 +658,13 @@ public class StorageTest {
     }
 
     @Test
+    public void lremNotAList() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(0, s.lrem("key", 0, 0));
+    }
+
+    @Test
     public void lremAllElementsOfReturnValue() throws DuplicatedKeyException {
         Storage s = createAndStoreEmptyListHelper();
         int toRemove = 5;
@@ -766,6 +780,13 @@ public class StorageTest {
     public void lrangeOnNonExistingKey() {
         Storage s = new Storage();
         assertArrayEquals(new Object[]{}, s.lrange("key", 0, 5).toArray());
+    }
+
+    @Test
+    public void lRangeNotAList() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(null, s.lrange("key", 0, 0));
     }
 
     @Test
@@ -900,6 +921,13 @@ public class StorageTest {
     public void ltrimOnEmptyList() throws DuplicatedKeyException {
         Storage s = createAndStoreEmptyListHelper();
         assertEquals(true, s.ltrim("key", 0, 5));
+    }
+
+    @Test
+    public void ltrimNotAList() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(false, s.ltrim("key", 0, 0));
     }
 
     @Test

@@ -1,14 +1,13 @@
 package client;
 
-import client.requests.Request;
 import client.requests.RequestName;
 import client.requests.client.RequestAddServer;
 import client.requests.client.RequestHelp;
+import client.requests.dataStructures.list.*;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
 import server.RedisLikeServer;
-import server.Server;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -21,10 +20,20 @@ import java.util.regex.Pattern;
 
 public class Client {
     private RedisLikeServer server;
-    private Registry registry;
+    private String serverIp;
+    private String serverName;
 
     private boolean exitRequested;
     private ArrayList<String> tokens;
+
+    private final String OK = "OK";
+    private final String NOT_OK = "NOT OK";
+    private final String EMPTY_STRING = "(empty string)";
+    private final String EMPTY_LIST = "(empty list)";
+    private final String ERROR_PARSE_INT = "(error) value is not an integer";
+    private final String ERROR_WRONG_TYPE = "(error) Operation dagainst a key holding the wrong kind of value";
+    private final String ERROR_NOT_LIST = "(error) not a list";
+    private final String NIL = "(nil)";
 
     public static void main(String[] args) {
         Client c = new Client();
@@ -74,6 +83,26 @@ public class Client {
             doIncrBy();
         } else if (cmd.equals(RequestName.getInstance().getDelCmd())) {
             doDel();
+        } else if (cmd.equals(RequestName.getInstance().getLIndexCmd())) {
+            doLindex();
+        } else if (cmd.equals(RequestName.getInstance().getLLenCmd())) {
+            doLLen();
+        } else if (cmd.equals(RequestName.getInstance().getLPopCmd())) {
+            doLPop();
+        } else if (cmd.equals(RequestName.getInstance().getLPushCmd())) {
+            doLPush();
+        } else if (cmd.equals(RequestName.getInstance().getLRangeCmd())) {
+            doLRange();
+        } else if (cmd.equals(RequestName.getInstance().getLRemCmd())) {
+            doLRem();
+        } else if (cmd.equals(RequestName.getInstance().getLSetCmd())) {
+            doLSet();
+        } else if (cmd.equals(RequestName.getInstance().getLTrimCmd())) {
+            doLTrim();
+        } else if (cmd.equals(RequestName.getInstance().getRPopCmd())) {
+            doRPop();
+        } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
+            doRPush();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -120,13 +149,50 @@ public class Client {
     }
 
     private void doAddServer() {
+        if (! shouldWeDisconnectFromCurrentServer()) {
+            return;
+        }
+
         try {
             RequestAddServer r = new RequestAddServer(tokens);
-            addServer(r.getIp(), r.getName());
+            serverIp = r.getIp();
+            serverName = r.getName();
+            addServer(serverIp, serverName);
         } catch (InvalidNbArgException | NoTokensException e) {
             System.out.println(e.getMessage());
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean shouldWeDisconnectFromCurrentServer() {
+        if (server != null) {
+            System.out.println(
+                    "You are already connected to a server (" + serverName + "@" + serverIp + "). " +
+                    "This client can only handle one server at a time.\n" +
+                    "Are you sure you want to exit the current server and connect to the new one? (yes/no)");
+            Scanner terminal = new Scanner(System.in);
+            boolean answered = false;
+            boolean shouldConnectAnw = true;
+            while (!answered) {
+                String answer = terminal.nextLine().toLowerCase();
+                switch (answer) {
+                    case "no":
+                        shouldConnectAnw = false;
+                        answered = true;
+                        break;
+                    case "yes":
+                        shouldConnectAnw = true;
+                        answered = true;
+                        break;
+                    default:
+                        System.out.println("Please answer \"yes\" or \"no\".");
+                        break;
+                }
+            }
+            return shouldConnectAnw;
+        } else {
+            return true;
         }
     }
 
@@ -149,7 +215,7 @@ public class Client {
         } else {
             try {
                 RequestSet r = new RequestSet(tokens);
-                set(r.getKey(), r.getObject());
+                System.out.println(set(r.getKey(), r.getObject()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -188,7 +254,7 @@ public class Client {
         } else {
             try {
                 RequestDecrBy r = new RequestDecrBy(tokens);
-                System.out.println(decrBy(r.getKey(), Integer.valueOf(r.getInteger())));
+                System.out.println(decrBy(r.getKey(), r.getInteger()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -214,7 +280,7 @@ public class Client {
         } else {
             try {
                 RequestIncrBy r = new RequestIncrBy(tokens);
-                System.out.println(incrBy(r.getKey(), Integer.valueOf(r.getInteger())));
+                System.out.println(incrBy(r.getKey(), r.getInteger()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -234,6 +300,136 @@ public class Client {
         }
     }
 
+    private void doLindex() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLIndex r = new RequestLIndex(tokens);
+                System.out.println(lindex(r.getKey(), r.getIndex()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLLen() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLLen r = new RequestLLen(tokens);
+                System.out.println(llen(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLPop() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLPop r = new RequestLPop(tokens);
+                System.out.println(lpop(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLPush() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLPush r = new RequestLPush(tokens);
+                System.out.println(lpush(r.getKey(), r.getString()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLRange() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLRange r = new RequestLRange(tokens);
+                System.out.println(lrange(r.getKey(), r.getStart(), r.getEnd()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLRem() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLRem r = new RequestLRem(tokens);
+                System.out.println(lrem(r.getKey(), r.getCount(), r.getValue()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLSet() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLSet r = new RequestLSet(tokens);
+                System.out.println(lset(r.getKey(), r.getIndex(), r.getValue()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doLTrim() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestLTrim r = new RequestLTrim(tokens);
+                System.out.println(ltrim(r.getKey(), r.getStart(), r.getEnd()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doRPop() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestRPop r = new RequestRPop(tokens);
+                System.out.println(rpop(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doRPush() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestRPush r = new RequestRPush(tokens);
+                System.out.println(rpush(r.getKey(), r.getString()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -244,7 +440,7 @@ public class Client {
     }
 
     private void addServer(String ip, String name) throws RemoteException, NotBoundException {
-        registry = LocateRegistry.getRegistry(ip);
+        Registry registry = LocateRegistry.getRegistry(ip);
         server = (RedisLikeServer) registry.lookup(name);
     }
 
@@ -252,142 +448,198 @@ public class Client {
         System.out.println("Server is not set. Please add a server. Type \"help add_server\" if you need help.");
     }
 
-    /**
-     * Test if the specified key exists.
-     * @param key The key to test.
-     * @return True if the key exists, false otherwise.
-     */
-    private boolean exists(String key) {
-        // TODO
-        return false;
-    }
-
-    /**
-     * Get the value of the specified key.
-     * @param key The key we want the value of.
-     * @return The value of the key if it exists, null otherwise.
-     */
-    private Object get(String key) {
+    private String get(String key) {
         try {
-            return server.get(key);
+            Object o = server.get(key);
+            return o != null ? o.toString() : NIL;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return null;
+            return e.getMessage();
         }
     }
 
-    /**
-     * Set key to hold the string value. If key already holds a value, it is overwritten, regardless of its type.
-     * @param key The key holding the value.
-     * @param value The value to set.
-     */
-    private void set(String key, Object value) {
+    private String set(String key, Object value) {
         try {
             server.set(key, value);
+            return OK;
         } catch (RemoteException e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 
-    /**
-     * Return the type of the value stored at key in form of a string.
-     * @param key The key holding the value.
-     * @return one of "none", "string", "int", "list". "none" is returned if the key does not exist.
-     */
     private String type(String key) {
         try {
             return server.type(key);
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return "";
+            return e.getMessage();
         }
     }
 
-    /**
-     * Decrement the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @return the new value of key after the decrement.
-     */
-    private int decr(String key) {
+    private String decr(String key) {
         try {
-            return server.decr(key);
+            return String.valueOf(server.decr(key));
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    /**
-     * Decrement the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @param integer The increment value.
-     * @return the new value of key after the decrement.
-     */
-    private int decrBy(String key, int integer) {
+    private String decrBy(String key, String integer) {
         try {
-            return server.decrBy(key, integer);
+            int realInteger = Integer.parseInt(integer);
+            return String.valueOf(server.decrBy(key, realInteger));
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    /**
-     * Increment the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @return the new value of key after the Increment.
-     */
-    private int incr(String key) {
+    private String incr(String key) {
         try {
-            return server.incr(key);
+            return String.valueOf(server.incr(key));
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    /**
-     * Increment the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @param integer The increment value.
-     * @return the new value of key after the Increment.
-     */
-    private int incrBy(String key, int integer) {
+    private String incrBy(String key, String integer) {
         try {
-            return server.incrBy(key, integer);
+            int realInteger = Integer.parseInt(integer);
+            return String.valueOf(server.incrBy(key, realInteger));
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return 0;
+            return e.getMessage();
         }
     }
 
-    /**
-     * Remove the specified key. If a given key does not exist no operation is performed for this key.
-     * @param key The key to remove.
-     * @return True if the key existed and has been removed, false otherwise.
-     */
-    private boolean del(String key) {
+    private String del(String key) {
         try {
-            return server.del(key);
+            return server.del(key) ? OK : NOT_OK;
         } catch (RemoteException e) {
-            e.printStackTrace();
-            return false;
+            return e.getMessage();
+        }
+    }
+
+    private String lindex(String key, String index) {
+        try {
+            int realIndex = Integer.parseInt(index);
+            Object o = server.lindex(key, realIndex);
+            if (o == null) {
+                return NIL;
+            } else if (o.equals("")) {
+                return EMPTY_STRING;
+            } else {
+                return o.toString();
+            }
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String llen(String key) {
+        try {
+            int len = server.llen(key);
+            return len >= 0 ? String.valueOf(len) : ERROR_NOT_LIST;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lpop(String key) {
+        try {
+            Object o = server.lpop(key);
+            if (o == null) {
+                return NIL;
+            } else {
+                return o.toString();
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lpush(String key, Object value) {
+        try {
+            return server.lpush(key, value) ? OK : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lrange(String key, String start, String end) {
+        try {
+            int realStart = Integer.parseInt(start);
+            int realEnd = Integer.parseInt(end);
+            ArrayList<Object> objects = server.lrange(key, realStart, realEnd);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lrem(String key, String count, String value) {
+        try {
+            int realCount = Integer.parseInt(count);
+            return String.valueOf(server.lrem(key, realCount, value));
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String lset(String key, String index, String value) {
+        try {
+            int realIndex = Integer.parseInt(index);
+            return server.lset(key, realIndex, value) ? OK : NOT_OK;
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String ltrim(String key, String start, String end) {
+        try {
+            int realStart = Integer.parseInt(start);
+            int realEnd = Integer.parseInt(end);
+            return server.ltrim(key, realStart, realEnd) ? OK : NOT_OK;
+        } catch (NumberFormatException e) {
+            return ERROR_PARSE_INT;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String rpush(String key, Object value) {
+        try {
+            return server.rpush(key, value) ? OK : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String rpop(String key) {
+        try {
+            Object o = server.rpop(key);
+            return o != null ? o.toString(): NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
         }
     }
 }

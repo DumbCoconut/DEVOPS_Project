@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import storage.Storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -180,10 +181,17 @@ public class ServerTest {
     }
 
     @Test
-    public void typeWithExistentKey() {
+    public void typeWithExistentKeyInteger() {
         Server s = new Server();
         s.set("key", 3);
         assertEquals("Integer", s.type("key"));
+    }
+
+    @Test
+    public void typeWithExistentKeyString() {
+        Server s = new Server();
+        s.set("key", "string");
+        assertEquals("String", s.type("key"));
     }
 
     @Test
@@ -289,5 +297,84 @@ public class ServerTest {
         Server s = createAndPopulateServer(2);
         boolean hasBeenDeleted = s.del(nonExistentKey);
         assertEquals(false, hasBeenDeleted);
+    }
+
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                          Useless tests because those functions are just wrappers...                            */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void testLindex() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.lindex(defaultKey, 0), storage.lindex(defaultKey, 0));
+    }
+
+    @Test
+    public void testLlen() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.llen(defaultKey), storage.llen(defaultKey));
+    }
+
+    @Test
+    public void testLpop() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.lpop(defaultKey), storage.lPop(defaultKey));
+    }
+
+    @Test
+    public void testLpush() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.lpush(defaultKey, defaultString), storage.lPush(defaultKey, defaultString));
+    }
+
+    //LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH
+
+    @Test
+    public void testLRange() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.lrange(defaultKey, 0, 0), storage.lrange(defaultKey, 0, 0));
+    }
+
+    @Test
+    public void testLRem() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.lrem(defaultKey, 0, defaultString), storage.lrem(defaultKey, 0, defaultString));
+    }
+
+    @Test
+    public void testLSet() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.lset(defaultKey, 0, defaultString), storage.lset(defaultKey, 0, defaultString));
+    }
+
+    @Test
+    public void testLTrim() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.ltrim(defaultKey, 0, 0), storage.lset(defaultKey, 0, 0));
+    }
+
+    @Test
+    public void testRpop() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.rpop(defaultKey), storage.rPop(defaultKey));
+    }
+
+    @Test
+    public void testRpush() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.rpush(defaultKey, defaultString), storage.rPush(defaultKey, defaultString));
     }
 }

@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class Server implements RedisLikeServer {
     public static final int DEFAULT_PORT = 42933;
@@ -265,5 +266,45 @@ public class Server implements RedisLikeServer {
         } catch (NonExistentKeyException e) {
             return false;
         }
+    }
+
+    public Object lindex(String key, int index) {
+        return storage.lindex(key, index);
+    }
+
+    public int llen(String key) {
+        return storage.llen(key);
+    }
+
+    public Object lpop(String key) {
+        return storage.lPop(key);
+    }
+
+    public boolean lpush(String key, Object value) {
+        return storage.lPush(key, value);
+    }
+
+    public ArrayList<Object> lrange(String key, int start, int end) {
+        return storage.lrange(key, start, end);
+    }
+
+    public int lrem(String key, int count, Object value) {
+        return storage.lrem(key, count, value);
+    }
+
+    public boolean lset(String key, int index, Object value) {
+        return storage.lset(key, index, value);
+    }
+
+    public boolean ltrim(String key, int start, int end) {
+        return storage.ltrim(key, start, end);
+    }
+
+    public Object rpop(String key) {
+        return storage.rPop(key);
+    }
+
+    public boolean rpush(String key, Object value) {
+        return storage.rPush(key, value);
     }
 }

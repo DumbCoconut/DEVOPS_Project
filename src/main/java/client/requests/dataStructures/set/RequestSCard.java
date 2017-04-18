@@ -15,7 +15,7 @@ public class RequestSCard extends RequestWithKey {
     /**
      * Constructor.
      *
-     * @param tokens The different words of the request, e.g {"llen", "key"}.
+     * @param tokens The different words of the request, e.g {"scard", "key"}.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */

@@ -129,6 +129,8 @@ public class RequestHELP extends Request {
                 res.add(getHelpRPop());
             } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
                 res.add(getHelpRPush());
+            } else if (cmd.equals(RequestName.getInstance().getSAddCmd())) {
+                res.add(getHelpSAdd());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -504,6 +506,21 @@ public class RequestHELP extends Request {
             +  "DESCRIPTION: Add the string value to the head (RPUSH) or tail (LPUSH) of the list stored at key. " +
                "If the key does not exist an empty list is created just before the append operation. " +
                "If the key exists but is not a List an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SADD.
+     * @return The help message of SADD.
+     */
+    public String getHelpSAdd() {
+        String res = "";
+        res += "SADD key member" + "\n\n"
+
+            +  "DESCRIPTION: Add the specified member to the set value stored at key. If member is already a member " +
+               "of the set no operation is performed. If key does not exist a new set with the specified member as " +
+               "sole member is created. If the key exists but does not hold a set value an error is returned.";
 
         return res;
     }

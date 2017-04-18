@@ -377,4 +377,11 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.rpush(defaultKey, defaultString), storage.rPush(defaultKey, defaultString));
     }
+
+    @Test
+    public void testSAdd() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sadd(defaultKey, defaultString), storage.sadd(defaultKey, defaultString));
+    }
 }

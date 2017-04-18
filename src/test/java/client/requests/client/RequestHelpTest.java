@@ -387,6 +387,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSAdd() throws Exception {
+        createRequest(new String[]{"help", "SADD"});
+        assert r.getMessage().contains("SADD");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

@@ -2,6 +2,7 @@ package client.requests;
 
 import client.requests.client.RequestClientTestSuite;
 import client.requests.dataStructures.list.RequestDataStructuresListTestSuite;
+import client.requests.dataStructures.set.RequestDataStructuresSetTestSuite;
 import client.requests.dataTypes.RequestDataTypesTestSuite;
 import client.requests.exceptions.ClientExceptionsTestSuite;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.junit.runners.Suite;
         RequestClientTestSuite.class,
         RequestDataTypesTestSuite.class,
         RequestDataStructuresListTestSuite.class,
+        RequestDataStructuresSetTestSuite.class,
         ClientExceptionsTestSuite.class,
         RequestNameTest.class
 })

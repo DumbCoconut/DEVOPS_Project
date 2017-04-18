@@ -4,6 +4,7 @@ import client.requests.RequestName;
 import client.requests.client.RequestADDSERVER;
 import client.requests.client.RequestHELP;
 import client.requests.dataStructures.list.*;
+import client.requests.dataStructures.set.RequestSADD;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -103,6 +104,8 @@ public class Client {
             doRPop();
         } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
             doRPush();
+        } else if (cmd.equals(RequestName.getInstance().getSAddCmd())) {
+            doSAdd();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -430,6 +433,19 @@ public class Client {
         }
     }
 
+    private void doSAdd() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSADD r = new RequestSADD(tokens);
+                System.out.println(sadd(r.getKey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -638,6 +654,15 @@ public class Client {
         try {
             Object o = server.rpop(key);
             return o != null ? o.toString(): NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sadd(String key, Object member) {
+        try {
+            int res = server.sadd(key, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();
         }

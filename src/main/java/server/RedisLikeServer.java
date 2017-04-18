@@ -1,3 +1,5 @@
 package server;
 
-public interface RedisLikeServer extends RedisLikeServerDataStructuresList, RedisLikeServerDataTypes {}
+public interface RedisLikeServer extends RedisLikeServerDataStructuresList, RedisLikeServerDataTypes,
+                                         RedisLikeServerDataStructuresSet
+{}

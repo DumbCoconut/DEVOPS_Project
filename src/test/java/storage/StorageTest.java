@@ -9,6 +9,7 @@ import storage.exceptions.KeyException;
 import storage.exceptions.NonExistentKeyException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
@@ -1027,6 +1028,89 @@ public class StorageTest {
         Object o = s.get("key");
         if (o instanceof ArrayList) {
             assertArrayEquals(expected, ((ArrayList) o).toArray());
+        } else {
+            fail();
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SADD                                                      */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void testSaddExistentKeyNotSetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        int res = s.sadd("key", "value2");
+        assertEquals(true, res < 0);
+    }
+
+    @Test
+    public void testSaddExistentKeyNotSetDoesNotModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        s.sadd("key", "value2");
+        assertEquals("value", s.get("key"));
+    }
+
+    @Test
+    public void testSAddNonExistentKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(1, s.sadd("key", "value"));
+    }
+
+    @Test
+    public void testSAddNonExistentKeyDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            HashSet set = (HashSet) o;
+            assertEquals(true, set.contains("value"));
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSAddExistentKeyNonExistentObjectReturnValue() {
+        Storage s = new Storage();
+        s.sadd("key", "member");
+        assertEquals(1, s.sadd("key", "member2"));
+    }
+
+    @Test
+    public void testSAddExistentKeyNonExistentObjectDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        s.sadd("key", "value2");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            HashSet set = (HashSet) o;
+            assertEquals(true, set.contains("value") && set.contains("value2"));
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSAddExistentKeyExistentObjectReturnValue() {
+        Storage s = new Storage();
+        s.sadd("key", "member");
+        assertEquals(0, s.sadd("key", "member"));
+    }
+
+    @Test
+    public void testSAddExistentKeyExistentObjectDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        s.sadd("key", "value");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            HashSet set = (HashSet) o;
+            assertEquals(1, set.size());
         } else {
             fail();
         }

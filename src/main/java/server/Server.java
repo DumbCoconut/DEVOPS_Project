@@ -307,4 +307,8 @@ public class Server implements RedisLikeServer {
     public boolean rpush(String key, Object value) {
         return storage.rPush(key, value);
     }
+
+    public int sadd(String key, Object member) {
+        return storage.sadd(key, member);
+    }
 }

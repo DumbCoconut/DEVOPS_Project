@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import storage.exceptions.DuplicatedKeyException;
 import storage.exceptions.NonExistentKeyException;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -331,5 +331,32 @@ public class Storage {
             }
         }
         return success;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                      SETS                                                      */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    public synchronized int sadd(String key, Object member) {
+        int res = -1;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            if (s instanceof Set) {
+                /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+                 * there might be some kind of work around, but we know for sure that we'll only have
+                 * HashSet of objects. Best thing would most likely to change the design a bit, but
+                 * lack of time and we'll just assume that nobody will never ever change the code of
+                 * storage in a way that it adds HashSet that are not containing objects. */
+                res = ((HashSet) s).add(member) ? 1 : 0;
+            }
+        } else {
+            HashSet<Object> s = new HashSet<>();
+            s.add(member);
+            cache.put(key, s);
+            res = 1;
+        }
+        return res;
     }
 }

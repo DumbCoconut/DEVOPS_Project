@@ -13,7 +13,8 @@ public class RequestName {
     public enum Cmd {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
-        LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH
+        LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
+        SADD
     }
 
     /**
@@ -29,6 +30,7 @@ public class RequestName {
         addClientRequests();
         addDataTypesRequests();
         addListRequests();
+        addSetRequests();
 
         // All commands are upper case
         cmds.replaceAll((k,v) -> v.toUpperCase());
@@ -72,6 +74,13 @@ public class RequestName {
         cmds.put(Cmd.LTRIM, "ltrim");
         cmds.put(Cmd.RPOP, "rpop");
         cmds.put(Cmd.RPUSH, "rpush");
+    }
+
+    /**
+     * Add requests related to sets.
+     */
+    private void addSetRequests() {
+        cmds.put(Cmd.SADD, "sadd");
     }
 
 
@@ -273,6 +282,14 @@ public class RequestName {
      */
     public String getRPushCmd() {
         return cmds.get(Cmd.RPUSH);
+    }
+
+    /**
+     * Get the natural name of the SADD command.
+     * @return The natural name of the SADD command.
+     */
+    public String getSAddCmd() {
+        return cmds.get(Cmd.SADD);
     }
 
     /**

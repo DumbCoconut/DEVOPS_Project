@@ -391,4 +391,11 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.scard(defaultKey), storage.scard(defaultKey));
     }
+
+    @Test
+    public void testSRem() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.srem(defaultKey, defaultString), storage.srem(defaultKey, defaultString));
+    }
 }

@@ -7,4 +7,6 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     int sadd(String key, Object member) throws RemoteException;
 
     int scard(String key) throws RemoteException;
+
+    int srem(String key, Object member) throws RemoteException;
 }

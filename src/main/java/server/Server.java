@@ -315,4 +315,8 @@ public class Server implements RedisLikeServer {
     public int scard(String key) {
         return storage.scard(key);
     }
+
+    public int srem(String key, Object member) {
+        return storage.srem(key, member);
+    }
 }

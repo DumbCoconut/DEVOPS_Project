@@ -402,6 +402,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSRem() throws Exception {
+        createRequest(new String[]{"help", "SREM"});
+        assert r.getMessage().contains("SREM");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

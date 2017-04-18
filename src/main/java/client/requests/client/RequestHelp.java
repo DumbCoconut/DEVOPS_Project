@@ -133,6 +133,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSAdd());
             } else if (cmd.equals(RequestName.getInstance().getSCardCmd())) {
                 res.add(getHelpSCard());
+            } else if (cmd.equals(RequestName.getInstance().getSRemCmd())) {
+                res.add(getHelpSRem());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -537,6 +539,20 @@ public class RequestHelp extends Request {
 
             +  "DESCRIPTION: Return the set cardinality (number of elements). If the key does not exist 0 is returned" +
                ", like for empty sets.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SREM.
+     * @return The help message of SREM.
+     */
+    public String getHelpSRem() {
+        String res = "";
+        res += "SREM key member" + "\n\n"
+
+            +  "DESCRIPTION: Remove the specified member from the set value stored at key. If member was not " +
+               "a member of the set no operation is performed. If key does not hold a set value an error is returned.";
 
         return res;
     }

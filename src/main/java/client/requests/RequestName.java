@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD
+        SADD, SCARD, SREM
     }
 
     /**
@@ -82,6 +82,7 @@ public class RequestName {
     private void addSetRequests() {
         cmds.put(Cmd.SADD, "sadd");
         cmds.put(Cmd.SCARD, "scard");
+        cmds.put(Cmd.SREM, "srem");
     }
 
 
@@ -299,6 +300,14 @@ public class RequestName {
      */
     public String getSCardCmd() {
         return cmds.get(Cmd.SCARD);
+    }
+
+    /**
+     * Get the natural name of the SREM command.
+     * @return The natural name of the SREM command.
+     */
+    public String getSRemCmd() {
+        return cmds.get(Cmd.SREM);
     }
 
     /**

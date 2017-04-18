@@ -1148,4 +1148,80 @@ public class StorageTest {
         assertEquals(true, res < 0);
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SREM                                                      */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    // key existe
+        // hashset
+        // non hashset
+            // return -1
+            // non modifié
+
+    @Test
+    public void testSRemNonExistentKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(0, s.srem("key", "value"));
+    }
+
+    @Test
+    public void testSRemExistentKeyExistentObjectReturnValue() {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        assertEquals(1, s.srem("key", "value"));
+    }
+
+    @Test
+    public void testSRemExistentKeyExistentObjectDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            int oldSize = ((HashSet) o).size();
+            s.srem("key", "value");
+            int newSize = ((HashSet) o).size();
+            assertEquals(oldSize - 1, newSize);
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSRemExistentKeyNonExistentObjectReturnValue() {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        assertEquals(0, s.srem("key", "value2"));
+    }
+
+    @Test
+    public void testSRemExistentKeyExistentNonObjectDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            int oldSize = ((HashSet) o).size();
+            s.srem("key", "value2");
+            int newSize = ((HashSet) o).size();
+            assertEquals(oldSize, newSize);
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSRemExistentKeyNotSetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(-1, s.srem("key", "value"));
+    }
+
+    @Test
+    public void testSRemExistentKeyNotSetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        s.srem("key", "value");
+        assertEquals("value", s.get("key"));
+    }
 }

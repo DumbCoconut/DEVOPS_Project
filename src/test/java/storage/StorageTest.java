@@ -1154,12 +1154,6 @@ public class StorageTest {
     /*                                                                                                                */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    // key existe
-        // hashset
-        // non hashset
-            // return -1
-            // non modifié
-
     @Test
     public void testSRemNonExistentKeyReturnValue() {
         Storage s = new Storage();

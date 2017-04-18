@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestDel extends RequestWithKey {
+public class RequestDEL extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -18,7 +18,7 @@ public class RequestDel extends RequestWithKey {
      * @throws NoTokensException When no tokens are provided to the request.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      */
-    public RequestDel(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestDEL(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

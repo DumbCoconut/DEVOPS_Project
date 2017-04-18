@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestLIndex extends RequestWithKey {
+public class RequestLINDEX extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -24,7 +24,7 @@ public class RequestLIndex extends RequestWithKey {
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */
-    public RequestLIndex(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestLINDEX(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

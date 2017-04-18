@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestAddServer extends Request {
+public class RequestADDSERVER extends Request {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -28,7 +28,7 @@ public class RequestAddServer extends Request {
      * @throws NoTokensException When no tokens are provided to the request.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      */
-    public RequestAddServer(ArrayList<String> tokens) throws NoTokensException, InvalidNbArgException {
+    public RequestADDSERVER(ArrayList<String> tokens) throws NoTokensException, InvalidNbArgException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestType extends RequestWithKey {
+public class RequestTYPE extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -18,7 +18,7 @@ public class RequestType extends RequestWithKey {
      * @throws NoTokensException When no tokens are provided to the request.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      */
-    public RequestType(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestTYPE(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

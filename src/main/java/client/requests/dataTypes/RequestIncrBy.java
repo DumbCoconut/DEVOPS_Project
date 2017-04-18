@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestIncrBy extends RequestWithKey {
+public class RequestINCRBY extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -23,7 +23,7 @@ public class RequestIncrBy extends RequestWithKey {
      * @throws NoTokensException When no tokens are provided to the request.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      */
-    public RequestIncrBy(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestINCRBY(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

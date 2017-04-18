@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestRPop extends RequestWithKey {
+public class RequestRPOP extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -19,7 +19,7 @@ public class RequestRPop extends RequestWithKey {
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */
-    public RequestRPop(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestRPOP(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

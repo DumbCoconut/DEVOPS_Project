@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestLTrim extends RequestWithKey {
+public class RequestLTRIM extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -29,7 +29,7 @@ public class RequestLTrim extends RequestWithKey {
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */
-    public RequestLTrim(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestLTRIM(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

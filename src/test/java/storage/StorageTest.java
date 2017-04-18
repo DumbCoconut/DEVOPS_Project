@@ -1218,4 +1218,76 @@ public class StorageTest {
         s.srem("key", "value");
         assertEquals("value", s.get("key"));
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SISMEMBER                                                 */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void testSIsMemberNonExistentKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(0, s.sismember("key", "value"));
+    }
+
+    @Test
+    public void testSIsMemberExistentKeyExistentObjectReturnValue() {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        assertEquals(1, s.sismember("key", "value"));
+    }
+
+    @Test
+    public void testSIsMemberExistentKeyExistentObjectDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            HashSet oldSet = ((HashSet) o);
+            s.sismember("key", "value");
+            HashSet newSet = (HashSet) s.get("key");
+            assertEquals(oldSet, newSet);
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSIsMemberExistentKeyNonExistentObjectReturnValue() {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        assertEquals(0, s.sismember("key", "value2"));
+    }
+
+    @Test
+    public void testSIsMemberExistentKeyNonExistentObjectDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            HashSet oldSet = ((HashSet) o);
+            s.sismember("key", "value2");
+            HashSet newSet = (HashSet) s.get("key");
+            assertEquals(oldSet, newSet);
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSIsMemberExistentKeyNotSetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(-1, s.sismember("key", "value"));
+    }
+
+    @Test
+    public void testSIsMemberExistentKeyNotSetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        s.sismember("key", "value");
+        assertEquals("value", s.get("key"));
+    }
+
 }

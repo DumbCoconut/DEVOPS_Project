@@ -6,6 +6,7 @@ import client.requests.client.RequestHelp;
 import client.requests.dataStructures.list.*;
 import client.requests.dataStructures.set.RequestSAdd;
 import client.requests.dataStructures.set.RequestSCard;
+import client.requests.dataStructures.set.RequestSIsMember;
 import client.requests.dataStructures.set.RequestSRem;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
@@ -112,6 +113,8 @@ public class Client {
             doSCard();
         } else if (cmd.equals(RequestName.getInstance().getSRemCmd())) {
             doSRem();
+        } else if (cmd.equals(RequestName.getInstance().getSIsMemberCmd())) {
+            doSIsMember();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -464,6 +467,7 @@ public class Client {
             }
         }
     }
+
     private void doSRem() {
         if (!isServerSet()) {
             printServerNotSet();
@@ -471,6 +475,19 @@ public class Client {
             try {
                 RequestSRem r = new RequestSRem(tokens);
                 System.out.println(srem(r.getKey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSIsMember() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSIsMember r = new RequestSIsMember(tokens);
+                System.out.println(sismember(r.getKey(), r.getMember()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
@@ -711,6 +728,15 @@ public class Client {
     private String srem(String key, Object member) {
         try {
             int res = server.srem(key, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sismember(String key, Object member) {
+        try {
+            int res = server.sismember(key, member);
             return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();

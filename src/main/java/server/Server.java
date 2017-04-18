@@ -319,4 +319,8 @@ public class Server implements RedisLikeServer {
     public int srem(String key, Object member) {
         return storage.srem(key, member);
     }
+
+    public int sismember(String key, Object member) {
+        return storage.sismember(key, member);
+    }
 }

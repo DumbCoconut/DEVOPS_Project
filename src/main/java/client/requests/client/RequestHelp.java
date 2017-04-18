@@ -135,6 +135,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSCard());
             } else if (cmd.equals(RequestName.getInstance().getSRemCmd())) {
                 res.add(getHelpSRem());
+            } else if (cmd.equals(RequestName.getInstance().getSIsMemberCmd())) {
+                res.add(getHelpSIsMember());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -553,6 +555,19 @@ public class RequestHelp extends Request {
 
             +  "DESCRIPTION: Remove the specified member from the set value stored at key. If member was not " +
                "a member of the set no operation is performed. If key does not hold a set value an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SISMEMBER.
+     * @return The help message of SISMEMBER.
+     */
+    public String getHelpSIsMember() {
+        String res = "";
+        res += "SISMEMBER key member" + "\n\n"
+
+            +  "DESCRIPTION: Return 1 if member is a member of the set stored at key, otherwise 0 is returned.";
 
         return res;
     }

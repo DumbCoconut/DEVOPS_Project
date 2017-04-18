@@ -381,4 +381,17 @@ public class Storage {
         }
         return res;
     }
+
+    public synchronized int sismember(String key, Object member) {
+        int res = 0;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            if (s instanceof HashSet) {
+                res = ((HashSet) s).contains(member) ? 1 : 0;
+            } else {
+                res = -1;
+            }
+        }
+        return res;
+    }
 }

@@ -408,6 +408,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSIsMember() throws Exception {
+        createRequest(new String[]{"help", "SISMEMBER"});
+        assert r.getMessage().contains("SISMEMBER");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

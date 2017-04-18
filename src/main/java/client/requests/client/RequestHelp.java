@@ -140,44 +140,21 @@ public class RequestHelp extends Request {
     }
 
     /**
-     * Get the help message of all the commands.
-     * @return The help message of all the commands.
+     * Get the default help message.
+     * @return The default help message.
      */
     public String getHelp() {
         // create the help
         ArrayList<String> l = new ArrayList<>();
 
-        // client
-        l.add(getHelpHelp());
-        l.add(getHelpQuit());
-        l.add(getHelpExit());
-        l.add(getHelpAddServer());
-        // data types
-        l.add(getHelpGet());
-        l.add(getHelpSet());
-        l.add(getHelpDecr());
-        l.add(getHelpDecrBy());
-        l.add(getHelpIncr());
-        l.add(getHelpIncrBy());
-        l.add(getHelpType());
-        l.add(getHelpDel());
-        // data structures
-        l.add(getHelpLIndex());
-        l.add(getHelpLLen());
-        l.add(getHelpLPop());
-        l.add(getHelpLPush());
-        l.add(getHelpLRange());
-        l.add(getHelpLRem());
-        l.add(getHelpLSet());
-        l.add(getHelpLTrim());
-        l.add(getHelpRPop());
-        l.add(getHelpRPush());
+        // add all the commands
+        RequestName.getInstance().getAllCmds().forEach((k,v) -> l.add(v));
 
         // sort the help by alphabetical order
         l.sort(String::compareTo);
 
         // return the reconstituted string
-        return String.join(SEPARATOR, l);
+        return "Please type HELP for one of these commands: " + String.join(", ", l);
     }
 
     /**

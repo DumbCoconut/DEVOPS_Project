@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestLPOP extends RequestWithKey {
+public class RequestLPop extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -19,7 +19,7 @@ public class RequestLPOP extends RequestWithKey {
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */
-    public RequestLPOP(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestLPop(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

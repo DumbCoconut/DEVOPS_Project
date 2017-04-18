@@ -7,7 +7,7 @@ import client.requests.exceptions.NoTokensException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RequestHELP extends Request {
+public class RequestHelp extends Request {
     /**
      * Separate the different blocks (one per request).
      */
@@ -23,7 +23,7 @@ public class RequestHELP extends Request {
      * @param tokens The different words of the request, e.g {"help", "get", "set"}.
      * @throws NoTokensException When no tokens are provided to the request.
      */
-    public RequestHELP(ArrayList<String> tokens) throws NoTokensException {
+    public RequestHelp(ArrayList<String> tokens) throws NoTokensException {
         super(tokens);
         requests = new ArrayList<>();
         parse();

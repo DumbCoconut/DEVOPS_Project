@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestLPUSH extends RequestWithKey {
+public class RequestLPush extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -24,7 +24,7 @@ public class RequestLPUSH extends RequestWithKey {
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */
-    public RequestLPUSH(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestLPush(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

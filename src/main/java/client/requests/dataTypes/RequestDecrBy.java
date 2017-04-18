@@ -6,7 +6,7 @@ import client.requests.exceptions.NoTokensException;
 
 import java.util.ArrayList;
 
-public class RequestDECRBY extends RequestWithKey {
+public class RequestDecrBy extends RequestWithKey {
     /**
      * The minimum number of arguments required to properly construct the request.
      */
@@ -23,7 +23,7 @@ public class RequestDECRBY extends RequestWithKey {
      * @throws NoTokensException When no tokens are provided to the request.
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      */
-    public RequestDECRBY(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
+    public RequestDecrBy(ArrayList<String> tokens) throws InvalidNbArgException, NoTokensException {
         super(tokens);
         setNbArgs(minNbArgs);
         parse();

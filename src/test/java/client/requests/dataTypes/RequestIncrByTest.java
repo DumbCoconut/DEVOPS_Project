@@ -13,7 +13,7 @@ public class RequestIncrByTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestIncrBy r;
+    private RequestINCRBY r;
     private int legitNbTokens = 3;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestIncrByTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestIncrBy(tokens);
+        r = new RequestINCRBY(tokens);
     }
 
     @Test

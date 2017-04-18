@@ -13,7 +13,7 @@ public class RequestLPopTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestLPop r;
+    private RequestLPOP r;
     private int legitNbTokens = 2;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestLPopTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestLPop(tokens);
+        r = new RequestLPOP(tokens);
     }
 
     @Test

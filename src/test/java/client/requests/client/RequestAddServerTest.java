@@ -13,7 +13,7 @@ public class RequestAddServerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestAddServer r;
+    private RequestADDSERVER r;
     private int legitNbTokens = 3;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestAddServerTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestAddServer(tokens);
+        r = new RequestADDSERVER(tokens);
     }
 
     @Test

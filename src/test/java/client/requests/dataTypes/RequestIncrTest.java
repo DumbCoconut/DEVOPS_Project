@@ -13,7 +13,7 @@ public class RequestIncrTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestIncr r;
+    private RequestINCR r;
     private int legitNbTokens = 2;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestIncrTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestIncr(tokens);
+        r = new RequestINCR(tokens);
     }
 
     @Test

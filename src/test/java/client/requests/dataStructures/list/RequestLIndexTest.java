@@ -13,7 +13,7 @@ public class RequestLIndexTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestLIndex r;
+    private RequestLINDEX r;
     private int legitNbTokens = 3;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestLIndexTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestLIndex(tokens);
+        r = new RequestLINDEX(tokens);
     }
 
     @Test

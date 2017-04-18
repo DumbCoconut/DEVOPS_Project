@@ -1,8 +1,8 @@
 package client;
 
 import client.requests.RequestName;
-import client.requests.client.RequestAddServer;
-import client.requests.client.RequestHelp;
+import client.requests.client.RequestADDSERVER;
+import client.requests.client.RequestHELP;
 import client.requests.dataStructures.list.*;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
@@ -136,7 +136,7 @@ public class Client {
 
     private void doHelp() {
         try {
-            RequestHelp r = new RequestHelp(tokens);
+            RequestHELP r = new RequestHELP(tokens);
             System.out.println(r.getMessage());
         } catch (NoTokensException e) {
             System.out.println(e.getMessage());
@@ -154,7 +154,7 @@ public class Client {
         }
 
         try {
-            RequestAddServer r = new RequestAddServer(tokens);
+            RequestADDSERVER r = new RequestADDSERVER(tokens);
             serverIp = r.getIp();
             serverName = r.getName();
             addServer(serverIp, serverName);
@@ -201,7 +201,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestGet r = new RequestGet(tokens);
+                RequestGET r = new RequestGET(tokens);
                 System.out.println(get(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -214,7 +214,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestSet r = new RequestSet(tokens);
+                RequestSET r = new RequestSET(tokens);
                 System.out.println(set(r.getKey(), r.getObject()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -227,7 +227,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestType r = new RequestType(tokens);
+                RequestTYPE r = new RequestTYPE(tokens);
                 System.out.println(type(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -240,7 +240,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestDecr r = new RequestDecr(tokens);
+                RequestDECR r = new RequestDECR(tokens);
                 System.out.println(decr(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -253,7 +253,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestDecrBy r = new RequestDecrBy(tokens);
+                RequestDECRBY r = new RequestDECRBY(tokens);
                 System.out.println(decrBy(r.getKey(), r.getInteger()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -266,7 +266,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestIncr r = new RequestIncr(tokens);
+                RequestINCR r = new RequestINCR(tokens);
                 System.out.println(incr(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -279,7 +279,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestIncrBy r = new RequestIncrBy(tokens);
+                RequestINCRBY r = new RequestINCRBY(tokens);
                 System.out.println(incrBy(r.getKey(), r.getInteger()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -292,7 +292,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestDel r = new RequestDel(tokens);
+                RequestDEL r = new RequestDEL(tokens);
                 System.out.println(del(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -305,7 +305,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLIndex r = new RequestLIndex(tokens);
+                RequestLINDEX r = new RequestLINDEX(tokens);
                 System.out.println(lindex(r.getKey(), r.getIndex()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -318,7 +318,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLLen r = new RequestLLen(tokens);
+                RequestLLEN r = new RequestLLEN(tokens);
                 System.out.println(llen(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -331,7 +331,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLPop r = new RequestLPop(tokens);
+                RequestLPOP r = new RequestLPOP(tokens);
                 System.out.println(lpop(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -344,7 +344,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLPush r = new RequestLPush(tokens);
+                RequestLPUSH r = new RequestLPUSH(tokens);
                 System.out.println(lpush(r.getKey(), r.getString()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -357,7 +357,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLRange r = new RequestLRange(tokens);
+                RequestLRANGE r = new RequestLRANGE(tokens);
                 System.out.println(lrange(r.getKey(), r.getStart(), r.getEnd()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -370,7 +370,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLRem r = new RequestLRem(tokens);
+                RequestLREM r = new RequestLREM(tokens);
                 System.out.println(lrem(r.getKey(), r.getCount(), r.getValue()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -383,7 +383,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLSet r = new RequestLSet(tokens);
+                RequestLSET r = new RequestLSET(tokens);
                 System.out.println(lset(r.getKey(), r.getIndex(), r.getValue()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -396,7 +396,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestLTrim r = new RequestLTrim(tokens);
+                RequestLTRIM r = new RequestLTRIM(tokens);
                 System.out.println(ltrim(r.getKey(), r.getStart(), r.getEnd()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -409,7 +409,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestRPop r = new RequestRPop(tokens);
+                RequestRPOP r = new RequestRPOP(tokens);
                 System.out.println(rpop(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
@@ -422,7 +422,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestRPush r = new RequestRPush(tokens);
+                RequestRPUSH r = new RequestRPUSH(tokens);
                 System.out.println(rpush(r.getKey(), r.getString()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());

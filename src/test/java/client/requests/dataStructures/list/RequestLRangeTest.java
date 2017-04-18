@@ -13,7 +13,7 @@ public class RequestLRangeTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestLRange r;
+    private RequestLRANGE r;
     private int legitNbTokens = 4;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestLRangeTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestLRange(tokens);
+        r = new RequestLRANGE(tokens);
     }
 
     @Test

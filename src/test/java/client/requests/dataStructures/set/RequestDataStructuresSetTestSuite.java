@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     RequestSADDTest.class,
     RequestSCardTest.class,
+    RequestSIsMemberTest.class,
     RequestSRemTest.class
 })
 public class RequestDataStructuresSetTestSuite {

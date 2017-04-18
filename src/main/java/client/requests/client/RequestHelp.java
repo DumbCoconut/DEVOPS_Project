@@ -154,7 +154,7 @@ public class RequestHelp extends Request {
         l.sort(String::compareTo);
 
         // return the reconstituted string
-        return "Please type HELP for one of these commands: " + String.join(", ", l);
+        return "Please type HELP for at least one of these commands: " + String.join(", ", l);
     }
 
     /**

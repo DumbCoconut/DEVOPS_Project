@@ -137,6 +137,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSRem());
             } else if (cmd.equals(RequestName.getInstance().getSIsMemberCmd())) {
                 res.add(getHelpSIsMember());
+            } else if (cmd.equals(RequestName.getInstance().getSMembersCmd())) {
+                res.add(getHelpSMembers());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -568,6 +570,19 @@ public class RequestHelp extends Request {
         res += "SISMEMBER key member" + "\n\n"
 
             +  "DESCRIPTION: Return 1 if member is a member of the set stored at key, otherwise 0 is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SMEMBERS.
+     * @return The help message of SMEMBERS.
+     */
+    public String getHelpSMembers() {
+        String res = "";
+        res += "SMEMBERS key" + "\n\n"
+
+            +  "DESCRIPTION: Return all the members (elements) of the set value stored at key.";
 
         return res;
     }

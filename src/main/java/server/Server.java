@@ -12,6 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Server implements RedisLikeServer {
     public static final int DEFAULT_PORT = 42933;
@@ -323,4 +324,9 @@ public class Server implements RedisLikeServer {
     public int sismember(String key, Object member) {
         return storage.sismember(key, member);
     }
+
+    public List<Object> smembers(String key) {
+        return storage.smembers(key);
+    }
+
 }

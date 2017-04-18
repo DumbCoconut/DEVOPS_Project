@@ -2,6 +2,7 @@ package server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface RedisLikeServerDataStructuresSet extends Remote {
     int sadd(String key, Object member) throws RemoteException;
@@ -11,4 +12,6 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     int srem(String key, Object member) throws RemoteException;
 
     int sismember(String key, Object member) throws RemoteException;
+
+    List<Object> smembers(String key) throws RemoteException;
 }

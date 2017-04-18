@@ -10,6 +10,7 @@ import storage.exceptions.NonExistentKeyException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
@@ -1288,6 +1289,61 @@ public class StorageTest {
         s.store("key", "value");
         s.sismember("key", "value");
         assertEquals("value", s.get("key"));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SMEMBERS                                                  */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sMembersOnNonExistingKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.smembers("key").toArray());
+    }
+
+    @Test
+    public void sMembersNotASet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(null, s.smembers("key"));
+    }
+
+    @Test
+    public void sMembersOnEmptySet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", new HashSet<>());
+        assertArrayEquals(new Object[]{}, s.smembers("key").toArray());
+    }
+
+    @Test
+    public void sMembersOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        String[] expected = new String[]{"0","1", "2", "3","4"};
+        List<Object> range = s.smembers("key");
+        assertArrayEquals(expected, range.toArray());
+    }
+
+    @Test
+    public void sMembersOnSetDoesNotModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        s.smembers("key");
+        String[] expected = new String[]{"0", "1", "2", "3", "4"};
+        Object o = s.get("key");
+        if (o instanceof HashSet) {
+            assertArrayEquals(expected, ((HashSet) o).toArray());
+        } else {
+            fail();
+        }
     }
 
 }

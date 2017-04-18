@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS
     }
 
     /**
@@ -84,6 +84,7 @@ public class RequestName {
         cmds.put(Cmd.SCARD, "scard");
         cmds.put(Cmd.SREM, "srem");
         cmds.put(Cmd.SISMEMBER, "sismember");
+        cmds.put(Cmd.SMEMBERS, "smembers");
     }
 
 
@@ -317,6 +318,14 @@ public class RequestName {
      */
     public String getSIsMemberCmd() {
         return cmds.get(Cmd.SISMEMBER);
+    }
+
+    /**
+     * Get the natural name of the SMEMBERS command.
+     * @return The natural name of the SMEMBERS command.
+     */
+    public String getSMembersCmd() {
+        return cmds.get(Cmd.SMEMBERS);
     }
 
     /**

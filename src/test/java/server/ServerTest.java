@@ -405,4 +405,11 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.sismember(defaultKey, defaultString), storage.sismember(defaultKey, defaultString));
     }
+
+    @Test
+    public void testSMembers() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.smembers(defaultKey), storage.smembers(defaultKey));
+    }
 }

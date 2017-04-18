@@ -394,4 +394,23 @@ public class Storage {
         }
         return res;
     }
+
+    public synchronized List<Object> smembers(String key) {
+        List<Object> res = null;
+        if (cache.containsKey(key)) {
+            Object o = cache.get(key);
+            if (o instanceof HashSet) {
+                res = new ArrayList<>();
+                /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+                 * there might be some kind of work around, but we know for sure that we'll only have
+                 * HashSet of objects. Best thing would most likely to change the design a bit, but
+                 * lack of time and we'll just assume that nobody will never ever change the code of
+                 * storage in a way that it adds HashSet that are not containing objects. */
+                ((HashSet) o).forEach(res::add);
+            }
+        } else {
+            res = new ArrayList<>();
+        }
+        return res;
+    }
 }

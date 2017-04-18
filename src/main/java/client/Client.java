@@ -4,10 +4,7 @@ import client.requests.RequestName;
 import client.requests.client.RequestAddServer;
 import client.requests.client.RequestHelp;
 import client.requests.dataStructures.list.*;
-import client.requests.dataStructures.set.RequestSAdd;
-import client.requests.dataStructures.set.RequestSCard;
-import client.requests.dataStructures.set.RequestSIsMember;
-import client.requests.dataStructures.set.RequestSRem;
+import client.requests.dataStructures.set.*;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -18,6 +15,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,6 +113,8 @@ public class Client {
             doSRem();
         } else if (cmd.equals(RequestName.getInstance().getSIsMemberCmd())) {
             doSIsMember();
+        } else if (cmd.equals(RequestName.getInstance().getSMembersCmd())) {
+            doSMembers();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -494,6 +494,19 @@ public class Client {
         }
     }
 
+    private void doSMembers() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSMembers r = new RequestSMembers(tokens);
+                System.out.println(smembers(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -738,6 +751,26 @@ public class Client {
         try {
             int res = server.sismember(key, member);
             return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String smembers(String key) {
+        try {
+            List<Object> objects = server.smembers(key);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
         } catch (RemoteException e) {
             return e.getMessage();
         }

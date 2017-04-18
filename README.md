@@ -51,6 +51,15 @@ quotes inside quotes yet - "my name is" would work but "my "name" is" would prod
 - RPOP _key_
 - RPUSH _key value_
 
+
+#### Sets
+
+- SADD _key member_
+- SCARD _key_
+- SISMEMBER _key_ _member_
+- SMEMBERS _key_
+- SREM _key member_
+
 For more explanations, use the HELP command directly in the client.
 
 ## Getting started

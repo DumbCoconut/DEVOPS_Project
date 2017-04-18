@@ -4,7 +4,7 @@ import client.requests.RequestName;
 import client.requests.client.RequestAddServer;
 import client.requests.client.RequestHelp;
 import client.requests.dataStructures.list.*;
-import client.requests.dataStructures.set.RequestSADD;
+import client.requests.dataStructures.set.RequestSAdd;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -438,7 +438,7 @@ public class Client {
             printServerNotSet();
         } else {
             try {
-                RequestSADD r = new RequestSADD(tokens);
+                RequestSAdd r = new RequestSAdd(tokens);
                 System.out.println(sadd(r.getKey(), r.getMember()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());

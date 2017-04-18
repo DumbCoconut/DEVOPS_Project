@@ -396,6 +396,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSCard() throws Exception {
+        createRequest(new String[]{"help", "SCARD"});
+        assert r.getMessage().contains("SCARD");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

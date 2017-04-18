@@ -131,6 +131,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpRPush());
             } else if (cmd.equals(RequestName.getInstance().getSAddCmd())) {
                 res.add(getHelpSAdd());
+            } else if (cmd.equals(RequestName.getInstance().getSCardCmd())) {
+                res.add(getHelpSCard());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -521,6 +523,20 @@ public class RequestHelp extends Request {
             +  "DESCRIPTION: Add the specified member to the set value stored at key. If member is already a member " +
                "of the set no operation is performed. If key does not exist a new set with the specified member as " +
                "sole member is created. If the key exists but does not hold a set value an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SADD.
+     * @return The help message of SADD.
+     */
+    public String getHelpSCard() {
+        String res = "";
+        res += "SCARD key" + "\n\n"
+
+            +  "DESCRIPTION: Return the set cardinality (number of elements). If the key does not exist 0 is returned" +
+               ", like for empty sets.";
 
         return res;
     }

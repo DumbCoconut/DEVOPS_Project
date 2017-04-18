@@ -311,4 +311,8 @@ public class Server implements RedisLikeServer {
     public int sadd(String key, Object member) {
         return storage.sadd(key, member);
     }
+
+    public int scard(String key) {
+        return storage.scard(key);
+    }
 }

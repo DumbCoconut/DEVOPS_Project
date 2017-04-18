@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD
+        SADD, SCARD
     }
 
     /**
@@ -81,6 +81,7 @@ public class RequestName {
      */
     private void addSetRequests() {
         cmds.put(Cmd.SADD, "sadd");
+        cmds.put(Cmd.SCARD, "scard");
     }
 
 
@@ -290,6 +291,14 @@ public class RequestName {
      */
     public String getSAddCmd() {
         return cmds.get(Cmd.SADD);
+    }
+
+    /**
+     * Get the natural name of the SCARD command.
+     * @return The natural name of the SCARD command.
+     */
+    public String getSCardCmd() {
+        return cmds.get(Cmd.SCARD);
     }
 
     /**

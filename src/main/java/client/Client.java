@@ -5,6 +5,7 @@ import client.requests.client.RequestAddServer;
 import client.requests.client.RequestHelp;
 import client.requests.dataStructures.list.*;
 import client.requests.dataStructures.set.RequestSAdd;
+import client.requests.dataStructures.set.RequestSCard;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -106,6 +107,8 @@ public class Client {
             doRPush();
         } else if (cmd.equals(RequestName.getInstance().getSAddCmd())) {
             doSAdd();
+        } else if (cmd.equals(RequestName.getInstance().getSCardCmd())) {
+            doSCard();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -446,6 +449,19 @@ public class Client {
         }
     }
 
+    private void doSCard() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSCard r = new RequestSCard(tokens);
+                System.out.println(scard(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -662,6 +678,15 @@ public class Client {
     private String sadd(String key, Object member) {
         try {
             int res = server.sadd(key, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String scard(String key) {
+        try {
+            int res = server.scard(key);
             return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();

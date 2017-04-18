@@ -343,7 +343,7 @@ public class Storage {
         int res = -1;
         if (cache.containsKey(key)) {
             Object s = cache.get(key);
-            if (s instanceof Set) {
+            if (s instanceof HashSet) {
                 /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
                  * there might be some kind of work around, but we know for sure that we'll only have
                  * HashSet of objects. Best thing would most likely to change the design a bit, but
@@ -356,6 +356,15 @@ public class Storage {
             s.add(member);
             cache.put(key, s);
             res = 1;
+        }
+        return res;
+    }
+
+    public synchronized int scard(String key) {
+        int res = 0;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            res = (s instanceof HashSet) ? ((HashSet) s).size() : -1;
         }
         return res;
     }

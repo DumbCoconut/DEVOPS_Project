@@ -384,4 +384,11 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.sadd(defaultKey, defaultString), storage.sadd(defaultKey, defaultString));
     }
+
+    @Test
+    public void testSCard() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.scard(defaultKey), storage.scard(defaultKey));
+    }
 }

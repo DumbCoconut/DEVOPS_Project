@@ -1115,4 +1115,37 @@ public class StorageTest {
             fail();
         }
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SCARD                                                     */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    // Here we do not test if scard modifies the set because it obviously don't and we do not have the time..
+
+    @Test
+    public void testSCardNonExistentKey() {
+        Storage s = new Storage();
+        assertEquals(0, s.scard("key"));
+    }
+
+    @Test
+    public void testSCardExistentKeySet() {
+        Storage s = new Storage();
+        int size = 3;
+        for (int i = 0; i < size; i++) {
+            s.sadd("key", "" + i);
+        }
+        assertEquals(size, s.scard("key"));
+    }
+
+    @Test
+    public void testSCardExistentKeyNotSet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        int res = s.scard("key");
+        assertEquals(true, res < 0);
+    }
+
 }

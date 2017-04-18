@@ -14,7 +14,44 @@ The connection between the two is made using
 
 ## Features
 
-TODO
+#### Overview
+
+J-REDIS provides a subset of redis features. Note that unlike redis, negative indexes are not supported. 
+The "integer" type has been introduced, e.g "3" will be an integer and not a string. You can't put
+quotes inside quotes yet - "my name is" would work but "my "name" is" would produce an error.
+
+#### Client commands 
+
+- ADD_SERVER _host\_ip server\_name_
+- HELP _[cmd1, cmd2, ..., cmdN]_
+- QUIT
+- EXIT
+
+#### String and integers
+
+- DECR _key_
+- DECRBY _key integer_
+- DEL _key_
+- GET _key_
+- INCR _key_
+- INCRBY _key integer_
+- SET _key value_
+- TYPE _key_
+
+#### Lists
+
+- LINDEX _key index_
+- LLEN _key_
+- LPOP _key_
+- LPUSH _key value_
+- LRANGE _key start end_
+- LREM _key count value_
+- LSET _key index value_
+- LTRIM _key start end_
+- RPOP _key_
+- RPUSH _key value_
+
+For more explanations, use the HELP command directly in the client.
 
 ## Getting started
 

@@ -28,7 +28,7 @@ public class RequestName {
         cmds = new HashMap<>();
         addClientRequests();
         addDataTypesRequests();
-        addDataStructuresRequests();
+        addListRequests();
 
         // All commands are upper case
         cmds.replaceAll((k,v) -> v.toUpperCase());
@@ -59,9 +59,9 @@ public class RequestName {
     }
 
     /**
-     * Add requests related to data structures.
+     * Add requests related to lists.
      */
-    private void addDataStructuresRequests() {
+    private void addListRequests() {
         cmds.put(Cmd.LINDEX, "lindex");
         cmds.put(Cmd.LLEN, "llen");
         cmds.put(Cmd.LPOP, "lpop");
@@ -73,6 +73,7 @@ public class RequestName {
         cmds.put(Cmd.RPOP, "rpop");
         cmds.put(Cmd.RPUSH, "rpush");
     }
+
 
     /**
      * The instance representing the singleton.

@@ -7,8 +7,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -17,12 +20,12 @@ public class RequestHelpTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    RequestHELP r;
+    RequestHelp r;
 
     private void createRequest(String[] args) throws Exception {
         ArrayList<String> tokens = new ArrayList<>();
         Collections.addAll(tokens, args);
-        r = new RequestHELP(tokens);
+        r = new RequestHelp(tokens);
     }
 
     @Before

@@ -16,7 +16,7 @@ public class RequestSetTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestSET r;
+    private RequestSet r;
     private int legitNbTokens = 3;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -24,7 +24,7 @@ public class RequestSetTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestSET(tokens);
+        r = new RequestSet(tokens);
     }
 
     @Test

@@ -13,7 +13,7 @@ public class RequestLTrimTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestLTRIM r;
+    private RequestLTrim r;
     private int legitNbTokens = 4;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestLTrimTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestLTRIM(tokens);
+        r = new RequestLTrim(tokens);
     }
 
     @Test

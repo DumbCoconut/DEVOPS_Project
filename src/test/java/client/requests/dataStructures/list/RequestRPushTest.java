@@ -13,7 +13,7 @@ public class RequestRPushTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RequestRPUSH r;
+    private RequestRPush r;
     private int legitNbTokens = 3;
 
     private void createRequest(int nbTokens) throws Exception {
@@ -21,7 +21,7 @@ public class RequestRPushTest {
         for (int i = 0; i < nbTokens; i++) {
             tokens.add("token" + i);
         }
-        r = new RequestRPUSH(tokens);
+        r = new RequestRPush(tokens);
     }
 
     @Test

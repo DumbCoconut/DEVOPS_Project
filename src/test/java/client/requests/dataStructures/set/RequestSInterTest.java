@@ -32,6 +32,14 @@ public class RequestSInterTest {
     }
 
     @Test
+    public void reqSIntNotEnoughToken() throws Exception {
+        thrown.expect(InvalidNbArgException.class);
+        thrown.expectMessage("(error) wrong number of arguments (given " + (legitNbTokens - 2)
+                + ", expected " + (legitNbTokens - 1) + ")");
+        createRequest(legitNbTokens - 1);
+    }
+
+    @Test
     public void reqSInterLegitNbToken() throws Exception {
         createRequest(legitNbTokens);
     }

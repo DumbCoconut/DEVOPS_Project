@@ -516,7 +516,7 @@ public class Client {
             try {
                 RequestSInter r = new RequestSInter(tokens);
                 System.out.println(sinter(r.getKeys()));
-            } catch (NoTokensException e) {
+            } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }
         }

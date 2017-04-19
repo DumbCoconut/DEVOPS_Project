@@ -9,6 +9,11 @@ import java.util.stream.Collectors;
 
 public class RequestSInter extends Request {
     /**
+     * The minimum number of arguments required to properly construct the request.
+     */
+    private final int minNbArgs = 1;
+
+    /**
      * All the keys we want to inter
      */
     String[] keys;
@@ -20,15 +25,20 @@ public class RequestSInter extends Request {
      * @throws InvalidNbArgException When not enough arguments are provided to the request.
      * @throws NoTokensException     When no tokens are provided to the request.
      */
-    public RequestSInter(ArrayList<String> tokens) throws NoTokensException {
+    public RequestSInter(ArrayList<String> tokens) throws NoTokensException, InvalidNbArgException {
         super(tokens);
+        setNbArgs(minNbArgs);
         parse();
     }
 
     /**
      * Parse the tokens and retrieve the keys.
      */
-    public void parse() {
+    public void parse() throws InvalidNbArgException {
+        if (tokens.size() < nbExpectedTokens()) {
+            throw new InvalidNbArgException(tokens.size() - 1, minNbArgs);
+        }
+
         /* sublist because we skip "sinter" */
         /* remove the duplicates */
         ArrayList<String> tempKeys = (ArrayList<String>) tokens.subList(1, tokens.size()).stream()

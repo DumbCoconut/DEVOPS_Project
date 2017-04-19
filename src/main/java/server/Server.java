@@ -340,4 +340,8 @@ public class Server implements RedisLikeServer {
     public Object spop(String key) {
         return storage.spop(key);
     }
+
+    public Object srandmember(String key) {
+        return storage.srandmember(key);
+    }
 }

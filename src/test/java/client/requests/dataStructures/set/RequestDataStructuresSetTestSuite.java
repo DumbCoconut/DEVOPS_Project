@@ -12,7 +12,8 @@ import org.junit.runners.Suite;
     RequestSMembersTest.class,
     RequestSInterTest.class,
     RequestSInterstoreTest.class,
-    RequestSPopTest.class
+    RequestSPopTest.class,
+    RequestSRandMemberTest.class
 })
 public class RequestDataStructuresSetTestSuite {
 }

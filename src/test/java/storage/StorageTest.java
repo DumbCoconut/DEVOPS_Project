@@ -1571,4 +1571,63 @@ public class StorageTest {
         Object o = s.spop("key");
         assertEquals(false, ((HashSet) s.get("key")).contains(o));
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                  TESTS SRANDMEMBER                                             */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sRandMemberNonExistentKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(null, s.srandmember("key"));
+    }
+
+    @Test
+    public void sRandMemberExistentKeyNotSetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(null, s.srandmember("key"));
+    }
+
+    @Test
+    public void sRandMemberExistentKeyNotSetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        s.srandmember("key");
+        assertEquals("value", s.get("key"));
+    }
+
+    @Test
+    public void sRandMemberExistentKeyEmptySetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", new HashSet<>());
+        assertEquals(null, s.srandmember("key"));
+    }
+
+    @Test
+    public void sRandMemberExistentKeyEmptySetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", new HashSet<>());
+        s.srandmember("key");
+        assertEquals(new HashSet<>(), s.get("key"));
+    }
+
+    @Test
+    public void sRandMemberExistentKeyNonEmptySetReturnValue() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        assertEquals(true, ((HashSet) s.get("key")).contains(s.srandmember("key")));
+    }
+
+    @Test
+    public void sRandMemberExistentKeyNonEmptySetDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        for (int i = 0; i < 1000; i++) {
+            s.sadd("key", i);
+        }
+        Object o = s.srandmember("key");
+        assertEquals(true, ((HashSet) s.get("key")).contains(o));
+    }
 }

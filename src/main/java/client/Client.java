@@ -121,6 +121,8 @@ public class Client {
             doSInterstore();
         } else if (cmd.equals(RequestName.getInstance().getSPopCmd())) {
             doSPop();
+        } else if (cmd.equals(RequestName.getInstance().getSRandMemberCmd())) {
+            doSRandMember();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -552,6 +554,19 @@ public class Client {
         }
     }
 
+    private void doSRandMember() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSRandMember r = new RequestSRandMember(tokens);
+                System.out.println(spop(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -853,6 +868,15 @@ public class Client {
     private String spop(String key) {
         try {
             Object res = server.spop(key);
+            return res != null ? res.toString() : NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String srandmember(String key) {
+        try {
+            Object res = server.srandmember(key);
             return res != null ? res.toString() : NIL;
         } catch (RemoteException e) {
             return e.getMessage();

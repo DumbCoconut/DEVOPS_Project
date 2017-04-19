@@ -145,6 +145,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSInterstore());
             } else if (cmd.equals(RequestName.getInstance().getSPopCmd())) {
                 res.add(getHelpSPop());
+            } else if (cmd.equals(RequestName.getInstance().getSRandMemberCmd())) {
+                res.add(getHelpSRandMember());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -637,6 +639,22 @@ public class RequestHelp extends Request {
                "or the key does not exist or the key is not a set, a nil object is returned." + "\n\n"
 
             +  "The SRANDMEMBER command does a similar work but the returned element is not removed from the Set.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SRANDMEMBER.
+     * @return The help message of SRANDMEMBER.
+     */
+    public String getHelpSRandMember() {
+        String res = "";
+        res += "SRANDMEMBER key" + "\n\n"
+
+            +  "DESCRIPTION: Return a random element from a Set, without removing the element. If the Set is empty " +
+               "or the key does not exist or the key is not a set, a nil object is returned." + "\n\n"
+
+            +  "The SPOP command does a similar work but the returned element is popped (removed) from the Set.";
 
         return res;
     }

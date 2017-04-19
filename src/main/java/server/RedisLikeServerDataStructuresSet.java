@@ -20,4 +20,6 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     int sinterstore(String[] keys) throws RemoteException;
 
     Object spop(String key) throws RemoteException;
+
+    Object srandmember(String key) throws RemoteException;
 }

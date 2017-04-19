@@ -488,17 +488,23 @@ public class Storage {
     }
 
     public synchronized Object spop(String key) {
-        Object res = null;
-        if (cache.containsKey(key)) {
-            Object o = cache.get(key);
-            if (o instanceof HashSet) {
-                res = randomlyPickAndRemove((HashSet) o);
+            Object res = null;
+            if (cache.containsKey(key)) {
+                Object o = cache.get(key);
+                if (o instanceof HashSet) {
+                    res = randomlyPickAndRemove((HashSet) o);
+                }
             }
-        }
-        return res;
+            return res;
     }
 
     private synchronized Object randomlyPickAndRemove(HashSet set) {
+        Object res = randomlyPick(set);
+        set.remove(res);
+        return res;
+    }
+
+    private synchronized Object randomlyPick(HashSet set) {
         Object res = null;
         int size = set.size();
         if (size > 0) {
@@ -512,7 +518,17 @@ public class Storage {
                     i++;
                 }
             }
-            set.remove(res);
+        }
+        return res;
+    }
+
+    public synchronized Object srandmember(String key) {
+        Object res = null;
+        if (cache.containsKey(key)) {
+            Object o = cache.get(key);
+            if (o instanceof HashSet) {
+                res = randomlyPick((HashSet) o);
+            }
         }
         return res;
     }

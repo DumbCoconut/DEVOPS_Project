@@ -433,4 +433,11 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.spop("key"), storage.spop("key"));
     }
+
+    @Test
+    public void testSRandMember() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.srandmember("key"), storage.srandmember("key"));
+    }
 }

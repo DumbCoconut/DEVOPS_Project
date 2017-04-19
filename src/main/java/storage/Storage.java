@@ -458,4 +458,27 @@ public class Storage {
         }
         return commonElements;
     }
+
+    public synchronized int sinterstore(String[] keys) {
+        // we don't want to do inter on the first key
+        String[] subKeys = new String[keys.length - 1];
+        for (int i = 0; i < keys.length - 1; i++) {
+            subKeys[i] = keys[i + 1];
+        }
+
+        List<Object> inter = sinter(subKeys);
+        // at least one key was not a set, we return an error
+        if (inter == null) {
+            return -1;
+        }
+
+        HashSet<Object> interSet = new HashSet<>();
+        interSet.addAll(inter);
+        if (cache.containsKey(keys[0])) {
+            cache.replace(keys[0], interSet);
+        } else {
+            cache.put(keys[0], interSet);
+        }
+        return 1;
+    }
 }

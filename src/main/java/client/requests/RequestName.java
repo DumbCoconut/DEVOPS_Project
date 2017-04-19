@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE
     }
 
     /**
@@ -86,6 +86,7 @@ public class RequestName {
         cmds.put(Cmd.SISMEMBER, "sismember");
         cmds.put(Cmd.SMEMBERS, "smembers");
         cmds.put(Cmd.SINTER, "sinter");
+        cmds.put(Cmd.SINTERSTORE, "sinterstore");
     }
 
 
@@ -335,6 +336,14 @@ public class RequestName {
      */
     public String getSInterCmd() {
         return cmds.get(Cmd.SINTER);
+    }
+
+    /**
+     * Get the natural name of the SINTERSTORE command.
+     * @return The natural name of the SINTERSTORE command.
+     */
+    public String getSInterstoreCmd() {
+        return cmds.get(Cmd.SINTERSTORE);
     }
 
     /**

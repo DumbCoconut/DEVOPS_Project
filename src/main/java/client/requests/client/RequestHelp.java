@@ -141,6 +141,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSMembers());
             } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
                 res.add(getHelpSInter());
+            }else if (cmd.equals(RequestName.getInstance().getSInterstoreCmd())) {
+                res.add(getHelpSInterstore());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -603,6 +605,20 @@ public class RequestHelp extends Request {
 
             + "Non existing keys are considered like empty sets, so if one of the keys is missing an empty set is " +
               "returned (since the intersection with an empty set always is an empty set).";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SINTERSTORE.
+     * @return The help message of SINTERSTORE.
+     */
+    public String getHelpSInterstore() {
+        String res = "";
+        res += "SINTERSTORE dstkey key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: This command works exactly like SINTER but instead of being returned the resulting set " +
+               "is stored as dstkey.";
 
         return res;
     }

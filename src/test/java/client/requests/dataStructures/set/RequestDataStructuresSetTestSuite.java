@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
     RequestSIsMemberTest.class,
     RequestSRemTest.class,
     RequestSMembersTest.class,
-    RequestSInterTest.class
+    RequestSInterTest.class,
+    RequestSInterstoreTest.class
 })
 public class RequestDataStructuresSetTestSuite {
 }

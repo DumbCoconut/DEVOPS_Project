@@ -117,6 +117,8 @@ public class Client {
             doSMembers();
         } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
             doSInter();
+        } else if (cmd.equals(RequestName.getInstance().getSInterstoreCmd())) {
+            doSInterstore();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -522,6 +524,19 @@ public class Client {
         }
     }
 
+    private void doSInterstore() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSInterstore r = new RequestSInterstore(tokens);
+                System.out.println(sinterstore(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -806,6 +821,15 @@ public class Client {
                 }
                 return res;
             }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sinterstore(String[] keys) {
+        try {
+            int res = server.sinterstore(keys);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();
         }

@@ -426,6 +426,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSInterstore() throws Exception {
+        createRequest(new String[]{"help", "SINTERSTORE"});
+        assert r.getMessage().contains("SINTERSTORE");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

@@ -1413,4 +1413,102 @@ public class StorageTest {
         assertEquals(oldSet2, s.get("key2"));
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                               TESTS SINTERSTORE                                                */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sInterStoreOnNonExistingKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(1, s.sinterstore(new String[]{"key", "key2"}));
+    }
+
+    @Test
+    public void sInterStoreOnNonExistingKeyDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sinterstore(new String[]{"key", "key2"});
+        assertEquals(new HashSet<>(), s.get("key"));
+    }
+
+    @Test
+    public void sInterStoreNotASetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key2", "value");
+        s.sadd("keyset", "value");
+        assertEquals(-1, s.sinterstore(new String[]{"key", "key2", "keyset"}));
+    }
+
+    @Test
+    public void sInterStoreNotASetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key2", "value");
+        s.sadd("keyset", "value");
+        s.sinterstore(new String[]{"key", "key2", "keyset"});
+        thrown.expect(NonExistentKeyException.class);
+        s.get("key");
+    }
+
+    @Test
+    public void sInterStoreOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        assertEquals(1, s.sinterstore(new String[] {"newkey", "key", "key2"}));
+    }
+
+    @Test
+    public void sInterOnSetDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+
+        HashSet<Object> expected = new HashSet<>();
+        expected.addAll(s.sinter(new String[] {"key", "key2"}));
+        s.sinterstore(new String[]{"newkey", "key", "key2"});
+        assertEquals(expected, s.get("newkey"));
+    }
+
+    @Test
+    public void sInterStoreOnSetExistentDestKeyReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        s.store("newkey", "value");
+        assertEquals(1, s.sinterstore(new String[] {"newkey", "key", "key2"}));
+    }
+
+    @Test
+    public void sInterOnSetExistentDestKeyDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        HashSet<Object> expected = new HashSet<>();
+        expected.addAll(s.sinter(new String[] {"key", "key2"}));
+        s.store("newkey", "value");
+        s.sinterstore(new String[]{"newkey", "key", "key2"});
+        assertEquals(expected, s.get("newkey"));
+    }
+
 }

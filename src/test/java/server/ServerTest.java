@@ -418,11 +418,19 @@ public class ServerTest {
         Server server = new Server();
         Storage storage = new Storage();
         assertEquals(server.sinter(new String[]{"key"}), storage.sinter(new String[]{"key"}));
-    }@Test
+    }
 
+    @Test
     public void testSInterstore() {
         Server server = new Server();
         Storage storage = new Storage();
         assertEquals(server.sinterstore(new String[]{"key"}), storage.sinterstore(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSPop() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.spop("key"), storage.spop("key"));
     }
 }

@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP
     }
 
     /**
@@ -87,8 +87,8 @@ public class RequestName {
         cmds.put(Cmd.SMEMBERS, "smembers");
         cmds.put(Cmd.SINTER, "sinter");
         cmds.put(Cmd.SINTERSTORE, "sinterstore");
+        cmds.put(Cmd.SPOP, "spop");
     }
-
 
     /**
      * The instance representing the singleton.
@@ -344,6 +344,14 @@ public class RequestName {
      */
     public String getSInterstoreCmd() {
         return cmds.get(Cmd.SINTERSTORE);
+    }
+
+    /**
+     * Get the natural name of the SPOP command.
+     * @return The natural name of the SPOP command.
+     */
+    public String getSPopCmd() {
+        return cmds.get(Cmd.SPOP);
     }
 
     /**

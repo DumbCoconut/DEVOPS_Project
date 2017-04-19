@@ -432,6 +432,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSPop() throws Exception {
+        createRequest(new String[]{"help", "SPOP"});
+        assert r.getMessage().contains("SPOP");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

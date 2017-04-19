@@ -141,8 +141,10 @@ public class RequestHelp extends Request {
                 res.add(getHelpSMembers());
             } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
                 res.add(getHelpSInter());
-            }else if (cmd.equals(RequestName.getInstance().getSInterstoreCmd())) {
+            } else if (cmd.equals(RequestName.getInstance().getSInterstoreCmd())) {
                 res.add(getHelpSInterstore());
+            } else if (cmd.equals(RequestName.getInstance().getSPopCmd())) {
+                res.add(getHelpSPop());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -619,6 +621,22 @@ public class RequestHelp extends Request {
 
             +  "DESCRIPTION: This command works exactly like SINTER but instead of being returned the resulting set " +
                "is stored as dstkey.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SPOP.
+     * @return The help message of SPOP.
+     */
+    public String getHelpSPop() {
+        String res = "";
+        res += "SPOP key" + "\n\n"
+
+            +  "DESCRIPTION: Remove a random element from a Set returning it as return value. If the Set is empty " +
+               "or the key does not exist or the key is not a set, a nil object is returned." + "\n\n"
+
+            +  "The SRANDMEMBER command does a similar work but the returned element is not removed from the Set.";
 
         return res;
     }

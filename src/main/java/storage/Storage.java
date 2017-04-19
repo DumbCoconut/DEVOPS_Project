@@ -26,6 +26,10 @@ public class Storage {
     private volatile long maxSize;
 
     /**
+     * Random generator
+     */
+    private Random random;
+    /**
      * Storage constructor.
      *
      * @param size The maximum number of objects to keep in memory.
@@ -33,6 +37,7 @@ public class Storage {
      */
     public Storage(long size) throws IllegalArgumentException {
         setMaxSize(size);
+        random = new Random();
         cache = CacheBuilder.newBuilder()
                             .maximumSize(maxSize)
                             .<String, Object>build()
@@ -481,4 +486,35 @@ public class Storage {
         }
         return 1;
     }
+
+    public synchronized Object spop(String key) {
+        Object res = null;
+        if (cache.containsKey(key)) {
+            Object o = cache.get(key);
+            if (o instanceof HashSet) {
+                res = randomlyPickAndRemove((HashSet) o);
+            }
+        }
+        return res;
+    }
+
+    private synchronized Object randomlyPickAndRemove(HashSet set) {
+        Object res = null;
+        int size = set.size();
+        if (size > 0) {
+            int randomItem = new Random().nextInt(size);
+            int i = 0;
+            for (Object item : set) {
+                if (i == randomItem) {
+                    res = item;
+                    break;
+                } else {
+                    i++;
+                }
+            }
+            set.remove(res);
+        }
+        return res;
+    }
+
 }

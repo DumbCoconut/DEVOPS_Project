@@ -336,4 +336,8 @@ public class Server implements RedisLikeServer {
     public int sinterstore(String[] keys) {
         return storage.sinterstore(keys);
     }
+
+    public Object spop(String key) {
+        return storage.spop(key);
+    }
 }

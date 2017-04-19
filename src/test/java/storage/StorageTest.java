@@ -1511,4 +1511,64 @@ public class StorageTest {
         assertEquals(expected, s.get("newkey"));
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                  TESTS SPOP                                                    */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sPopNonExistentKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(null, s.spop("key"));
+    }
+
+    @Test
+    public void sPopExistentKeyNotSetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        assertEquals(null, s.spop("key"));
+    }
+
+    @Test
+    public void sPopExistentKeyNotSetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", "value");
+        s.spop("key");
+        assertEquals("value", s.get("key"));
+    }
+
+    @Test
+    public void sPopExistentKeyEmptySetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key", new HashSet<>());
+        assertEquals(null, s.spop("key"));
+    }
+
+    @Test
+    public void sPopExistentKeyEmptySetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key", new HashSet<>());
+        s.spop("key");
+        assertEquals(new HashSet<>(), s.get("key"));
+    }
+
+    @Test
+    public void sPopExistentKeyNonEmptySetReturnValue() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        HashSet<Object> oldSet = new HashSet<>();
+        oldSet.addAll((HashSet) s.get("key"));
+        assertEquals(true, oldSet.contains(s.spop("key")));
+    }
+
+    @Test
+    public void sPopExistentKeyNonEmptySetDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        for (int i = 0; i < 1000; i++) {
+            s.sadd("key", i);
+        }
+        Object o = s.spop("key");
+        assertEquals(false, ((HashSet) s.get("key")).contains(o));
+    }
 }

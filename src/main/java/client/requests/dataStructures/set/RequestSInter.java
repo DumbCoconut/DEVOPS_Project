@@ -26,7 +26,7 @@ public class RequestSInter extends Request {
     }
 
     /**
-     * Parse the tokens and retrieve the commands where help has been requested.
+     * Parse the tokens and retrieve the keys.
      */
     public void parse() {
         /* sublist because we skip "sinter" */

@@ -123,6 +123,8 @@ public class Client {
             doSPop();
         } else if (cmd.equals(RequestName.getInstance().getSRandMemberCmd())) {
             doSRandMember();
+        } else if (cmd.equals(RequestName.getInstance().getSMoveCmd())) {
+            doSMove();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -567,6 +569,19 @@ public class Client {
         }
     }
 
+    private void doSMove() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSMove r = new RequestSMove(tokens);
+                System.out.println(smove(r.getKey(), r.getDstkey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -878,6 +893,15 @@ public class Client {
         try {
             Object res = server.srandmember(key);
             return res != null ? res.toString() : NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String smove(String srckey, String dstkey, Object member) {
+        try {
+            int res = server.smove(srckey, dstkey, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();
         }

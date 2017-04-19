@@ -1630,4 +1630,119 @@ public class StorageTest {
         Object o = s.srandmember("key");
         assertEquals(true, ((HashSet) s.get("key")).contains(o));
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                  TESTS SMOVE                                                   */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sMoveFirstKeyNonExistentReturnValue() {
+        Storage s = new Storage();
+        s.sadd("dstkey", "value");
+        assertEquals(0, s.smove("srckey", "dstkey", "member"));
+    }
+
+    @Test
+    public void sMoveFirstKeyNonExistentDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("dstkey", "value");
+        s.smove("srckey", "dstkey", "member");
+        HashSet set = (HashSet) s.get("dstkey");
+        assertEquals(true, set.contains("value") && !set.contains("member"));
+    }
+
+    @Test
+    public void sMoveFirstKeyNotASetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("srckey", "value");
+        s.sadd("dstkey", "a");
+        assertEquals(-1, s.smove("srckey", "dstkey", "value"));
+    }
+
+    @Test
+    public void sMoveFirstKeyNotASetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("srckey", "value");
+        s.sadd("dstkey", "a");
+        s.smove("srckey", "dstkey", "value");
+        Object o1 = s.get("srckey");
+        HashSet o2 = (HashSet) s.get("dstkey");
+        assertEquals(true, o1.equals("value") && !o2.contains("value"));
+    }
+
+    @Test
+    public void sMoveSecondKeyNonExistentReturnValue() {
+        Storage s = new Storage();
+        s.sadd("srckey", "value");
+        assertEquals(1, s.smove("srckey", "dstkey", "value"));
+    }
+
+    @Test
+    public void sMoveSecondKeyNonExistentDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("srckey", "value");
+        s.smove("srckey", "dstkey", "value");
+        HashSet s1 = (HashSet) s.get("srckey");
+        HashSet s2 = (HashSet) s.get("dstkey");
+        assertEquals(true, !s1.contains("value") && s2.contains("value"));
+    }
+
+    @Test
+    public void sMoveSecondKeyNotASetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("dstkey", "a");
+        s.sadd("srckey", "value");
+        assertEquals(-1, s.smove("srckey", "dstkey", "value"));
+    }
+
+    @Test
+    public void sMoveSecondKeyNotASetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("srckey", "a");
+        s.store("dstkey", "value");
+        s.smove("srckey", "dstkey", "value");
+        HashSet o1 = (HashSet) s.get("srckey");
+        Object o2 = s.get("dstkey");
+        assertEquals(true, !o1.contains("value") && o2.equals("value"));
+    }
+
+    @Test
+    public void sMoveBothKeyOKContainsMemberReturnValue() {
+        Storage s = new Storage();
+        s.sadd("srckey", "member");
+        s.sadd("dstkey", "not_member");
+        assertEquals(1, s.smove("srckey", "dstkey", "member"));
+    }
+
+    @Test
+    public void sMoveBothKeyOKContainsMemberDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("srckey", "member");
+        s.sadd("dstkey", "not_member");
+        s.smove("srckey", "dstkey", "member");
+        HashSet s1 = (HashSet) s.get("srckey");
+        HashSet s2 = (HashSet) s.get("dstkey");
+        assertEquals(true, !s1.contains("member") && s2.contains("member"));
+    }
+
+    @Test
+    public void sMoveBothKeyOKDoesNotContainsMemberReturnValue() {
+        Storage s = new Storage();
+        s.sadd("srckey", "not_member");
+        s.sadd("dstkey", "not_member");
+        assertEquals(0, s.smove("srckey", "dstkey", "member"));
+    }
+
+    @Test
+    public void sMoveBothKeyOKDoesNotContainsMemberDoesNotModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sadd("srckey", "not_member");
+        s.sadd("dstkey", "not_member");
+        s.smove("srckey", "dstkey", "member");
+        HashSet s1 = (HashSet) s.get("srckey");
+        HashSet s2 = (HashSet) s.get("dstkey");
+        assertEquals(true, !s1.contains("member") && !s2.contains("member"));
+    }
 }

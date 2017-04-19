@@ -63,6 +63,7 @@ quotes inside quotes yet - "my name is" would work but "my "name" is" would prod
 - SINTERSTORE _dstkey key1 key2 ... keyN_
 - SPOP _key_
 - SRANDMEMBER _key_
+- SMOVE _srckey dstkey member_
 
 For more explanations, use the HELP command directly in the client.
 

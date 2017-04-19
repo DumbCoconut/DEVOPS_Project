@@ -1,6 +1,7 @@
 package storage;
 
 import com.google.common.cache.CacheBuilder;
+import com.google.common.hash.Hasher;
 import storage.exceptions.DuplicatedKeyException;
 import storage.exceptions.NonExistentKeyException;
 
@@ -528,6 +529,43 @@ public class Storage {
             Object o = cache.get(key);
             if (o instanceof HashSet) {
                 res = randomlyPick((HashSet) o);
+            }
+        }
+        return res;
+    }
+
+    public synchronized int smove(String srckey, String dstkey, Object member) {
+        int res = 0;
+
+        // does srckey exists? yes ->continue no->0
+        if (cache.containsKey(srckey)) {
+            Object src = cache.get(srckey);
+            // is srckey a set? yes->continue no->error
+            if (src instanceof HashSet) {
+                HashSet srcSet = (HashSet) src;
+                // does srckey contain member? yes->remove & continue no->0
+                if (srcSet.contains(member)) {
+                    srcSet.remove(member);
+                    // does cache contain dstkey? yes->continue no->insert src
+                    if (cache.containsKey(dstkey)) {
+                        Object dst = cache.get(dstkey);
+                        // is dstkey a set? yes-> add it & done no-> error
+                        if (dst instanceof HashSet) {
+                            HashSet dstSet = (HashSet) dst;
+                            if (! dstSet.contains(member)) {
+                                sadd(dstkey, member);
+                                res = 1;
+                            }
+                        } else {
+                            res = -1;
+                        }
+                    } else {
+                        sadd(dstkey, member);
+                        res = 1;
+                    }
+                }
+            } else {
+                res = -1;
             }
         }
         return res;

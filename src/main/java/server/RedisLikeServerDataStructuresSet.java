@@ -22,4 +22,6 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     Object spop(String key) throws RemoteException;
 
     Object srandmember(String key) throws RemoteException;
+
+    int smove(String srckey, String dstkey, Object member) throws RemoteException;
 }

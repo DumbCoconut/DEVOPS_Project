@@ -147,6 +147,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSPop());
             } else if (cmd.equals(RequestName.getInstance().getSRandMemberCmd())) {
                 res.add(getHelpSRandMember());
+            } else if (cmd.equals(RequestName.getInstance().getSMoveCmd())) {
+                res.add(getHelpSMove());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -655,6 +657,25 @@ public class RequestHelp extends Request {
                "or the key does not exist or the key is not a set, a nil object is returned." + "\n\n"
 
             +  "The SPOP command does a similar work but the returned element is popped (removed) from the Set.";
+
+        return res;
+    }
+    /**
+     * Get the help message of SMOVE.
+     * @return The help message of SMOVE.
+     */
+    public String getHelpSMove() {
+        String res = "";
+        res += "SMOVE srckey dstkey member" + "\n\n"
+
+            +  "DESCRIPTION: Move the specifided member from the set at srckey to the set at dstkey." + "\n\n"
+
+            +  "If the source set does not exist or does not contain the specified element no operation is " +
+               "performed and zero is returned, otherwise the element is removed from the source set and added to " +
+               "the destination set. On success one is returned, even if the element was already present in the " +
+               "destination set." + "\n\n"
+
+            +  "An error is raised if the source or destination keys contain a non Set value.";
 
         return res;
     }

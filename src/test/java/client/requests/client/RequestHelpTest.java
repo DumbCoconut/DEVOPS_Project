@@ -444,6 +444,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSMove() throws Exception {
+        createRequest(new String[]{"help", "SMOVE"});
+        assert r.getMessage().contains("SMOVE");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

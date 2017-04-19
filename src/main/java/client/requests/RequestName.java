@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE
     }
 
     /**
@@ -89,6 +89,7 @@ public class RequestName {
         cmds.put(Cmd.SINTERSTORE, "sinterstore");
         cmds.put(Cmd.SPOP, "spop");
         cmds.put(Cmd.SRANDMEMBER, "srandmember");
+        cmds.put(Cmd.SMOVE, "smove");
     }
 
     /**
@@ -361,6 +362,14 @@ public class RequestName {
      */
     public String getSRandMemberCmd() {
         return cmds.get(Cmd.SRANDMEMBER);
+    }
+
+    /**
+     * Get the natural name of the SMOVE command.
+     * @return The natural name of the SMOVE command.
+     */
+    public String getSMoveCmd() {
+        return cmds.get(Cmd.SMOVE);
     }
 
     /**

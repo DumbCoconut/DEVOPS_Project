@@ -440,4 +440,10 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.srandmember("key"), storage.srandmember("key"));
     }
+    @Test
+    public void testSMove() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.smove("key", "key2", "mem"), storage.smove("key", "key2", "mem"));
+    }
 }

@@ -344,4 +344,9 @@ public class Server implements RedisLikeServer {
     public Object srandmember(String key) {
         return storage.srandmember(key);
     }
+
+    public int smove(String srckey, String dstkey, Object member) {
+        return storage.smove(srckey, dstkey, member);
+    }
+
 }

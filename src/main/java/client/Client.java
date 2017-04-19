@@ -560,7 +560,7 @@ public class Client {
         } else {
             try {
                 RequestSRandMember r = new RequestSRandMember(tokens);
-                System.out.println(spop(r.getKey()));
+                System.out.println(srandmember(r.getKey()));
             } catch (InvalidNbArgException | NoTokensException e) {
                 System.out.println(e.getMessage());
             }

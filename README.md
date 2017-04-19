@@ -59,6 +59,7 @@ quotes inside quotes yet - "my name is" would work but "my "name" is" would prod
 - SISMEMBER _key_ _member_
 - SMEMBERS _key_
 - SREM _key member_
+- SINTER _key1 key2 ... keyN_
 
 For more explanations, use the HELP command directly in the client.
 

@@ -329,4 +329,8 @@ public class Server implements RedisLikeServer {
         return storage.smembers(key);
     }
 
+    public List<Object> sinter(String[] keys) {
+        return storage.sinter(keys);
+    }
+
 }

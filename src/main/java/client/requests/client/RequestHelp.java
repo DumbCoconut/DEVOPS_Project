@@ -139,6 +139,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpSIsMember());
             } else if (cmd.equals(RequestName.getInstance().getSMembersCmd())) {
                 res.add(getHelpSMembers());
+            } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
+                res.add(getHelpSInter());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -583,6 +585,24 @@ public class RequestHelp extends Request {
         res += "SMEMBERS key" + "\n\n"
 
             +  "DESCRIPTION: Return all the members (elements) of the set value stored at key.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SINTER.
+     * @return The help message of SINTER.
+     */
+    public String getHelpSInter() {
+        String res = "";
+        res += "SINTER key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: Return the members of a set resulting from the intersection of all the sets hold at the " +
+               "specified keys. If just a single key is specified, then this command produces the same result as " +
+               "SMEMBERS." + "\n\n"
+
+            + "Non existing keys are considered like empty sets, so if one of the keys is missing an empty set is " +
+              "returned (since the intersection with an empty set always is an empty set).";
 
         return res;
     }

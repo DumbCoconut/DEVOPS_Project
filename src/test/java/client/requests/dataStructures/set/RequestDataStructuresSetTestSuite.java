@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
     RequestSCardTest.class,
     RequestSIsMemberTest.class,
     RequestSRemTest.class,
-    RequestSMembersTest.class
+    RequestSMembersTest.class,
+    RequestSInterTest.class
 })
 public class RequestDataStructuresSetTestSuite {
 }

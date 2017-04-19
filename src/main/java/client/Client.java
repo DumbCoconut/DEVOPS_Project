@@ -115,6 +115,8 @@ public class Client {
             doSIsMember();
         } else if (cmd.equals(RequestName.getInstance().getSMembersCmd())) {
             doSMembers();
+        } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
+            doSInter();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -507,6 +509,19 @@ public class Client {
         }
     }
 
+    private void doSInter() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSInter r = new RequestSInter(tokens);
+                System.out.println(sinter(r.getKeys()));
+            } catch (NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -759,6 +774,26 @@ public class Client {
     private String smembers(String key) {
         try {
             List<Object> objects = server.smembers(key);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sinter(String[] keys) {
+        try {
+            List<Object> objects = server.sinter(keys);
             if (objects == null) {
                 return ERROR_WRONG_TYPE;
             } else if (objects.isEmpty()) {

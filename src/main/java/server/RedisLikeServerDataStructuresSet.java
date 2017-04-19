@@ -14,4 +14,6 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     int sismember(String key, Object member) throws RemoteException;
 
     List<Object> smembers(String key) throws RemoteException;
+
+    List<Object> sinter(String[] keys) throws RemoteException;
 }

@@ -420,6 +420,12 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSInter() throws Exception {
+        createRequest(new String[]{"help", "SINTER"});
+        assert r.getMessage().contains("SINTER");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

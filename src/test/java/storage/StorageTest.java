@@ -1346,4 +1346,71 @@ public class StorageTest {
         }
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                  TESTS SINTER                                                  */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sInterOnNonExistingKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.sinter(new String[]{"key"}).toArray());
+    }
+
+    @Test
+    public void sInterOnNoKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.sinter(new String[]{}).toArray());
+    }
+
+    @Test
+    public void sInterNotASet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.sadd("keyset", "value");
+        s.store("key", "value");
+        assertEquals(null, s.sinter(new String[]{"key", "keyset"}));
+    }
+
+    @Test
+    public void sInterOnEmptySet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        s.store("key2", new HashSet<>());
+
+        assertArrayEquals(new Object[]{}, s.sinter(new String[]{"key", "key2"}).toArray());
+    }
+
+    @Test
+    public void sInterOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        String[] expected = new String[]{"0","1", "2", "3"};
+        List<Object> inter = s.sinter(new String[] {"key", "key2"});
+        assertArrayEquals(expected, inter.toArray());
+    }
+
+    @Test
+    public void sInterOnSetDoesNotModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        Object oldSet1 = s.get("key");
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        Object oldSet2 = s.get("key2");
+        s.sinter(new String[] {"key", "key2"});
+        assertEquals(oldSet1, s.get("key"));
+        assertEquals(oldSet2, s.get("key2"));
+    }
+
 }

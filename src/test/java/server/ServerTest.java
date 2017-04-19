@@ -412,4 +412,11 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.smembers(defaultKey), storage.smembers(defaultKey));
     }
+
+    @Test
+    public void testSInter() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sinter(new String[]{"key"}), storage.sinter(new String[]{"key"}));
+    }
 }

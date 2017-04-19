@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER, SMEMBERS
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER
     }
 
     /**
@@ -85,6 +85,7 @@ public class RequestName {
         cmds.put(Cmd.SREM, "srem");
         cmds.put(Cmd.SISMEMBER, "sismember");
         cmds.put(Cmd.SMEMBERS, "smembers");
+        cmds.put(Cmd.SINTER, "sinter");
     }
 
 
@@ -326,6 +327,14 @@ public class RequestName {
      */
     public String getSMembersCmd() {
         return cmds.get(Cmd.SMEMBERS);
+    }
+
+    /**
+     * Get the natural name of the SINTER command.
+     * @return The natural name of the SINTER command.
+     */
+    public String getSInterCmd() {
+        return cmds.get(Cmd.SINTER);
     }
 
     /**

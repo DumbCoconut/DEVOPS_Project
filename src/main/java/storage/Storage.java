@@ -413,4 +413,49 @@ public class Storage {
         }
         return res;
     }
+
+    public synchronized List<Object> sinter(String[] keys) {
+        // if no keys were provided, we return an empty list
+        if (keys.length == 0) {
+            return new ArrayList<>();
+        }
+
+        // Create a list of all the sets
+        List<HashSet> sets = new ArrayList<>();
+        for (String k : keys) {
+            if (cache.containsKey(k)) {
+                Object o = cache.get(k);
+                if (o instanceof HashSet) {
+                    sets.add((HashSet) o);
+                } else {
+                    // Early exit
+                    // One of the provided keys is not a HashSet, we can't do sinter, we return an error
+                    return null;
+                }
+            } else {
+                // Early exit
+                // Non existing keys are considered empty sets, if one of the keys is missing an empty set is returned
+                return new ArrayList<>();
+            }
+        }
+
+        /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+         * there might be some kind of work around, but we know for sure that we'll only have
+         * HashSet of objects. Best thing would most likely to change the design a bit, but
+         * lack of time and we'll just assume that nobody will never ever change the code of
+         * storage in a way that it adds HashSet that are not containing objects. */
+        HashSet<Object> setInter = sets.get(0);
+
+        // Do the inter
+        for (int i = 0; i < keys.length; i++) {
+            setInter.retainAll(sets.get(i));
+        }
+
+        // Create the list of common elements
+        ArrayList<Object> commonElements = new ArrayList<>();
+        for (Object o : setInter) {
+            commonElements.add(o);
+        }
+        return commonElements;
+    }
 }

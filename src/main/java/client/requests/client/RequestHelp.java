@@ -149,6 +149,10 @@ public class RequestHelp extends Request {
                 res.add(getHelpSRandMember());
             } else if (cmd.equals(RequestName.getInstance().getSMoveCmd())) {
                 res.add(getHelpSMove());
+            } else if (cmd.equals(RequestName.getInstance().getSUnionCmd())) {
+                res.add(getHelpSUnion());
+            } else if (cmd.equals(RequestName.getInstance().getSUnionStoreCmd())) {
+                res.add(getHelpSUnionStore());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -660,6 +664,7 @@ public class RequestHelp extends Request {
 
         return res;
     }
+
     /**
      * Get the help message of SMOVE.
      * @return The help message of SMOVE.
@@ -676,6 +681,36 @@ public class RequestHelp extends Request {
                "destination set." + "\n\n"
 
             +  "An error is raised if the source or destination keys contain a non Set value.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SUNION.
+     * @return The help message of SUNION.
+     */
+    public String getHelpSUnion() {
+        String res = "";
+        res += "SUNION key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: return the members of a set resulting from the union of all the sets hold at the " +
+               "specified keys." + "\n\n"
+
+            +  "Non existing keys are considered like empty sets." ;
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SUNIONSTORE.
+     * @return The help message of SUNIONSTORE.
+     */
+    public String getHelpSUnionStore() {
+        String res = "";
+        res += "SUNIONSTORE dstkey key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: This command works exactly like SUNION but instead of being returned the resulting set " +
+               "is stored as dstkey. Any existing value in dstkey will be over-written.";
 
         return res;
     }

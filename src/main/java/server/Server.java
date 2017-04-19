@@ -349,4 +349,12 @@ public class Server implements RedisLikeServer {
         return storage.smove(srckey, dstkey, member);
     }
 
+    public List<Object> sunion(String[] keys) {
+        return storage.sunion(keys);
+    }
+
+    public int sunionstore(String[] keys) {
+        return storage.sunionstore(keys);
+    }
+
 }

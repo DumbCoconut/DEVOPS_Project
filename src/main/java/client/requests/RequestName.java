@@ -14,7 +14,7 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE, SUNION, SUNIONSTORE
     }
 
     /**
@@ -90,6 +90,8 @@ public class RequestName {
         cmds.put(Cmd.SPOP, "spop");
         cmds.put(Cmd.SRANDMEMBER, "srandmember");
         cmds.put(Cmd.SMOVE, "smove");
+        cmds.put(Cmd.SUNION, "sunion");
+        cmds.put(Cmd.SUNIONSTORE, "sunionstore");
     }
 
     /**
@@ -370,6 +372,22 @@ public class RequestName {
      */
     public String getSMoveCmd() {
         return cmds.get(Cmd.SMOVE);
+    }
+
+    /**
+     * Get the natural name of the SUNION command.
+     * @return The natural name of the SUNION command.
+     */
+    public String getSUnionCmd() {
+        return cmds.get(Cmd.SUNION);
+    }
+
+    /**
+     * Get the natural name of the SUNIONSTORE command.
+     * @return The natural name of the SUNIONSTORE command.
+     */
+    public String getSUnionStoreCmd() {
+        return cmds.get(Cmd.SUNIONSTORE);
     }
 
     /**

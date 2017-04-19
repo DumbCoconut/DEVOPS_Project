@@ -571,4 +571,58 @@ public class Storage {
         return res;
     }
 
+    public synchronized List<Object> sunion(String[] keys) {
+        // if no keys were provided, we return an empty list
+        if (keys.length == 0) {
+            return new ArrayList<>();
+        }
+
+        // Create a list of all the sets
+        List<HashSet> sets = new ArrayList<>();
+        for (String k : keys) {
+            if (cache.containsKey(k)) {
+                Object o = cache.get(k);
+                if (o instanceof HashSet) {
+                    sets.add((HashSet) o);
+                } else {
+                    // Early exit
+                    // One of the provided keys is not a HashSet, we can't do sunion, we return an error
+                    return null;
+                }
+            }
+        }
+
+        // Do the union
+        ArrayList<Object> res = new ArrayList<>();
+        for (HashSet set : sets) {
+            for (Object o : set) {
+                if (!res.contains(o)) {
+                    res.add(o);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public synchronized int sunionstore(String[] keys) {
+        // we don't want to do union on the first key
+        String[] subKeys = new String[keys.length - 1];
+        System.arraycopy(keys, 1, subKeys, 0, keys.length - 1);
+
+        List<Object> union = sunion(subKeys);
+        // at least one key was not a set, we return an error
+        if (union == null) {
+            return -1;
+        }
+
+        HashSet<Object> unionSet = new HashSet<>();
+        unionSet.addAll(union);
+        if (cache.containsKey(keys[0])) {
+            cache.replace(keys[0], unionSet);
+        } else {
+            cache.put(keys[0], unionSet);
+        }
+        return 1;
+    }
 }

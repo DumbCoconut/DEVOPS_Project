@@ -450,6 +450,18 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSUnion() throws Exception {
+        createRequest(new String[]{"help", "SUNION"});
+        assert r.getMessage().contains("SUNION");
+    }
+
+    @Test
+    public void testGetMessageWithSUnionStore() throws Exception {
+        createRequest(new String[]{"help", "SUNIONSTORE"});
+        assert r.getMessage().contains("SUNIONSTORE");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

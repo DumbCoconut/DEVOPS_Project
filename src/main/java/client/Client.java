@@ -125,6 +125,10 @@ public class Client {
             doSRandMember();
         } else if (cmd.equals(RequestName.getInstance().getSMoveCmd())) {
             doSMove();
+        } else if (cmd.equals(RequestName.getInstance().getSUnionCmd())) {
+            doSUnion();
+        } else if (cmd.equals(RequestName.getInstance().getSUnionStoreCmd())) {
+            doSUnionstore();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -582,6 +586,32 @@ public class Client {
         }
     }
 
+    private void doSUnion() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSUnion r = new RequestSUnion(tokens);
+                System.out.println(sunion(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSUnionstore() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSUnionstore r = new RequestSUnionstore(tokens);
+                System.out.println(sunionstore(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -901,6 +931,35 @@ public class Client {
     private String smove(String srckey, String dstkey, Object member) {
         try {
             int res = server.smove(srckey, dstkey, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sunion(String[] keys) {
+        try {
+            List<Object> objects = server.sunion(keys);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sunionstore(String[] keys) {
+        try {
+            int res = server.sunionstore(keys);
             return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();

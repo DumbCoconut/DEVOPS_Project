@@ -1464,7 +1464,7 @@ public class StorageTest {
     }
 
     @Test
-    public void sInterOnSetDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+    public void sInterStoreOnSetDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
         Storage s = new Storage();
         int len = 5;
         for (int i = 0; i < len; i++) {
@@ -1495,7 +1495,7 @@ public class StorageTest {
     }
 
     @Test
-    public void sInterOnSetExistentDestKeyDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+    public void sInterStoreOnSetExistentDestKeyDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
         Storage s = new Storage();
         int len = 5;
         for (int i = 0; i < len; i++) {
@@ -1744,5 +1744,170 @@ public class StorageTest {
         HashSet s1 = (HashSet) s.get("srckey");
         HashSet s2 = (HashSet) s.get("dstkey");
         assertEquals(true, !s1.contains("member") && !s2.contains("member"));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                  TESTS SUNION                                                  */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sUnionOnNonExistingKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.sunion(new String[]{"key"}).toArray());
+    }
+
+    @Test
+    public void sUnionOnNoKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.sunion(new String[]{}).toArray());
+    }
+
+    @Test
+    public void sUnionNotASet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.sadd("keyset", "value");
+        s.store("key", "value");
+        assertEquals(null, s.sunion(new String[]{"key", "keyset"}));
+    }
+
+    @Test
+    public void sUnionOnEmptySet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        s.store("key2", new HashSet<>());
+
+        assertArrayEquals(new Object[]{"value"}, s.sunion(new String[]{"key", "key2"}).toArray());
+    }
+
+    @Test
+    public void sUnionOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len + 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        String[] expected = new String[]{"0","1", "2", "3", "4", "5"};
+        List<Object> inter = s.sunion(new String[] {"key", "key2"});
+        assertArrayEquals(expected, inter.toArray());
+    }
+
+    @Test
+    public void sUnionOnSetDoesNotModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        Object oldSet1 = s.get("key");
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        Object oldSet2 = s.get("key2");
+        s.sunion(new String[] {"key", "key2"});
+        assertEquals(oldSet1, s.get("key"));
+        assertEquals(oldSet2, s.get("key2"));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SUNIONSTORE                                               */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sUnionStoreOnNonExistingKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(1, s.sunionstore(new String[]{"key", "key2"}));
+    }
+
+    @Test
+    public void sUnionStoreOnNonExistingKeyDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sunionstore(new String[]{"key", "key2"});
+        assertEquals(new HashSet<>(), s.get("key"));
+    }
+
+    @Test
+    public void sUnionStoreNotASetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key2", "value");
+        s.sadd("keyset", "value");
+        assertEquals(-1, s.sunionstore(new String[]{"key", "key2", "keyset"}));
+    }
+
+    @Test
+    public void sUnionStoreNotASetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key2", "value");
+        s.sadd("keyset", "value");
+        s.sunionstore(new String[]{"key", "key2", "keyset"});
+        thrown.expect(NonExistentKeyException.class);
+        s.get("key");
+    }
+
+    @Test
+    public void sUnionStoreOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        assertEquals(1, s.sunionstore(new String[] {"newkey", "key", "key2"}));
+    }
+
+    @Test
+    public void sUnionStoreOnSetDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+
+        HashSet<Object> expected = new HashSet<>();
+        expected.addAll(s.sinter(new String[] {"key", "key2"}));
+        s.sinterstore(new String[]{"newkey", "key", "key2"});
+        assertEquals(expected, s.get("newkey"));
+    }
+
+    @Test
+    public void sUnionStoreOnSetExistentDestKeyReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        s.store("newkey", "value");
+        assertEquals(1, s.sunionstore(new String[] {"newkey", "key", "key2"}));
+    }
+
+    @Test
+    public void SUnionStoreOnSetExistentDestKeyDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        HashSet<Object> expected = new HashSet<>();
+        expected.addAll(s.sunion(new String[] {"key", "key2"}));
+        s.store("newkey", "value");
+        s.sunionstore(new String[]{"newkey", "key", "key2"});
+        assertEquals(expected, s.get("newkey"));
     }
 }

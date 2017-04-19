@@ -24,4 +24,8 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     Object srandmember(String key) throws RemoteException;
 
     int smove(String srckey, String dstkey, Object member) throws RemoteException;
+
+    List<Object> sunion(String[] keys) throws RemoteException;
+
+    int sunionstore(String[] keys) throws RemoteException;
 }

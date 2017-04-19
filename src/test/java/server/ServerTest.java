@@ -440,10 +440,25 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.srandmember("key"), storage.srandmember("key"));
     }
+
     @Test
     public void testSMove() {
         Server server = new Server();
         Storage storage = new Storage();
         assertEquals(server.smove("key", "key2", "mem"), storage.smove("key", "key2", "mem"));
+    }
+
+    @Test
+    public void testSUnion() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sunion(new String[]{"key"}), storage.sunion(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSUnionStore() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sunionstore(new String[]{"key"}), storage.sinterstore(new String[]{"key"}));
     }
 }

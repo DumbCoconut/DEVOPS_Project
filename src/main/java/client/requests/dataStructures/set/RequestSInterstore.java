@@ -39,7 +39,7 @@ public class RequestSInterstore extends Request {
             throw new InvalidNbArgException(tokens.size() - 1, minNbArgs);
         }
 
-        /* sublist because we skip "sinter" */
+        /* sublist because we skip "sinterstore" */
         /* remove the duplicates */
         ArrayList<String> tempKeys = (ArrayList<String>) tokens.subList(1, tokens.size()).stream()
                 .distinct()

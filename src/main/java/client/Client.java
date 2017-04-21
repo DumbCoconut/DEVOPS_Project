@@ -4,6 +4,7 @@ import client.requests.RequestName;
 import client.requests.client.RequestAddServer;
 import client.requests.client.RequestHelp;
 import client.requests.dataStructures.list.*;
+import client.requests.dataStructures.set.*;
 import client.requests.dataTypes.*;
 import client.requests.exceptions.InvalidNbArgException;
 import client.requests.exceptions.NoTokensException;
@@ -14,6 +15,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,6 +105,34 @@ public class Client {
             doRPop();
         } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
             doRPush();
+        } else if (cmd.equals(RequestName.getInstance().getSAddCmd())) {
+            doSAdd();
+        } else if (cmd.equals(RequestName.getInstance().getSCardCmd())) {
+            doSCard();
+        } else if (cmd.equals(RequestName.getInstance().getSRemCmd())) {
+            doSRem();
+        } else if (cmd.equals(RequestName.getInstance().getSIsMemberCmd())) {
+            doSIsMember();
+        } else if (cmd.equals(RequestName.getInstance().getSMembersCmd())) {
+            doSMembers();
+        } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
+            doSInter();
+        } else if (cmd.equals(RequestName.getInstance().getSInterstoreCmd())) {
+            doSInterstore();
+        } else if (cmd.equals(RequestName.getInstance().getSPopCmd())) {
+            doSPop();
+        } else if (cmd.equals(RequestName.getInstance().getSRandMemberCmd())) {
+            doSRandMember();
+        } else if (cmd.equals(RequestName.getInstance().getSMoveCmd())) {
+            doSMove();
+        } else if (cmd.equals(RequestName.getInstance().getSUnionCmd())) {
+            doSUnion();
+        } else if (cmd.equals(RequestName.getInstance().getSUnionStoreCmd())) {
+            doSUnionstore();
+        } else if (cmd.equals(RequestName.getInstance().getSDiffCmd())) {
+            doSDiff();
+        } else if (cmd.equals(RequestName.getInstance().getSDiffStoreCmd())) {
+            doSDiffStore();
         } else {
             doUndefinedCmd(cmd);
         }
@@ -430,6 +460,188 @@ public class Client {
         }
     }
 
+    private void doSAdd() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSAdd r = new RequestSAdd(tokens);
+                System.out.println(sadd(r.getKey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSCard() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSCard r = new RequestSCard(tokens);
+                System.out.println(scard(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSRem() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSRem r = new RequestSRem(tokens);
+                System.out.println(srem(r.getKey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSIsMember() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSIsMember r = new RequestSIsMember(tokens);
+                System.out.println(sismember(r.getKey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSMembers() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSMembers r = new RequestSMembers(tokens);
+                System.out.println(smembers(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSInter() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSInter r = new RequestSInter(tokens);
+                System.out.println(sinter(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSInterstore() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSInterstore r = new RequestSInterstore(tokens);
+                System.out.println(sinterstore(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSPop() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSPop r = new RequestSPop(tokens);
+                System.out.println(spop(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSRandMember() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSRandMember r = new RequestSRandMember(tokens);
+                System.out.println(srandmember(r.getKey()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSMove() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSMove r = new RequestSMove(tokens);
+                System.out.println(smove(r.getKey(), r.getDstkey(), r.getMember()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSUnion() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSUnion r = new RequestSUnion(tokens);
+                System.out.println(sunion(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSUnionstore() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSUnionstore r = new RequestSUnionstore(tokens);
+                System.out.println(sunionstore(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSDiff() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSDiff r = new RequestSDiff(tokens);
+                System.out.println(sdiff(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void doSDiffStore() {
+        if (!isServerSet()) {
+            printServerNotSet();
+        } else {
+            try {
+                RequestSDiffstore r = new RequestSDiffstore(tokens);
+                System.out.println(sdiffstore(r.getKeys()));
+            } catch (InvalidNbArgException | NoTokensException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private void doUndefinedCmd(String cmd) {
         System.out.println("(error) I'm sorry, I don't recognize that command. "
                 + "Did you mean \"" + RequestName.getInstance().findClosestCmdMatch(cmd) + "\"?");
@@ -638,6 +850,176 @@ public class Client {
         try {
             Object o = server.rpop(key);
             return o != null ? o.toString(): NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sadd(String key, Object member) {
+        try {
+            int res = server.sadd(key, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String scard(String key) {
+        try {
+            int res = server.scard(key);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String srem(String key, Object member) {
+        try {
+            int res = server.srem(key, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sismember(String key, Object member) {
+        try {
+            int res = server.sismember(key, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String smembers(String key) {
+        try {
+            List<Object> objects = server.smembers(key);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sinter(String[] keys) {
+        try {
+            List<Object> objects = server.sinter(keys);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sinterstore(String[] keys) {
+        try {
+            int res = server.sinterstore(keys);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String spop(String key) {
+        try {
+            Object res = server.spop(key);
+            return res != null ? res.toString() : NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String srandmember(String key) {
+        try {
+            Object res = server.srandmember(key);
+            return res != null ? res.toString() : NIL;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String smove(String srckey, String dstkey, Object member) {
+        try {
+            int res = server.smove(srckey, dstkey, member);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sunion(String[] keys) {
+        try {
+            List<Object> objects = server.sunion(keys);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sunionstore(String[] keys) {
+        try {
+            int res = server.sunionstore(keys);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sdiff(String[] keys) {
+        try {
+            List<Object> objects = server.sdiff(keys);
+            if (objects == null) {
+                return ERROR_WRONG_TYPE;
+            } else if (objects.isEmpty()) {
+                return EMPTY_LIST;
+            } else {
+                int len = objects.size();
+                String res = "";
+                for (int i = 0; i < len; i++) {
+                    res += (i + 1) + ") " + objects.get(i).toString() + "\n";
+                }
+                return res;
+            }
+        } catch (RemoteException e) {
+            return e.getMessage();
+        }
+    }
+
+    private String sdiffstore(String[] keys) {
+        try {
+            int res = server.sdiffstore(keys);
+            return res >= 0 ? String.valueOf(res) : ERROR_WRONG_TYPE;
         } catch (RemoteException e) {
             return e.getMessage();
         }

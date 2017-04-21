@@ -377,4 +377,102 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.rpush(defaultKey, defaultString), storage.rPush(defaultKey, defaultString));
     }
+
+    @Test
+    public void testSAdd() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sadd(defaultKey, defaultString), storage.sadd(defaultKey, defaultString));
+    }
+
+    @Test
+    public void testSCard() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.scard(defaultKey), storage.scard(defaultKey));
+    }
+
+    @Test
+    public void testSRem() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.srem(defaultKey, defaultString), storage.srem(defaultKey, defaultString));
+    }
+
+    @Test
+    public void testSIsMember() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sismember(defaultKey, defaultString), storage.sismember(defaultKey, defaultString));
+    }
+
+    @Test
+    public void testSMembers() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.smembers(defaultKey), storage.smembers(defaultKey));
+    }
+
+    @Test
+    public void testSInter() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sinter(new String[]{"key"}), storage.sinter(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSInterstore() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sinterstore(new String[]{"key"}), storage.sinterstore(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSPop() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.spop("key"), storage.spop("key"));
+    }
+
+    @Test
+    public void testSRandMember() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.srandmember("key"), storage.srandmember("key"));
+    }
+
+    @Test
+    public void testSMove() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.smove("key", "key2", "mem"), storage.smove("key", "key2", "mem"));
+    }
+
+    @Test
+    public void testSUnion() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sunion(new String[]{"key"}), storage.sunion(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSUnionStore() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sunionstore(new String[]{"key"}), storage.sinterstore(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSDiff() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sdiff(new String[]{"key"}), storage.sdiff(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSDiffStore() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sdiffstore(new String[]{"key"}), storage.sdiffstore(new String[]{"key"}));
+    }
 }

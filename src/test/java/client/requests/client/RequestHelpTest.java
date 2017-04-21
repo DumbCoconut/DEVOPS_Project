@@ -390,6 +390,90 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSAdd() throws Exception {
+        createRequest(new String[]{"help", "SADD"});
+        assert r.getMessage().contains("SADD");
+    }
+
+    @Test
+    public void testGetMessageWithSCard() throws Exception {
+        createRequest(new String[]{"help", "SCARD"});
+        assert r.getMessage().contains("SCARD");
+    }
+
+    @Test
+    public void testGetMessageWithSRem() throws Exception {
+        createRequest(new String[]{"help", "SREM"});
+        assert r.getMessage().contains("SREM");
+    }
+
+    @Test
+    public void testGetMessageWithSIsMember() throws Exception {
+        createRequest(new String[]{"help", "SISMEMBER"});
+        assert r.getMessage().contains("SISMEMBER");
+    }
+
+    @Test
+    public void testGetMessageWithSMembers() throws Exception {
+        createRequest(new String[]{"help", "SMEMBERS"});
+        assert r.getMessage().contains("SMEMBERS");
+    }
+
+    @Test
+    public void testGetMessageWithSInter() throws Exception {
+        createRequest(new String[]{"help", "SINTER"});
+        assert r.getMessage().contains("SINTER");
+    }
+
+    @Test
+    public void testGetMessageWithSInterstore() throws Exception {
+        createRequest(new String[]{"help", "SINTERSTORE"});
+        assert r.getMessage().contains("SINTERSTORE");
+    }
+
+    @Test
+    public void testGetMessageWithSPop() throws Exception {
+        createRequest(new String[]{"help", "SPOP"});
+        assert r.getMessage().contains("SPOP");
+    }
+
+    @Test
+    public void testGetMessageWithSRandMember() throws Exception {
+        createRequest(new String[]{"help", "SRANDMEMBER"});
+        assert r.getMessage().contains("SRANDMEMBER");
+    }
+
+    @Test
+    public void testGetMessageWithSMove() throws Exception {
+        createRequest(new String[]{"help", "SMOVE"});
+        assert r.getMessage().contains("SMOVE");
+    }
+
+    @Test
+    public void testGetMessageWithSUnion() throws Exception {
+        createRequest(new String[]{"help", "SUNION"});
+        assert r.getMessage().contains("SUNION");
+    }
+
+    @Test
+    public void testGetMessageWithSUnionStore() throws Exception {
+        createRequest(new String[]{"help", "SUNIONSTORE"});
+        assert r.getMessage().contains("SUNIONSTORE");
+    }
+
+    @Test
+    public void testGetMessageWithSDiff() throws Exception {
+        createRequest(new String[]{"help", "SDIFF"});
+        assert r.getMessage().contains("SDIFF");
+    }
+
+    @Test
+    public void testGetMessageWithSDiffStore() throws Exception {
+        createRequest(new String[]{"help", "SDIFFSTORE"});
+        assert r.getMessage().contains("SDIFFSTORE");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

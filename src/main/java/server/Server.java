@@ -12,6 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Server implements RedisLikeServer {
     public static final int DEFAULT_PORT = 42933;
@@ -307,4 +308,61 @@ public class Server implements RedisLikeServer {
     public boolean rpush(String key, Object value) {
         return storage.rPush(key, value);
     }
+
+    public int sadd(String key, Object member) {
+        return storage.sadd(key, member);
+    }
+
+    public int scard(String key) {
+        return storage.scard(key);
+    }
+
+    public int srem(String key, Object member) {
+        return storage.srem(key, member);
+    }
+
+    public int sismember(String key, Object member) {
+        return storage.sismember(key, member);
+    }
+
+    public List<Object> smembers(String key) {
+        return storage.smembers(key);
+    }
+
+    public List<Object> sinter(String[] keys) {
+        return storage.sinter(keys);
+    }
+
+    public int sinterstore(String[] keys) {
+        return storage.sinterstore(keys);
+    }
+
+    public Object spop(String key) {
+        return storage.spop(key);
+    }
+
+    public Object srandmember(String key) {
+        return storage.srandmember(key);
+    }
+
+    public int smove(String srckey, String dstkey, Object member) {
+        return storage.smove(srckey, dstkey, member);
+    }
+
+    public List<Object> sunion(String[] keys) {
+        return storage.sunion(keys);
+    }
+
+    public int sunionstore(String[] keys) {
+        return storage.sunionstore(keys);
+    }
+
+    public List<Object> sdiff(String[] keys) {
+        return storage.sdiff(keys);
+    }
+
+    public int sdiffstore(String[] keys) {
+        return storage.sdiffstore(keys);
+    }
+
 }

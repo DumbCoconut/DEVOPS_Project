@@ -129,6 +129,34 @@ public class RequestHelp extends Request {
                 res.add(getHelpRPop());
             } else if (cmd.equals(RequestName.getInstance().getRPushCmd())) {
                 res.add(getHelpRPush());
+            } else if (cmd.equals(RequestName.getInstance().getSAddCmd())) {
+                res.add(getHelpSAdd());
+            } else if (cmd.equals(RequestName.getInstance().getSCardCmd())) {
+                res.add(getHelpSCard());
+            } else if (cmd.equals(RequestName.getInstance().getSRemCmd())) {
+                res.add(getHelpSRem());
+            } else if (cmd.equals(RequestName.getInstance().getSIsMemberCmd())) {
+                res.add(getHelpSIsMember());
+            } else if (cmd.equals(RequestName.getInstance().getSMembersCmd())) {
+                res.add(getHelpSMembers());
+            } else if (cmd.equals(RequestName.getInstance().getSInterCmd())) {
+                res.add(getHelpSInter());
+            } else if (cmd.equals(RequestName.getInstance().getSInterstoreCmd())) {
+                res.add(getHelpSInterstore());
+            } else if (cmd.equals(RequestName.getInstance().getSPopCmd())) {
+                res.add(getHelpSPop());
+            } else if (cmd.equals(RequestName.getInstance().getSRandMemberCmd())) {
+                res.add(getHelpSRandMember());
+            } else if (cmd.equals(RequestName.getInstance().getSMoveCmd())) {
+                res.add(getHelpSMove());
+            } else if (cmd.equals(RequestName.getInstance().getSUnionCmd())) {
+                res.add(getHelpSUnion());
+            } else if (cmd.equals(RequestName.getInstance().getSUnionStoreCmd())) {
+                res.add(getHelpSUnionStore());
+            } else if (cmd.equals(RequestName.getInstance().getSDiffCmd())) {
+                res.add(getHelpSDiff());
+            } else if (cmd.equals(RequestName.getInstance().getSDiffStoreCmd())) {
+                res.add(getHelpSDiffStore());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -140,44 +168,21 @@ public class RequestHelp extends Request {
     }
 
     /**
-     * Get the help message of all the commands.
-     * @return The help message of all the commands.
+     * Get the default help message.
+     * @return The default help message.
      */
     public String getHelp() {
         // create the help
         ArrayList<String> l = new ArrayList<>();
 
-        // client
-        l.add(getHelpHelp());
-        l.add(getHelpQuit());
-        l.add(getHelpExit());
-        l.add(getHelpAddServer());
-        // data types
-        l.add(getHelpGet());
-        l.add(getHelpSet());
-        l.add(getHelpDecr());
-        l.add(getHelpDecrBy());
-        l.add(getHelpIncr());
-        l.add(getHelpIncrBy());
-        l.add(getHelpType());
-        l.add(getHelpDel());
-        // data structures
-        l.add(getHelpLIndex());
-        l.add(getHelpLLen());
-        l.add(getHelpLPop());
-        l.add(getHelpLPush());
-        l.add(getHelpLRange());
-        l.add(getHelpLRem());
-        l.add(getHelpLSet());
-        l.add(getHelpLTrim());
-        l.add(getHelpRPop());
-        l.add(getHelpRPush());
+        // add all the commands
+        RequestName.getInstance().getAllCmds().forEach((k,v) -> l.add(v));
 
         // sort the help by alphabetical order
         l.sort(String::compareTo);
 
         // return the reconstituted string
-        return String.join(SEPARATOR, l);
+        return "Please type HELP for at least one of these commands: " + String.join(", ", l);
     }
 
     /**
@@ -527,6 +532,219 @@ public class RequestHelp extends Request {
             +  "DESCRIPTION: Add the string value to the head (RPUSH) or tail (LPUSH) of the list stored at key. " +
                "If the key does not exist an empty list is created just before the append operation. " +
                "If the key exists but is not a List an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SADD.
+     * @return The help message of SADD.
+     */
+    public String getHelpSAdd() {
+        String res = "";
+        res += "SADD key member" + "\n\n"
+
+            +  "DESCRIPTION: Add the specified member to the set value stored at key. If member is already a member " +
+               "of the set no operation is performed. If key does not exist a new set with the specified member as " +
+               "sole member is created. If the key exists but does not hold a set value an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SADD.
+     * @return The help message of SADD.
+     */
+    public String getHelpSCard() {
+        String res = "";
+        res += "SCARD key" + "\n\n"
+
+            +  "DESCRIPTION: Return the set cardinality (number of elements). If the key does not exist 0 is returned" +
+               ", like for empty sets.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SREM.
+     * @return The help message of SREM.
+     */
+    public String getHelpSRem() {
+        String res = "";
+        res += "SREM key member" + "\n\n"
+
+            +  "DESCRIPTION: Remove the specified member from the set value stored at key. If member was not " +
+               "a member of the set no operation is performed. If key does not hold a set value an error is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SISMEMBER.
+     * @return The help message of SISMEMBER.
+     */
+    public String getHelpSIsMember() {
+        String res = "";
+        res += "SISMEMBER key member" + "\n\n"
+
+            +  "DESCRIPTION: Return 1 if member is a member of the set stored at key, otherwise 0 is returned.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SMEMBERS.
+     * @return The help message of SMEMBERS.
+     */
+    public String getHelpSMembers() {
+        String res = "";
+        res += "SMEMBERS key" + "\n\n"
+
+            +  "DESCRIPTION: Return all the members (elements) of the set value stored at key.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SINTER.
+     * @return The help message of SINTER.
+     */
+    public String getHelpSInter() {
+        String res = "";
+        res += "SINTER key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: Return the members of a set resulting from the intersection of all the sets hold at the " +
+               "specified keys. If just a single key is specified, then this command produces the same result as " +
+               "SMEMBERS." + "\n\n"
+
+            + "Non existing keys are considered like empty sets, so if one of the keys is missing an empty set is " +
+              "returned (since the intersection with an empty set always is an empty set).";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SINTERSTORE.
+     * @return The help message of SINTERSTORE.
+     */
+    public String getHelpSInterstore() {
+        String res = "";
+        res += "SINTERSTORE dstkey key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: This command works exactly like SINTER but instead of being returned the resulting set " +
+               "is stored as dstkey.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SPOP.
+     * @return The help message of SPOP.
+     */
+    public String getHelpSPop() {
+        String res = "";
+        res += "SPOP key" + "\n\n"
+
+            +  "DESCRIPTION: Remove a random element from a Set returning it as return value. If the Set is empty " +
+               "or the key does not exist or the key is not a set, a nil object is returned." + "\n\n"
+
+            +  "The SRANDMEMBER command does a similar work but the returned element is not removed from the Set.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SRANDMEMBER.
+     * @return The help message of SRANDMEMBER.
+     */
+    public String getHelpSRandMember() {
+        String res = "";
+        res += "SRANDMEMBER key" + "\n\n"
+
+            +  "DESCRIPTION: Return a random element from a Set, without removing the element. If the Set is empty " +
+               "or the key does not exist or the key is not a set, a nil object is returned." + "\n\n"
+
+            +  "The SPOP command does a similar work but the returned element is popped (removed) from the Set.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SMOVE.
+     * @return The help message of SMOVE.
+     */
+    public String getHelpSMove() {
+        String res = "";
+        res += "SMOVE srckey dstkey member" + "\n\n"
+
+            +  "DESCRIPTION: Move the specifided member from the set at srckey to the set at dstkey." + "\n\n"
+
+            +  "If the source set does not exist or does not contain the specified element no operation is " +
+               "performed and zero is returned, otherwise the element is removed from the source set and added to " +
+               "the destination set. On success one is returned, even if the element was already present in the " +
+               "destination set." + "\n\n"
+
+            +  "An error is raised if the source or destination keys contain a non Set value.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SUNION.
+     * @return The help message of SUNION.
+     */
+    public String getHelpSUnion() {
+        String res = "";
+        res += "SUNION key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: return the members of a set resulting from the union of all the sets hold at the " +
+               "specified keys." + "\n\n"
+
+            +  "Non existing keys are considered like empty sets." ;
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SUNIONSTORE.
+     * @return The help message of SUNIONSTORE.
+     */
+    public String getHelpSUnionStore() {
+        String res = "";
+        res += "SUNIONSTORE dstkey key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: This command works exactly like SUNION but instead of being returned the resulting set " +
+               "is stored as dstkey. Any existing value in dstkey will be over-written.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SDIFF.
+     * @return The help message of SDIFF.
+     */
+    public String getHelpSDiff() {
+        String res = "";
+        res += "SDIFF key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: Return the members of a set resulting from the difference between the first set provided" +
+                " and all the successive sets." + "\n\n"
+
+            +  "Non existing keys are considered like empty sets.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SDIFFSTORE.
+     * @return The help message of SDIFFSTORE.
+     */
+    public String getHelpSDiffStore() {
+        String res = "";
+        res += "SDIFFSTORE dstkey key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: This command works exactly like SDIFF but instead of being returned the resulting set " +
+                "is stored in dstkey. Any existing value in dstkey will be over-written.";
 
         return res;
     }

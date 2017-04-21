@@ -1,10 +1,11 @@
 package storage;
 
 import com.google.common.cache.CacheBuilder;
+import com.google.common.hash.Hasher;
 import storage.exceptions.DuplicatedKeyException;
 import storage.exceptions.NonExistentKeyException;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,6 +27,10 @@ public class Storage {
     private volatile long maxSize;
 
     /**
+     * Random generator
+     */
+    private Random random;
+    /**
      * Storage constructor.
      *
      * @param size The maximum number of objects to keep in memory.
@@ -33,6 +38,7 @@ public class Storage {
      */
     public Storage(long size) throws IllegalArgumentException {
         setMaxSize(size);
+        random = new Random();
         cache = CacheBuilder.newBuilder()
                             .maximumSize(maxSize)
                             .<String, Object>build()
@@ -331,5 +337,357 @@ public class Storage {
             }
         }
         return success;
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                      SETS                                                      */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    public synchronized int sadd(String key, Object member) {
+        int res = -1;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            if (s instanceof HashSet) {
+                /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+                 * there might be some kind of work around, but we know for sure that we'll only have
+                 * HashSet of objects. Best thing would most likely to change the design a bit, but
+                 * lack of time and we'll just assume that nobody will never ever change the code of
+                 * storage in a way that it adds HashSet that are not containing objects. */
+                res = ((HashSet) s).add(member) ? 1 : 0;
+            }
+        } else {
+            HashSet<Object> s = new HashSet<>();
+            s.add(member);
+            cache.put(key, s);
+            res = 1;
+        }
+        return res;
+    }
+
+    public synchronized int scard(String key) {
+        int res = 0;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            res = (s instanceof HashSet) ? ((HashSet) s).size() : -1;
+        }
+        return res;
+    }
+
+    public synchronized int srem(String key, Object member) {
+        int res = 0;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            if (s instanceof HashSet) {
+                res = ((HashSet) s).remove(member) ? 1 : 0;
+            } else {
+                res = -1;
+            }
+        }
+        return res;
+    }
+
+    public synchronized int sismember(String key, Object member) {
+        int res = 0;
+        if (cache.containsKey(key)) {
+            Object s = cache.get(key);
+            if (s instanceof HashSet) {
+                res = ((HashSet) s).contains(member) ? 1 : 0;
+            } else {
+                res = -1;
+            }
+        }
+        return res;
+    }
+
+    public synchronized List<Object> smembers(String key) {
+        List<Object> res = null;
+        if (cache.containsKey(key)) {
+            Object o = cache.get(key);
+            if (o instanceof HashSet) {
+                res = new ArrayList<>();
+                /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+                 * there might be some kind of work around, but we know for sure that we'll only have
+                 * HashSet of objects. Best thing would most likely to change the design a bit, but
+                 * lack of time and we'll just assume that nobody will never ever change the code of
+                 * storage in a way that it adds HashSet that are not containing objects. */
+                ((HashSet) o).forEach(res::add);
+            }
+        } else {
+            res = new ArrayList<>();
+        }
+        return res;
+    }
+
+    public synchronized List<Object> sinter(String[] keys) {
+        // if no keys were provided, we return an empty list
+        if (keys.length == 0) {
+            return new ArrayList<>();
+        }
+
+        // Create a list of all the sets
+        List<HashSet> sets = new ArrayList<>();
+        for (String k : keys) {
+            if (cache.containsKey(k)) {
+                Object o = cache.get(k);
+                if (o instanceof HashSet) {
+                    sets.add((HashSet) o);
+                } else {
+                    // Early exit
+                    // One of the provided keys is not a HashSet, we can't do sinter, we return an error
+                    return null;
+                }
+            } else {
+                // Early exit
+                // Non existing keys are considered empty sets, if one of the keys is missing an empty set is returned
+                return new ArrayList<>();
+            }
+        }
+
+        /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+         * there might be some kind of work around, but we know for sure that we'll only have
+         * HashSet of objects. Best thing would most likely to change the design a bit, but
+         * lack of time and we'll just assume that nobody will never ever change the code of
+         * storage in a way that it adds HashSet that are not containing objects. */
+        HashSet<Object> setInter = sets.get(0);
+
+        // Do the inter
+        for (int i = 0; i < keys.length; i++) {
+            setInter.retainAll(sets.get(i));
+        }
+
+        // Create the list of common elements
+        ArrayList<Object> commonElements = new ArrayList<>();
+        for (Object o : setInter) {
+            commonElements.add(o);
+        }
+        return commonElements;
+    }
+
+    public synchronized int sinterstore(String[] keys) {
+        // we don't want to do inter on the first key
+        String[] subKeys = new String[keys.length - 1];
+        for (int i = 0; i < keys.length - 1; i++) {
+            subKeys[i] = keys[i + 1];
+        }
+
+        List<Object> inter = sinter(subKeys);
+        // at least one key was not a set, we return an error
+        if (inter == null) {
+            return -1;
+        }
+
+        HashSet<Object> interSet = new HashSet<>();
+        interSet.addAll(inter);
+        if (cache.containsKey(keys[0])) {
+            cache.replace(keys[0], interSet);
+        } else {
+            cache.put(keys[0], interSet);
+        }
+        return 1;
+    }
+
+    public synchronized Object spop(String key) {
+            Object res = null;
+            if (cache.containsKey(key)) {
+                Object o = cache.get(key);
+                if (o instanceof HashSet) {
+                    res = randomlyPickAndRemove((HashSet) o);
+                }
+            }
+            return res;
+    }
+
+    private synchronized Object randomlyPickAndRemove(HashSet set) {
+        Object res = randomlyPick(set);
+        set.remove(res);
+        return res;
+    }
+
+    private synchronized Object randomlyPick(HashSet set) {
+        Object res = null;
+        int size = set.size();
+        if (size > 0) {
+            int randomItem = new Random().nextInt(size);
+            int i = 0;
+            for (Object item : set) {
+                if (i == randomItem) {
+                    res = item;
+                    break;
+                } else {
+                    i++;
+                }
+            }
+        }
+        return res;
+    }
+
+    public synchronized Object srandmember(String key) {
+        Object res = null;
+        if (cache.containsKey(key)) {
+            Object o = cache.get(key);
+            if (o instanceof HashSet) {
+                res = randomlyPick((HashSet) o);
+            }
+        }
+        return res;
+    }
+
+    public synchronized int smove(String srckey, String dstkey, Object member) {
+        int res = 0;
+
+        // does srckey exists? yes ->continue no->0
+        if (cache.containsKey(srckey)) {
+            Object src = cache.get(srckey);
+            // is srckey a set? yes->continue no->error
+            if (src instanceof HashSet) {
+                HashSet srcSet = (HashSet) src;
+                // does srckey contain member? yes->remove & continue no->0
+                if (srcSet.contains(member)) {
+                    srcSet.remove(member);
+                    // does cache contain dstkey? yes->continue no->insert src
+                    if (cache.containsKey(dstkey)) {
+                        Object dst = cache.get(dstkey);
+                        // is dstkey a set? yes-> add it & done no-> error
+                        if (dst instanceof HashSet) {
+                            HashSet dstSet = (HashSet) dst;
+                            if (! dstSet.contains(member)) {
+                                sadd(dstkey, member);
+                                res = 1;
+                            }
+                        } else {
+                            res = -1;
+                        }
+                    } else {
+                        sadd(dstkey, member);
+                        res = 1;
+                    }
+                }
+            } else {
+                res = -1;
+            }
+        }
+        return res;
+    }
+
+    public synchronized List<Object> sunion(String[] keys) {
+        // if no keys were provided, we return an empty list
+        if (keys.length == 0) {
+            return new ArrayList<>();
+        }
+
+        // Create a list of all the sets
+        List<HashSet> sets = new ArrayList<>();
+        for (String k : keys) {
+            if (cache.containsKey(k)) {
+                Object o = cache.get(k);
+                if (o instanceof HashSet) {
+                    sets.add((HashSet) o);
+                } else {
+                    // Early exit
+                    // One of the provided keys is not a HashSet, we can't do sunion, we return an error
+                    return null;
+                }
+            }
+        }
+
+        // Do the union
+        ArrayList<Object> res = new ArrayList<>();
+        for (HashSet set : sets) {
+            for (Object o : set) {
+                if (!res.contains(o)) {
+                    res.add(o);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public synchronized int sunionstore(String[] keys) {
+        // we don't want to do union on the first key
+        String[] subKeys = new String[keys.length - 1];
+        System.arraycopy(keys, 1, subKeys, 0, keys.length - 1);
+
+        List<Object> union = sunion(subKeys);
+        // at least one key was not a set, we return an error
+        if (union == null) {
+            return -1;
+        }
+
+        HashSet<Object> unionSet = new HashSet<>();
+        unionSet.addAll(union);
+        if (cache.containsKey(keys[0])) {
+            cache.replace(keys[0], unionSet);
+        } else {
+            cache.put(keys[0], unionSet);
+        }
+        return 1;
+    }
+
+    public synchronized List<Object> sdiff(String[] keys) {
+        // if no keys were provided, we return an empty list
+        if (keys.length == 0) {
+            return new ArrayList<>();
+        }
+
+        // Create a list of all the sets
+        List<HashSet> sets = new ArrayList<>();
+        for (String k : keys) {
+            if (cache.containsKey(k)) {
+                Object o = cache.get(k);
+                if (o instanceof HashSet) {
+                    sets.add((HashSet) o);
+                } else {
+                    // Early exit
+                    // One of the provided keys is not a HashSet, we can't do sdiff, we return an error
+                    return null;
+                }
+            } else {
+                sets.add(new HashSet<>());
+            }
+        }
+
+        /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+         * there might be some kind of work around, but we know for sure that we'll only have
+         * HashSet of objects. Best thing would most likely to change the design a bit, but
+         * lack of time and we'll just assume that nobody will never ever change the code of
+         * storage in a way that it adds HashSet that are not containing objects. */
+        HashSet<Object> setDiff = (HashSet<Object>) sets.get(0).clone();
+
+        // Do the diff. Starts at one, otherwise we'll do set diff with itself..
+        for (int i = 1; i < keys.length; i++) {
+            setDiff.removeAll(sets.get(i));
+        }
+
+        // Create the list of diff elements
+        ArrayList<Object> diffElements = new ArrayList<>();
+        for (Object o : setDiff) {
+            diffElements.add(o);
+        }
+
+        return diffElements;
+    }
+
+    public synchronized int sdiffstore(String[] keys) {
+        // we don't want to do diff on the first key
+        String[] subKeys = new String[keys.length - 1];
+        System.arraycopy(keys, 1, subKeys, 0, keys.length - 1);
+
+        List<Object> diff = sdiff(subKeys);
+        // at least one key was not a set, we return an error
+        if (diff == null) {
+            return -1;
+        }
+
+        HashSet<Object> diffSet = new HashSet<>();
+        diffSet.addAll(diff);
+        if (cache.containsKey(keys[0])) {
+            cache.replace(keys[0], diffSet);
+        } else {
+            cache.put(keys[0], diffSet);
+        }
+        return 1;
     }
 }

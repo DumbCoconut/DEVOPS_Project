@@ -13,7 +13,9 @@ public class RequestName {
     public enum Cmd {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
-        LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH
+        LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE, SUNION, SUNIONSTORE,
+            SDIFF, SDIFFSTORE
     }
 
     /**
@@ -28,7 +30,8 @@ public class RequestName {
         cmds = new HashMap<>();
         addClientRequests();
         addDataTypesRequests();
-        addDataStructuresRequests();
+        addListRequests();
+        addSetRequests();
 
         // All commands are upper case
         cmds.replaceAll((k,v) -> v.toUpperCase());
@@ -59,9 +62,9 @@ public class RequestName {
     }
 
     /**
-     * Add requests related to data structures.
+     * Add requests related to lists.
      */
-    private void addDataStructuresRequests() {
+    private void addListRequests() {
         cmds.put(Cmd.LINDEX, "lindex");
         cmds.put(Cmd.LLEN, "llen");
         cmds.put(Cmd.LPOP, "lpop");
@@ -72,6 +75,26 @@ public class RequestName {
         cmds.put(Cmd.LTRIM, "ltrim");
         cmds.put(Cmd.RPOP, "rpop");
         cmds.put(Cmd.RPUSH, "rpush");
+    }
+
+    /**
+     * Add requests related to sets.
+     */
+    private void addSetRequests() {
+        cmds.put(Cmd.SADD, "sadd");
+        cmds.put(Cmd.SCARD, "scard");
+        cmds.put(Cmd.SREM, "srem");
+        cmds.put(Cmd.SISMEMBER, "sismember");
+        cmds.put(Cmd.SMEMBERS, "smembers");
+        cmds.put(Cmd.SINTER, "sinter");
+        cmds.put(Cmd.SINTERSTORE, "sinterstore");
+        cmds.put(Cmd.SPOP, "spop");
+        cmds.put(Cmd.SRANDMEMBER, "srandmember");
+        cmds.put(Cmd.SMOVE, "smove");
+        cmds.put(Cmd.SUNION, "sunion");
+        cmds.put(Cmd.SUNIONSTORE, "sunionstore");
+        cmds.put(Cmd.SDIFF, "sdiff");
+        cmds.put(Cmd.SDIFFSTORE, "sdiffstore");
     }
 
     /**
@@ -272,6 +295,118 @@ public class RequestName {
      */
     public String getRPushCmd() {
         return cmds.get(Cmd.RPUSH);
+    }
+
+    /**
+     * Get the natural name of the SADD command.
+     * @return The natural name of the SADD command.
+     */
+    public String getSAddCmd() {
+        return cmds.get(Cmd.SADD);
+    }
+
+    /**
+     * Get the natural name of the SCARD command.
+     * @return The natural name of the SCARD command.
+     */
+    public String getSCardCmd() {
+        return cmds.get(Cmd.SCARD);
+    }
+
+    /**
+     * Get the natural name of the SREM command.
+     * @return The natural name of the SREM command.
+     */
+    public String getSRemCmd() {
+        return cmds.get(Cmd.SREM);
+    }
+
+    /**
+     * Get the natural name of the SISMEMBER command.
+     * @return The natural name of the SISMEMBER command.
+     */
+    public String getSIsMemberCmd() {
+        return cmds.get(Cmd.SISMEMBER);
+    }
+
+    /**
+     * Get the natural name of the SMEMBERS command.
+     * @return The natural name of the SMEMBERS command.
+     */
+    public String getSMembersCmd() {
+        return cmds.get(Cmd.SMEMBERS);
+    }
+
+    /**
+     * Get the natural name of the SINTER command.
+     * @return The natural name of the SINTER command.
+     */
+    public String getSInterCmd() {
+        return cmds.get(Cmd.SINTER);
+    }
+
+    /**
+     * Get the natural name of the SINTERSTORE command.
+     * @return The natural name of the SINTERSTORE command.
+     */
+    public String getSInterstoreCmd() {
+        return cmds.get(Cmd.SINTERSTORE);
+    }
+
+    /**
+     * Get the natural name of the SPOP command.
+     * @return The natural name of the SPOP command.
+     */
+    public String getSPopCmd() {
+        return cmds.get(Cmd.SPOP);
+    }
+
+    /**
+     * Get the natural name of the SRANDMEMBER command.
+     * @return The natural name of the SRANDMEMBER command.
+     */
+    public String getSRandMemberCmd() {
+        return cmds.get(Cmd.SRANDMEMBER);
+    }
+
+    /**
+     * Get the natural name of the SMOVE command.
+     * @return The natural name of the SMOVE command.
+     */
+    public String getSMoveCmd() {
+        return cmds.get(Cmd.SMOVE);
+    }
+
+    /**
+     * Get the natural name of the SUNION command.
+     * @return The natural name of the SUNION command.
+     */
+    public String getSUnionCmd() {
+        return cmds.get(Cmd.SUNION);
+    }
+
+    /**
+     * Get the natural name of the SUNIONSTORE command.
+     * @return The natural name of the SUNIONSTORE command.
+     */
+    public String getSUnionStoreCmd() {
+        return cmds.get(Cmd.SUNIONSTORE);
+    }
+
+    /**
+     * Get the natural name of the SDIFF command.
+     * @return The natural name of the SDIFF command.
+     */
+    public String getSDiffCmd() {
+        return cmds.get(Cmd.SDIFF);
+    }
+
+    /**
+     * Get the natural name of the SDIFFSTORE command.
+     * @return The natural name of the SDIFFSTORE command.
+     */
+    public String getSDiffStoreCmd() {
+        return cmds.get(Cmd.SDIFFSTORE);
     }
 
     /**

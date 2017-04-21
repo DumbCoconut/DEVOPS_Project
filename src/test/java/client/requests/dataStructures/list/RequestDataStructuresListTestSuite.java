@@ -16,4 +16,4 @@ import org.junit.runners.Suite;
         RequestRPopTest.class,
         RequestRPushTest.class
 })
-public class RequestDataStructuresTestSuite {}
+public class RequestDataStructuresListTestSuite {}

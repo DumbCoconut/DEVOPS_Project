@@ -1,32 +1,139 @@
-# DEVOPS_Project
+<h1 align="center"><a href="https://github.com/DumbCoconut/J-REDIS">J-REDIS</a></h1>
 
-NOTE : tout se passe sur la branche client pour le moment, la branche master a plusieurs jours de retard
+## Overview
 
-# FONCTIONNEMENT
+J-REDIS is a simple redis-like console application. It provides two things:
 
-En attendant que le pom soit modifié (cf TODO), pour faire fonctionner le programme :
+- A server holding a in-memory data structure store. It supports data structures such as 
+strings, integers and lists. 
 
-1) clone https://github.com/DumbCoconut/Redis-Like_App.git
-2) cd Redis-Like-App
-3) mvn install
-4) cd target
-5) cd classes
-6) rmiregistry
-7) lancer la classe server et la laisser tourner
-8) lancer le client, se connecter au serveur (add_server 127.0.0.1 server_0), puis on peut faire les set, get etc
+- A client able to query a given J-REDIS server. 
 
-Normalement mvn install devrait créer le dossier target, mais impossible de vérifier maintenant, mandelbrot ayant une
-version ancienne de mvn et java 1.7 donc impossible de compiler ... si ça ne le créé pas alors gérer ça avec un IDE pour le moment
+The connection between the two is made using 
+<a href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/rmiregistry.html">rmiregistry</a>.
 
-# TODO
+## Features
 
-- écrire les tests du client (faisable en lançant un client et en lui envoyant des données via stdin ? Sachant qu'il 
-faut avoir un client de lancé, autrement passer par des scripts bash).
-- écrire les tests de RequestName, RequestAddServer et RequestHelp.
-- faire en sorte qu'on puisse parser des chaînes incluant des quotes échapées, par exemple "une \\"quote\"\ comme ça".
-Actuellement les " à l'intérieur de "" ne fonctionnent pas (voir client.splitIntoTokens, il faut modifier le regex)
-- intégrer List et Set
-- améliorer la gestion des remote errors
-- modifier le pom pour qu'il nous fasse un module client et un module server (qui contiendra aussi le storage)
-- écrire le vrai readme
-- faciliter le lancement d'un serveur (simple script bash)
+#### Overview
+
+J-REDIS provides a subset of redis features. Note that unlike redis, negative indexes are not supported. 
+The "integer" type has been introduced, e.g "3" will be an integer and not a string. You can't put
+quotes inside quotes yet - "my name is" would work but "my "name" is" would produce an error.
+
+#### Client commands 
+
+- ADD_SERVER _host\_ip server\_name_
+- HELP _[cmd1, cmd2, ..., cmdN]_
+- QUIT
+- EXIT
+
+#### String and integers
+
+- DECR _key_
+- DECRBY _key integer_
+- DEL _key_
+- GET _key_
+- INCR _key_
+- INCRBY _key integer_
+- SET _key value_
+- TYPE _key_
+
+#### Lists
+
+- LINDEX _key index_
+- LLEN _key_
+- LPOP _key_
+- LPUSH _key value_
+- LRANGE _key start end_
+- LREM _key count value_
+- LSET _key index value_
+- LTRIM _key start end_
+- RPOP _key_
+- RPUSH _key value_
+
+
+#### Sets
+
+- SADD _key member_
+- SCARD _key_
+- SISMEMBER _key_ _member_
+- SMEMBERS _key_
+- SREM _key member_
+- SINTER _key1 key2 ... keyN_
+- SINTERSTORE _dstkey key1 key2 ... keyN_
+- SPOP _key_
+- SRANDMEMBER _key_
+- SMOVE _srckey dstkey member_
+- SUNION _key1 key2 ... keyN_
+- SUNIONSTORE _dstkey key1 key2 ... keyN_
+- SDIFF _key1 key2 ... keyN_
+- SDIFFSTORE _dstkey key1 key2 ... keyN_
+
+For more explanations, use the HELP command directly in the client.
+
+## Getting started
+
+TODO
+
+## What has been tested
+
+- Everything regarding the data structure store
+
+- The server doing operations on the store
+
+- The construction of the requests made by the client to the server
+
+## What has NOT been tested (yet)
+
+Either not tested or in experimental stage:
+
+- The client interface
+
+- The client-server connection
+
+- The "did you mean X" function. It uses the Levenshtein distance to find the closest match, without
+any kind of heuristic behind it, so it might be way off sometimes
+
+## Examples
+
+TODO
+
+## Feedback
+
+### Travis
+
+- Trivial à utiliser dans une utilisation "simple", e.g sans cron jobs etc.
+
+- Les erreurs ne sont pas toujours très claires. Par exemple il n'y a aucune indication directe sur 
+comment résoudre des erreurs comme : `The command "eval mvn install -DskipTests=true 
+-Dmaven.javadoc.skip=true -B -V" failed.` qui ne sont au final que des soucis de compatibilité entre 
+les versions utilisées par travis et celles utilisées dans le pom. 
+
+- Le principal intérêt de Travis est découvrir rapidement si un commit a cassé quelque chose, mais ça
+ne devrait pas arriver si on vérifie que les tests passent avant de commit. Néanmoins ça devient plus
+utile au moment de merge : on sait directement si le pull request peut être validé (en tout cas sur 
+le plan "technique") sans avoir à vérifier manuellement que la personne demandant le pull de sa 
+branche a bien passé les tests. On peut donc facilement gérer le projet à "grande échelle".
+ 
+- Etant donné la facilité d'utilisation et le fait que ce soit gratuit pour une utilisation open 
+source, intégrer travis à tous ses projets ne peut qu'être positif, exception faite du cas où on se
+moque de passer les tests (ou qu'il n'y a pas de tests unitaires). 
+
+### Projet
+
+Une amélioration possible (en tout cas d'un point de vue étudiant noté) serait de détailler dans le
+sujet la notation. On sait en gros sur quoi nous sommes évalués, mais 
+
+- Pour Github, les commits doivent-ils être pertinents (clareté, description, ...) ? Ne pas utiliser 
+de branches est-il pénalisant ?  
+
+- Pour la qualité du code, comment est-elle évaluée ? Uniquement par le fait que les tests soient 
+passés (et donc que le logiciel produit est fonctionnel) ou bien d'autres critères sont pris en 
+comptes (par exemple : structuration, cohérence, efficacité, documentation, facilité à maintenir,
+etc.) ? 
+
+- L'évaluation des fonctionnalités est évalué notamment à partir de la couverture, mais est-ce si 
+important ? Typiquement dans le cas de fonctions qui ne font "rien" (par exemple un wrapper d'une 
+ligne qui retourne une autre fonction), écrire des tests semble être une perte de temps, mais ne
+pas le faire diminuera le taux de couverture de code.
+

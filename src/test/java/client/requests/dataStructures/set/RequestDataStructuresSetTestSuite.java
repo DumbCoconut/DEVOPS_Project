@@ -16,7 +16,9 @@ import org.junit.runners.Suite;
     RequestSRandMemberTest.class,
     RequestSMoveTest.class,
     RequestSUnionstoreTest.class,
-    RequestSUnionTest.class
+    RequestSUnionTest.class,
+    RequestSDiffTest.class,
+    RequestSDiffstoreTest.class
 })
 public class RequestDataStructuresSetTestSuite {
 }

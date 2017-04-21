@@ -461,4 +461,18 @@ public class ServerTest {
         Storage storage = new Storage();
         assertEquals(server.sunionstore(new String[]{"key"}), storage.sinterstore(new String[]{"key"}));
     }
+
+    @Test
+    public void testSDiff() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sdiff(new String[]{"key"}), storage.sdiff(new String[]{"key"}));
+    }
+
+    @Test
+    public void testSDiffStore() {
+        Server server = new Server();
+        Storage storage = new Storage();
+        assertEquals(server.sdiffstore(new String[]{"key"}), storage.sdiffstore(new String[]{"key"}));
+    }
 }

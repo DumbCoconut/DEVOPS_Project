@@ -1910,4 +1910,169 @@ public class StorageTest {
         s.sunionstore(new String[]{"newkey", "key", "key2"});
         assertEquals(expected, s.get("newkey"));
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                  TESTS SDIFF                                                   */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void SDiffOnNonExistingKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.sdiff(new String[]{"key"}).toArray());
+    }
+
+    @Test
+    public void SDiffOnNoKey() {
+        Storage s = new Storage();
+        assertArrayEquals(new Object[]{}, s.sdiff(new String[]{}).toArray());
+    }
+
+    @Test
+    public void SDiffNotASet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.sadd("keyset", "value");
+        s.store("key", "value");
+        assertEquals(null, s.sdiff(new String[]{"key", "keyset"}));
+    }
+
+    @Test
+    public void SDiffOnEmptySet() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.sadd("key", "value");
+        s.store("key2", new HashSet<>());
+
+        assertArrayEquals(new Object[]{"value"}, s.sdiff(new String[]{"key", "key2"}).toArray());
+    }
+
+    @Test
+    public void SDiffOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len + 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        String[] expected = new String[]{};
+        List<Object> inter = s.sdiff(new String[] {"key", "key2"});
+        assertArrayEquals(expected, inter.toArray());
+    }
+
+    @Test
+    public void SDiffOnSetDoesNotModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        Object oldSet1 = s.get("key");
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        Object oldSet2 = s.get("key2");
+        s.sdiff(new String[] {"key", "key2"});
+        assertEquals(oldSet1, s.get("key"));
+        assertEquals(oldSet2, s.get("key2"));
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                TESTS SDIFFSTORE                                                */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    @Test
+    public void sDiffStoreOnNonExistingKeyReturnValue() {
+        Storage s = new Storage();
+        assertEquals(1, s.sdiffstore(new String[]{"key", "key2"}));
+    }
+
+    @Test
+    public void sDiffStoreOnNonExistingKeyDoesModify() throws NonExistentKeyException {
+        Storage s = new Storage();
+        s.sdiffstore(new String[]{"key", "key2"});
+        assertEquals(new HashSet<>(), s.get("key"));
+    }
+
+    @Test
+    public void sDiffStoreNotASetReturnValue() throws DuplicatedKeyException {
+        Storage s = new Storage();
+        s.store("key2", "value");
+        s.sadd("keyset", "value");
+        assertEquals(-1, s.sdiffstore(new String[]{"key", "key2", "keyset"}));
+    }
+
+    @Test
+    public void sDiffStoreNotASetDoesNotModify() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        s.store("key2", "value");
+        s.sadd("keyset", "value");
+        s.sdiffstore(new String[]{"key", "key2", "keyset"});
+        thrown.expect(NonExistentKeyException.class);
+        s.get("key");
+    }
+
+    @Test
+    public void sDiffStoreOnSetReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        assertEquals(1, s.sdiffstore(new String[] {"newkey", "key", "key2"}));
+    }
+
+    @Test
+    public void sDiffStoreOnSetDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+
+        HashSet<Object> expected = new HashSet<>();
+        expected.addAll(s.sdiff(new String[] {"key", "key2"}));
+        s.sdiffstore(new String[]{"newkey", "key", "key2"});
+        assertEquals(expected, s.get("newkey"));
+    }
+
+    @Test
+    public void sDiffStoreOnSetExistentDestKeyReturnValue() throws DuplicatedKeyException, NonExistentKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        s.store("newkey", "value");
+        assertEquals(1, s.sdiffstore(new String[] {"newkey", "key", "key2"}));
+    }
+
+    @Test
+    public void sDiffStoreOnSetExistentDestKeyDoesModify() throws NonExistentKeyException, DuplicatedKeyException {
+        Storage s = new Storage();
+        int len = 5;
+        for (int i = 0; i < len; i++) {
+            s.sadd("key", "" + i);
+        }
+        for (int i = 0; i < len - 1; i++) {
+            s.sadd("key2", "" + i);
+        }
+        HashSet<Object> expected = new HashSet<>();
+        expected.addAll(s.sdiff(new String[] {"key", "key2"}));
+        s.store("newkey", "value");
+        s.sdiffstore(new String[]{"newkey", "key", "key2"});
+        assertEquals(expected, s.get("newkey"));
+    }
 }

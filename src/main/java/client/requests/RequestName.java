@@ -14,7 +14,8 @@ public class RequestName {
         QUIT, EXIT, HELP, ADD_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
-        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE, SUNION, SUNIONSTORE
+        SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE, SUNION, SUNIONSTORE,
+            SDIFF, SDIFFSTORE
     }
 
     /**
@@ -92,6 +93,8 @@ public class RequestName {
         cmds.put(Cmd.SMOVE, "smove");
         cmds.put(Cmd.SUNION, "sunion");
         cmds.put(Cmd.SUNIONSTORE, "sunionstore");
+        cmds.put(Cmd.SDIFF, "sdiff");
+        cmds.put(Cmd.SDIFFSTORE, "sdiffstore");
     }
 
     /**
@@ -388,6 +391,22 @@ public class RequestName {
      */
     public String getSUnionStoreCmd() {
         return cmds.get(Cmd.SUNIONSTORE);
+    }
+
+    /**
+     * Get the natural name of the SDIFF command.
+     * @return The natural name of the SDIFF command.
+     */
+    public String getSDiffCmd() {
+        return cmds.get(Cmd.SDIFF);
+    }
+
+    /**
+     * Get the natural name of the SDIFFSTORE command.
+     * @return The natural name of the SDIFFSTORE command.
+     */
+    public String getSDiffStoreCmd() {
+        return cmds.get(Cmd.SDIFFSTORE);
     }
 
     /**

@@ -153,6 +153,10 @@ public class RequestHelp extends Request {
                 res.add(getHelpSUnion());
             } else if (cmd.equals(RequestName.getInstance().getSUnionStoreCmd())) {
                 res.add(getHelpSUnionStore());
+            } else if (cmd.equals(RequestName.getInstance().getSDiffCmd())) {
+                res.add(getHelpSDiff());
+            } else if (cmd.equals(RequestName.getInstance().getSDiffStoreCmd())) {
+                res.add(getHelpSDiffStore());
             } else {
                 res.add(cmd.toUpperCase() + " : (error) I'm sorry, I don't recognize the command \"" +
                                             cmd.toUpperCase() + "\". " + "Did you mean \"" +
@@ -711,6 +715,36 @@ public class RequestHelp extends Request {
 
             +  "DESCRIPTION: This command works exactly like SUNION but instead of being returned the resulting set " +
                "is stored as dstkey. Any existing value in dstkey will be over-written.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SDIFF.
+     * @return The help message of SDIFF.
+     */
+    public String getHelpSDiff() {
+        String res = "";
+        res += "SDIFF key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: Return the members of a set resulting from the difference between the first set provided" +
+                " and all the successive sets." + "\n\n"
+
+            +  "Non existing keys are considered like empty sets.";
+
+        return res;
+    }
+
+    /**
+     * Get the help message of SDIFFSTORE.
+     * @return The help message of SDIFFSTORE.
+     */
+    public String getHelpSDiffStore() {
+        String res = "";
+        res += "SDIFFSTORE dstkey key1 key2 ... keyN" + "\n\n"
+
+            +  "DESCRIPTION: This command works exactly like SDIFF but instead of being returned the resulting set " +
+                "is stored in dstkey. Any existing value in dstkey will be over-written.";
 
         return res;
     }

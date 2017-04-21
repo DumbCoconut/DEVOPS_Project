@@ -357,4 +357,12 @@ public class Server implements RedisLikeServer {
         return storage.sunionstore(keys);
     }
 
+    public List<Object> sdiff(String[] keys) {
+        return storage.sdiff(keys);
+    }
+
+    public int sdiffstore(String[] keys) {
+        return storage.sdiffstore(keys);
+    }
+
 }

@@ -625,4 +625,69 @@ public class Storage {
         }
         return 1;
     }
+
+    public synchronized List<Object> sdiff(String[] keys) {
+        // if no keys were provided, we return an empty list
+        if (keys.length == 0) {
+            return new ArrayList<>();
+        }
+
+        // Create a list of all the sets
+        List<HashSet> sets = new ArrayList<>();
+        for (String k : keys) {
+            if (cache.containsKey(k)) {
+                Object o = cache.get(k);
+                if (o instanceof HashSet) {
+                    sets.add((HashSet) o);
+                } else {
+                    // Early exit
+                    // One of the provided keys is not a HashSet, we can't do sdiff, we return an error
+                    return null;
+                }
+            } else {
+                sets.add(new HashSet<>());
+            }
+        }
+
+        /* unchecked cast, we can't use instanceof HashSet<Object> because of type erasure.
+         * there might be some kind of work around, but we know for sure that we'll only have
+         * HashSet of objects. Best thing would most likely to change the design a bit, but
+         * lack of time and we'll just assume that nobody will never ever change the code of
+         * storage in a way that it adds HashSet that are not containing objects. */
+        HashSet<Object> setDiff = (HashSet<Object>) sets.get(0).clone();
+
+        // Do the diff. Starts at one, otherwise we'll do set diff with itself..
+        for (int i = 1; i < keys.length; i++) {
+            setDiff.removeAll(sets.get(i));
+        }
+
+        // Create the list of diff elements
+        ArrayList<Object> diffElements = new ArrayList<>();
+        for (Object o : setDiff) {
+            diffElements.add(o);
+        }
+
+        return diffElements;
+    }
+
+    public synchronized int sdiffstore(String[] keys) {
+        // we don't want to do diff on the first key
+        String[] subKeys = new String[keys.length - 1];
+        System.arraycopy(keys, 1, subKeys, 0, keys.length - 1);
+
+        List<Object> diff = sdiff(subKeys);
+        // at least one key was not a set, we return an error
+        if (diff == null) {
+            return -1;
+        }
+
+        HashSet<Object> diffSet = new HashSet<>();
+        diffSet.addAll(diff);
+        if (cache.containsKey(keys[0])) {
+            cache.replace(keys[0], diffSet);
+        } else {
+            cache.put(keys[0], diffSet);
+        }
+        return 1;
+    }
 }

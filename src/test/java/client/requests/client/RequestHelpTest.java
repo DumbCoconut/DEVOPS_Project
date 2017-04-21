@@ -462,6 +462,18 @@ public class RequestHelpTest {
     }
 
     @Test
+    public void testGetMessageWithSDiff() throws Exception {
+        createRequest(new String[]{"help", "SDIFF"});
+        assert r.getMessage().contains("SDIFF");
+    }
+
+    @Test
+    public void testGetMessageWithSDiffStore() throws Exception {
+        createRequest(new String[]{"help", "SDIFFSTORE"});
+        assert r.getMessage().contains("SDIFFSTORE");
+    }
+
+    @Test
     public void testGetMessageWithMultipleCmd() throws Exception {
         createRequest(new String[]{"help", "help", "del", "get"});
         assert (

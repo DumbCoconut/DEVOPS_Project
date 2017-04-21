@@ -28,4 +28,8 @@ public interface RedisLikeServerDataStructuresSet extends Remote {
     List<Object> sunion(String[] keys) throws RemoteException;
 
     int sunionstore(String[] keys) throws RemoteException;
+
+    List<Object> sdiff(String[] keys) throws RemoteException;
+
+    int sdiffstore(String[] keys) throws RemoteException;
 }

@@ -57,7 +57,7 @@ public abstract class Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     abstract public String toString();

@@ -62,7 +62,7 @@ public class RequestSInterstore extends Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

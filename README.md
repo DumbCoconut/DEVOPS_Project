@@ -2,27 +2,30 @@
 
 ## Overview
 
-J-REDIS is a simple redis-like console application. It provides two things:
+J-REDIS is a simple redis-like console application. It was made as a toy-project for the DEVOPS course
+taught at <a href="http://www.univ-grenoble-alpes.fr/">UGA</a>.
+
+It provides two things:
 
 - A server holding a in-memory data structure store. It supports data structures such as 
 strings, integers and lists. 
 
 - A client able to query a given J-REDIS server. 
 
-The connection between the two is made using 
+The connection between the two is done using 
 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/rmiregistry.html">rmiregistry</a>.
 
 ## Features
 
 #### Overview
 
-J-REDIS provides a subset of redis features. Note that unlike redis, negative indexes are not supported. 
-The "integer" type has been introduced, e.g "3" will be an integer and not a string. You can't put
-quotes inside quotes yet - "my name is" would work but "my "name" is" would produce an error.
+J-REDIS provides a subset of redis features. Not everything is supported, e.g negative indexes are not.
+You can't put quotes inside quotes yet - "my name is" would work but "my "name" is" would produce an error.
+The "integer" type has been introduced, e.g "3" will be an integer and not a string. 
 
 #### Client commands 
 
-- ADD_SERVER _host\_ip server\_name_
+- SET_SERVER _host\_ip server\_name_
 - HELP _[cmd1, cmd2, ..., cmdN]_
 - QUIT
 - EXIT
@@ -83,9 +86,9 @@ TODO
 
 - The construction of the requests made by the client to the server
 
-## What has NOT been tested (yet)
+## What has NOT been (automatically) tested
 
-Either not tested or in experimental stage:
+Either tested manually or still in experimental stage:
 
 - The client interface
 
@@ -94,9 +97,22 @@ Either not tested or in experimental stage:
 - The "did you mean X" function. It uses the Levenshtein distance to find the closest match, without
 any kind of heuristic behind it, so it might be way off sometimes
 
-## Examples
+- One server with multiple clients accessing to the storage at the same time, thought: a) the server 
+uses RMI registry, so a new thread should be created for each new client and b) the storage uses a
+concurrent hashmap from <a href="https://github.com/google/guava">Guava</a> so everything _should_ 
+be thread-safe.
 
-TODO
+## What could be improved
+
+- The overall design, which has not been given much thoughts: the goal was to have something that 
+works great. We could for example have a RequestFactory. We do have a few unchecked casts, thought
+they should never break anything, it could still be improved with a bit of refactoring. 
+
+- The responses given by the server. We could for example follow the 
+<a href="https://redis.io/topics/protocol"> Redis Protocol specification</a> 
+to allow multi-buck replies.
+
+- Tests: bash script to test the client interface, make them easier to navigate and refactor, etc
 
 ## Feedback
 
@@ -132,7 +148,7 @@ passés (et donc que le logiciel produit est fonctionnel) ou bien d'autres crit�
 comptes (par exemple : structuration, cohérence, efficacité, documentation, facilité à maintenir,
 etc.) ? 
 
-- L'évaluation des fonctionnalités est évalué notamment à partir de la couverture, mais est-ce si 
+- L'évaluation des fonctionnalités est faite notamment à partir de la couverture, mais est-ce si 
 important ? Typiquement dans le cas de fonctions qui ne font "rien" (par exemple un wrapper d'une 
 ligne qui retourne une autre fonction), écrire des tests semble être une perte de temps, mais ne
 pas le faire diminuera le taux de couverture de code.

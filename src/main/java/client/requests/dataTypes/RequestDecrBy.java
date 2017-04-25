@@ -49,7 +49,7 @@ public class RequestDecrBy extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

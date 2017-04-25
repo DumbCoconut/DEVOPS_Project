@@ -48,25 +48,25 @@ public class RequestHelpTest {
 
     @Test
     public void testTwoTokens() throws Exception {
-        String[] tokens = new String[] {"help", "add_server"};
+        String[] tokens = new String[] {"help", "set_server"};
         createRequest(tokens);
         assertEquals(tokens.length - 1, r.getRequests().size());
     }
 
     @Test
     public void testMultipleTokens() throws Exception {
-        String[] tokens = new String[] {"help", "add_server", "get", "set"};
+        String[] tokens = new String[] {"help", "set_server", "get", "set"};
         createRequest(tokens);
         assertEquals(tokens.length - 1, r.getRequests().size());
     }
 
     @Test
     public void testParseToLowerCase() throws Exception {
-        String[] tokens = new String[] {"help", "Add_Server", "gEt", "seT"};
+        String[] tokens = new String[] {"help", "Set_Server", "gEt", "seT"};
         String[] expected = new String[] {
-                RequestName.getInstance().getAddServerCmd(),
                 RequestName.getInstance().getGetCmd(),
-                RequestName.getInstance().getSetCmd()
+                RequestName.getInstance().getSetCmd(),
+                RequestName.getInstance().getSetServerCmd()
         };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
@@ -74,12 +74,12 @@ public class RequestHelpTest {
 
     @Test
     public void testParseSortedAlphabetically() throws Exception {
-        String[] tokens = new String[] {"help", "get", "add_server", "set", "del"};
+        String[] tokens = new String[] {"help", "get", "set_server", "set", "del"};
         String[] expected = new String[] {
-                RequestName.getInstance().getAddServerCmd(),
                 RequestName.getInstance().getDelCmd(),
                 RequestName.getInstance().getGetCmd(),
-                RequestName.getInstance().getSetCmd()
+                RequestName.getInstance().getSetCmd(),
+                RequestName.getInstance().getSetServerCmd()
         };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
@@ -87,12 +87,12 @@ public class RequestHelpTest {
 
     @Test
     public void testParseSortedAlphabeticallyWithUperAndLowerCase() throws Exception {
-        String[] tokens = new String[] {"help", "Get", "Add_server", "sET", "Del"};
+        String[] tokens = new String[] {"help", "Get", "Set_server", "sET", "Del"};
         String[] expected = new String[] {
-                RequestName.getInstance().getAddServerCmd(),
                 RequestName.getInstance().getDelCmd(),
                 RequestName.getInstance().getGetCmd(),
-                RequestName.getInstance().getSetCmd()
+                RequestName.getInstance().getSetCmd(),
+                RequestName.getInstance().getSetServerCmd()
         };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
@@ -100,10 +100,10 @@ public class RequestHelpTest {
 
     @Test
     public void testRemoveDistinct() throws Exception {
-        String[] tokens = new String[] {"help", "get", "get", "get", "get", "add_server", "add_server"};
+        String[] tokens = new String[] {"help", "get", "get", "get", "get", "set_server", "set_server"};
         String[] expected = new String[] {
-                RequestName.getInstance().getAddServerCmd(),
-                RequestName.getInstance().getGetCmd()
+                RequestName.getInstance().getGetCmd(),
+                RequestName.getInstance().getSetServerCmd()
         };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
@@ -111,10 +111,10 @@ public class RequestHelpTest {
 
     @Test
     public void testRemoveDistinctWithUpperAndLowerCase() throws Exception {
-        String[] tokens = new String[] {"help", "get", "GeT", "GET", "gEt", "add_server", "Add_Server"};
+        String[] tokens = new String[] {"help", "get", "GeT", "GET", "gEt", "set_server", "Set_Server"};
         String[] expected = new String[] {
-                RequestName.getInstance().getAddServerCmd(),
-                RequestName.getInstance().getGetCmd()
+                RequestName.getInstance().getGetCmd(),
+                RequestName.getInstance().getSetServerCmd()
         };
         createRequest(tokens);
         assertArrayEquals(expected, r.getRequests().toArray());
@@ -143,10 +143,10 @@ public class RequestHelpTest {
 
     @Test
     public void testGetHelpAddServer() throws Exception {
-        String expected = "ADD_SERVER server_ip server_name" + "\n\n"
+        String expected = "SET_SERVER server_ip server_name" + "\n\n"
                         +  "DESCRIPTION: Connect to the given server. server_ip is the IP of the server (if local, 127.0.0.1). " +
                            "server_name is the name of the server on the host (example: server_0)";
-        assertEquals(expected, r.getHelpAddServer());
+        assertEquals(expected, r.getHelpSetServer());
     }
 
     @Test
@@ -260,217 +260,217 @@ public class RequestHelpTest {
     @Test
     public void testGetMessageWithHelp() throws Exception {
         createRequest(new String[]{"help", "help"});
-        assert r.getMessage().contains("HELP");
+        assert r.getMessage().contains("HELP") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithQuit() throws Exception {
         createRequest(new String[]{"help", "QUIT"});
-        assert r.getMessage().contains("QUIT");
+        assert r.getMessage().contains("QUIT") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithExit() throws Exception {
         createRequest(new String[]{"help", "EXIT"});
-        assert r.getMessage().contains("EXIT");
+        assert r.getMessage().contains("EXIT") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithAddServer() throws Exception {
-        createRequest(new String[]{"help", "ADD_SERVER"});
-        assert r.getMessage().contains("ADD_SERVER");
+        createRequest(new String[]{"help", "SET_SERVER"});
+        assert r.getMessage().contains("SET_SERVER") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithGet() throws Exception {
         createRequest(new String[]{"help", "GET"});
-        assert r.getMessage().contains("GET");
+        assert r.getMessage().contains("GET") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSet() throws Exception {
         createRequest(new String[]{"help", "SET"});
-        assert r.getMessage().contains("SET");
+        assert r.getMessage().contains("SET") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithDecr() throws Exception {
         createRequest(new String[]{"help", "DECR"});
-        assert r.getMessage().contains("DECR");
+        assert r.getMessage().contains("DECR") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithDecrBy() throws Exception {
         createRequest(new String[]{"help", "DECRBY"});
-        assert r.getMessage().contains("DECRBY");
+        assert r.getMessage().contains("DECRBY") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithIncr() throws Exception {
         createRequest(new String[]{"help", "INCR"});
-        assert r.getMessage().contains("INCR");
+        assert r.getMessage().contains("INCR") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithIncrBy() throws Exception {
         createRequest(new String[]{"help", "INCRBY"});
-        assert r.getMessage().contains("INCRBY");
+        assert r.getMessage().contains("INCRBY") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithType() throws Exception {
         createRequest(new String[]{"help", "TYPE"});
-        assert r.getMessage().contains("TYPE");
+        assert r.getMessage().contains("TYPE") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithDel() throws Exception {
         createRequest(new String[]{"help", "DEL"});
-        assert r.getMessage().contains("DEL");
+        assert r.getMessage().contains("DEL") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLIndex() throws Exception {
         createRequest(new String[]{"help", "LINDEX"});
-        assert r.getMessage().contains("LINDEX");
+        assert r.getMessage().contains("LINDEX") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLLen() throws Exception {
         createRequest(new String[]{"help", "LLEN"});
-        assert r.getMessage().contains("LLEN");
+        assert r.getMessage().contains("LLEN") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLPop() throws Exception {
         createRequest(new String[]{"help", "LPOP"});
-        assert r.getMessage().contains("LPOP");
+        assert r.getMessage().contains("LPOP") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLPush() throws Exception {
         createRequest(new String[]{"help", "LPUSH"});
-        assert r.getMessage().contains("LPUSH");
+        assert r.getMessage().contains("LPUSH") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLRange() throws Exception {
         createRequest(new String[]{"help", "LRANGE"});
-        assert r.getMessage().contains("LRANGE");
+        assert r.getMessage().contains("LRANGE") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLRem() throws Exception {
         createRequest(new String[]{"help", "LREM"});
-        assert r.getMessage().contains("LREM");
+        assert r.getMessage().contains("LREM") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLSet() throws Exception {
         createRequest(new String[]{"help", "LSET"});
-        assert r.getMessage().contains("LSET");
+        assert r.getMessage().contains("LSET") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithLTrim() throws Exception {
         createRequest(new String[]{"help", "LTRIM"});
-        assert r.getMessage().contains("LTRIM");
+        assert r.getMessage().contains("LTRIM") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithRPop() throws Exception {
         createRequest(new String[]{"help", "RPOP"});
-        assert r.getMessage().contains("RPOP");
+        assert r.getMessage().contains("RPOP") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithRPush() throws Exception {
         createRequest(new String[]{"help", "RPUSH"});
-        assert r.getMessage().contains("RPUSH");
+        assert r.getMessage().contains("RPUSH") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSAdd() throws Exception {
         createRequest(new String[]{"help", "SADD"});
-        assert r.getMessage().contains("SADD");
+        assert r.getMessage().contains("SADD") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSCard() throws Exception {
         createRequest(new String[]{"help", "SCARD"});
-        assert r.getMessage().contains("SCARD");
+        assert r.getMessage().contains("SCARD") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSRem() throws Exception {
         createRequest(new String[]{"help", "SREM"});
-        assert r.getMessage().contains("SREM");
+        assert r.getMessage().contains("SREM") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSIsMember() throws Exception {
         createRequest(new String[]{"help", "SISMEMBER"});
-        assert r.getMessage().contains("SISMEMBER");
+        assert r.getMessage().contains("SISMEMBER") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSMembers() throws Exception {
         createRequest(new String[]{"help", "SMEMBERS"});
-        assert r.getMessage().contains("SMEMBERS");
+        assert r.getMessage().contains("SMEMBERS") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSInter() throws Exception {
         createRequest(new String[]{"help", "SINTER"});
-        assert r.getMessage().contains("SINTER");
+        assert r.getMessage().contains("SINTER") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSInterstore() throws Exception {
         createRequest(new String[]{"help", "SINTERSTORE"});
-        assert r.getMessage().contains("SINTERSTORE");
+        assert r.getMessage().contains("SINTERSTORE") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSPop() throws Exception {
         createRequest(new String[]{"help", "SPOP"});
-        assert r.getMessage().contains("SPOP");
+        assert r.getMessage().contains("SPOP") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSRandMember() throws Exception {
         createRequest(new String[]{"help", "SRANDMEMBER"});
-        assert r.getMessage().contains("SRANDMEMBER");
+        assert r.getMessage().contains("SRANDMEMBER") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSMove() throws Exception {
         createRequest(new String[]{"help", "SMOVE"});
-        assert r.getMessage().contains("SMOVE");
+        assert r.getMessage().contains("SMOVE") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSUnion() throws Exception {
         createRequest(new String[]{"help", "SUNION"});
-        assert r.getMessage().contains("SUNION");
+        assert r.getMessage().contains("SUNION") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSUnionStore() throws Exception {
         createRequest(new String[]{"help", "SUNIONSTORE"});
-        assert r.getMessage().contains("SUNIONSTORE");
+        assert r.getMessage().contains("SUNIONSTORE") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSDiff() throws Exception {
         createRequest(new String[]{"help", "SDIFF"});
-        assert r.getMessage().contains("SDIFF");
+        assert r.getMessage().contains("SDIFF") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
     public void testGetMessageWithSDiffStore() throws Exception {
         createRequest(new String[]{"help", "SDIFFSTORE"});
-        assert r.getMessage().contains("SDIFFSTORE");
+        assert r.getMessage().contains("SDIFFSTORE") && !r.getMessage().contains("I don't recognize");
     }
 
     @Test
@@ -479,7 +479,8 @@ public class RequestHelpTest {
         assert (
                r.getMessage().contains("HELP") &&
                r.getMessage().contains("DEL") &&
-               r.getMessage().contains("GET")
+               r.getMessage().contains("GET") &&
+               !r.getMessage().contains("I don't recognize")
         );
     }
 

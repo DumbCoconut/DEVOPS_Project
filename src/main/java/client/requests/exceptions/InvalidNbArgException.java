@@ -22,7 +22,7 @@ public class InvalidNbArgException extends Exception {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String getMessage() {

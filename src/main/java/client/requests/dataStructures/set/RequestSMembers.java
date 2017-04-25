@@ -36,7 +36,7 @@ public class RequestSMembers extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

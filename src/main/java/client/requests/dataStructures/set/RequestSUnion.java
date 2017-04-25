@@ -62,7 +62,7 @@ public class RequestSUnion extends Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

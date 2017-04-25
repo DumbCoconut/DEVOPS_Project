@@ -150,10 +150,14 @@ public class Server implements RedisLikeServer {
         System.out.println("\t-p\t--port\tSet the port of this server.");
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                              STRINGS AND INTEGERS                                              */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
     /**
-     * Get the value of the specified key.
-     * @param key The key we want the value of.
-     * @return The value of the key if it exists, null otherwise.
+     * {@inheritDoc}
      */
     public Object get(String key) {
         try {
@@ -164,9 +168,7 @@ public class Server implements RedisLikeServer {
     }
 
     /**
-     * Set key to hold the string value. If key already holds a value, it is overwritten, regardless of its type.
-     * @param key The key holding the value.
-     * @param value The value to set.
+     * {@inheritDoc}
      */
     public void set(String key, Object value) {
         try {
@@ -177,9 +179,7 @@ public class Server implements RedisLikeServer {
     }
 
     /**
-     * Return the type of the value stored at key in form of a string.
-     * @param key The key holding the value.
-     * @return one of "none", "string", "int", "list". "none" is returned if the key does not exist.
+     * {@inheritDoc}
      */
     public String type(String key) {
         try {
@@ -190,54 +190,28 @@ public class Server implements RedisLikeServer {
     }
 
     /**
-     * Decrement the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @return the new value of key after the decrement.
+     * {@inheritDoc}
      */
     public int decr(String key) {
         return incrBy(key, -1);
     }
 
     /**
-     * Decrement the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @param integer The increment value.
-     * @return the new value of key after the decrement.
+     * {@inheritDoc}
      */
     public int decrBy(String key, int integer) {
         return incrBy(key, -integer);
     }
 
     /**
-     * Increment the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @return the new value of key after the Increment.
+     * {@inheritDoc}
      */
     public int incr(String key) {
         return incrBy(key, 1);
     }
 
     /**
-     * Increment the number stored at key by one.
-     * <p>
-     *     If the key does not exist or contains a value of a wrong type, set the key to the value of "0"
-     *     before to perform the increment or decrement operation.
-     * </p>
-     * @param key The key holding the value.
-     * @param integer The increment value.
-     * @return the new value of key after the Increment.
+     * {@inheritDoc}
      */
     public int incrBy(String key, int integer) {
         int newValue = integer;
@@ -256,9 +230,7 @@ public class Server implements RedisLikeServer {
     }
 
     /**
-     * Remove the specified key. If a given key does not exist no operation is performed for this key.
-     * @param key The key to remove.
-     * @return True if the key existed and has been removed, false otherwise.
+     * {@inheritDoc}
      */
     public boolean del(String key) {
         try {
@@ -269,100 +241,183 @@ public class Server implements RedisLikeServer {
         }
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                      LISTS                                                     */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * {@inheritDoc}
+     */
     public Object lindex(String key, int index) {
         return storage.lindex(key, index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int llen(String key) {
         return storage.llen(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object lpop(String key) {
         return storage.lPop(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean lpush(String key, Object value) {
         return storage.lPush(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ArrayList<Object> lrange(String key, int start, int end) {
         return storage.lrange(key, start, end);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int lrem(String key, int count, Object value) {
         return storage.lrem(key, count, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean lset(String key, int index, Object value) {
         return storage.lset(key, index, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean ltrim(String key, int start, int end) {
         return storage.ltrim(key, start, end);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object rpop(String key) {
         return storage.rPop(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean rpush(String key, Object value) {
         return storage.rPush(key, value);
     }
 
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /*                                                                                                                */
+    /*                                                      SETS                                                      */
+    /*                                                                                                                */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * {@inheritDoc}
+     */
     public int sadd(String key, Object member) {
         return storage.sadd(key, member);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int scard(String key) {
         return storage.scard(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int srem(String key, Object member) {
         return storage.srem(key, member);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int sismember(String key, Object member) {
         return storage.sismember(key, member);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> smembers(String key) {
         return storage.smembers(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> sinter(String[] keys) {
         return storage.sinter(keys);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int sinterstore(String[] keys) {
         return storage.sinterstore(keys);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object spop(String key) {
         return storage.spop(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object srandmember(String key) {
         return storage.srandmember(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int smove(String srckey, String dstkey, Object member) {
         return storage.smove(srckey, dstkey, member);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> sunion(String[] keys) {
         return storage.sunion(keys);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int sunionstore(String[] keys) {
         return storage.sunionstore(keys);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Object> sdiff(String[] keys) {
         return storage.sdiff(keys);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public int sdiffstore(String[] keys) {
         return storage.sdiffstore(keys);
     }
-
 }

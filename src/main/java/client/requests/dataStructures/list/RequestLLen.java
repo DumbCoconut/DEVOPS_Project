@@ -36,7 +36,7 @@ public class RequestLLen extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

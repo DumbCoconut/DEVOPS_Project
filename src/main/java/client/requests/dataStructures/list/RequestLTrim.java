@@ -64,7 +64,7 @@ public class RequestLTrim extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

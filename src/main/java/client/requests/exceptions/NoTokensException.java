@@ -7,7 +7,7 @@ public class NoTokensException extends Exception {
     public NoTokensException() {}
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String getMessage() {

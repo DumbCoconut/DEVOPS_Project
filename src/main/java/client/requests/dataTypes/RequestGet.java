@@ -35,7 +35,7 @@ public class RequestGet extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

@@ -62,7 +62,7 @@ public class RequestSDiff extends Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

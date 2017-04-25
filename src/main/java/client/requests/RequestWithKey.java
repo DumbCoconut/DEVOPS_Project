@@ -39,7 +39,7 @@ public abstract class RequestWithKey extends Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

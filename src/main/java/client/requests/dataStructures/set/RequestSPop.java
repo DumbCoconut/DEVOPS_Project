@@ -37,7 +37,7 @@ public class RequestSPop extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

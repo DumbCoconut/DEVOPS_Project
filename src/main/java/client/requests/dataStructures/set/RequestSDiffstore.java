@@ -62,7 +62,7 @@ public class RequestSDiffstore extends Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

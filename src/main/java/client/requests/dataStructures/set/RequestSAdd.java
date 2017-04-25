@@ -50,7 +50,7 @@ public class RequestSAdd extends RequestWithKey {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

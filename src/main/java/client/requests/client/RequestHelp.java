@@ -30,7 +30,7 @@ public class RequestHelp extends Request {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public String toString() {

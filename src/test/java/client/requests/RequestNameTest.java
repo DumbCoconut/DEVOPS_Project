@@ -22,7 +22,7 @@ public class RequestNameTest {
                 "HELP",
                 "QUIT",
                 "EXIT",
-                "ADD_SERVER",
+                "SET_SERVER",
                 "GET",
                 "SET",
                 "DEL",
@@ -55,8 +55,8 @@ public class RequestNameTest {
     }
 
     @Test
-    public void getAddServerCmd() throws Exception {
-        assertEquals("ADD_SERVER", r.getAddServerCmd());
+    public void getSetServerCmd() throws Exception {
+        assertEquals("SET_SERVER", r.getSetServerCmd());
     }
 
     @Test

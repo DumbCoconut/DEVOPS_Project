@@ -1,7 +1,7 @@
 package client;
 
 import client.requests.RequestName;
-import client.requests.client.RequestAddServer;
+import client.requests.client.RequestSetServer;
 import client.requests.client.RequestHelp;
 import client.requests.dataStructures.list.*;
 import client.requests.dataStructures.set.*;
@@ -67,8 +67,8 @@ public class Client {
             doHelp();
         } else if (cmd.equals(RequestName.getInstance().getQuitCmd()) || cmd.equals(RequestName.getInstance().getExitCmd())) {
             doExit();
-        } else if (cmd.equals(RequestName.getInstance().getAddServerCmd())) {
-            doAddServer();
+        } else if (cmd.equals(RequestName.getInstance().getSetServerCmd())) {
+            doSetServer();
         } else if (cmd.equals(RequestName.getInstance().getGetCmd())) {
             doGet();
         } else if (cmd.equals(RequestName.getInstance().getSetCmd())) {
@@ -178,16 +178,15 @@ public class Client {
         System.out.println("Bye!");
     }
 
-    private void doAddServer() {
+    private void doSetServer() {
         if (! shouldWeDisconnectFromCurrentServer()) {
             return;
         }
-
         try {
-            RequestAddServer r = new RequestAddServer(tokens);
+            RequestSetServer r = new RequestSetServer(tokens);
             serverIp = r.getIp();
             serverName = r.getName();
-            addServer(serverIp, serverName);
+            setServer(serverIp, serverName);
         } catch (InvalidNbArgException | NoTokensException e) {
             System.out.println(e.getMessage());
         } catch (RemoteException | NotBoundException e) {
@@ -651,7 +650,7 @@ public class Client {
         return !(server == null);
     }
 
-    private void addServer(String ip, String name) throws RemoteException, NotBoundException {
+    private void setServer(String ip, String name) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(ip);
         server = (RedisLikeServer) registry.lookup(name);
     }

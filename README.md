@@ -25,7 +25,7 @@ The "integer" type has been introduced, e.g "3" will be an integer and not a str
 
 #### Client commands 
 
-- ADD_SERVER _host\_ip server\_name_
+- SET_SERVER _host\_ip server\_name_
 - HELP _[cmd1, cmd2, ..., cmdN]_
 - QUIT
 - EXIT

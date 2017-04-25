@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        RequestAddServerTest.class,
+        RequestSetServerTest.class,
         RequestHelpTest.class
 })
 public class RequestClientTestSuite {}

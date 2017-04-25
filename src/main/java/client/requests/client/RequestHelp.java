@@ -91,8 +91,8 @@ public class RequestHelp extends Request {
                 res.add(getHelpQuit());
             } else if (cmd.equals(RequestName.getInstance().getExitCmd())) {
                 res.add(getHelpExit());
-            } else if (cmd.equals(RequestName.getInstance().getAddServerCmd())) {
-                res.add(getHelpAddServer());
+            } else if (cmd.equals(RequestName.getInstance().getSetServerCmd())) {
+                res.add(getHelpSetServer());
             } else if (cmd.equals(RequestName.getInstance().getGetCmd())) {
                 res.add(getHelpGet());
             } else if (cmd.equals(RequestName.getInstance().getSetCmd())) {
@@ -226,12 +226,12 @@ public class RequestHelp extends Request {
     }
 
     /**
-     * Get the help message of ADD_SERVER.
-     * @return The help message of ADD_SERVER.
+     * Get the help message of SET_SERVER.
+     * @return The help message of SET_SERVER.
      */
-    public String getHelpAddServer() {
+    public String getHelpSetServer() {
         String res = "";
-        res += "ADD_SERVER server_ip server_name" + "\n\n"
+        res += "SET_SERVER server_ip server_name" + "\n\n"
 
             +  "DESCRIPTION: Connect to the given server. server_ip is the IP of the server (if local, 127.0.0.1). " +
                "server_name is the name of the server on the host (example: server_0)";

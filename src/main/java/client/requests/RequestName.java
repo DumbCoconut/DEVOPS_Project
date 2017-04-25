@@ -11,7 +11,7 @@ public class RequestName {
      * Enumeration of the available commands.
      */
     public enum Cmd {
-        QUIT, EXIT, HELP, ADD_SERVER,
+        QUIT, EXIT, HELP, SET_SERVER,
         GET, SET, TYPE, DECR, DECRBY, INCR, INCRBY, DEL,
         LINDEX, LLEN, LPOP, LPUSH, LRANGE, LREM, LSET, LTRIM, RPOP, RPUSH,
         SADD, SCARD, SREM, SISMEMBER, SMEMBERS, SINTER, SINTERSTORE, SPOP, SRANDMEMBER, SMOVE, SUNION, SUNIONSTORE,
@@ -44,7 +44,7 @@ public class RequestName {
         cmds.put(Cmd.QUIT, "quit");
         cmds.put(Cmd.EXIT, "exit");
         cmds.put(Cmd.HELP, "help");
-        cmds.put(Cmd.ADD_SERVER, "add_server");
+        cmds.put(Cmd.SET_SERVER, "set_server");
     }
 
     /**
@@ -149,8 +149,8 @@ public class RequestName {
      * Get the natural name of the ADD_SERVER command.
      * @return The natural name of the ADD_SERVER command.
      */
-    public String getAddServerCmd() {
-        return cmds.get(Cmd.ADD_SERVER);
+    public String getSetServerCmd() {
+        return cmds.get(Cmd.SET_SERVER);
     }
 
     /**

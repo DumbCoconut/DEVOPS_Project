@@ -1,6 +1,5 @@
 package client.requests;
 
-import client.requests.client.RequestAddServer;
 import client.requests.client.RequestClientTestSuite;
 import client.requests.dataStructures.list.RequestDataStructuresListTestSuite;
 import client.requests.dataStructures.set.RequestDataStructuresSetTestSuite;

@@ -2,3 +2,7 @@
 .idea/
 DEVOPS_Project.iml
 target/
+jredisclient/target/
+jredisserver/target/
+jredisclient/jredisclient.iml
+jredisserver/jredisserver.iml

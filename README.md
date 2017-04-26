@@ -8,7 +8,7 @@ taught at <a href="http://www.univ-grenoble-alpes.fr/">UGA</a>.
 It provides two things:
 
 - A server holding a in-memory data structure store. It supports data structures such as 
-strings, integers and lists. 
+strings, integers, sets and lists. 
 
 - A client able to query a given J-REDIS server. 
 
@@ -76,7 +76,64 @@ For more explanations, use the HELP command directly in the client.
 
 ## Getting started
 
-TODO
+#### Requirements
+
+To build and run the application you need:
+
+- java jdk 1.8 
+- maven 3
+- A linux distribution, as nothing has been tested under Windows
+
+#### build
+
+To build both the server and the client, run (at the root directory) `mvn install`.
+
+If you want to build only one of both, go into the module directory and run `mvn install`.
+
+#### run a client
+
+To run a client, from the root directory, run `java -jar jredisclient/target/j-redis-client-1.0-SNAPSHOT-shaded.jar`.
+
+To connect the client to a server, you need to make sure rmiregistry is running. To launch rmiregistry, 
+run (from the root directory) `./launch_rmiregistry.sh`. 
+
+Once rmiregistry is running, you should be able to connect your client to a server by using the command 
+`SET_SERVER host_ip server_name`. You can use the `HELP` command in the client if you need more information.
+
+
+#### run a server
+
+To run a server, first make sure that you've already launched rmiregistry (if not, run from the root directory 
+`./launch_rmiregistry.sh`). 
+
+Once rmiregistry is running, you can run a server by running the command (from the root directory) 
+`java -jar jredisserver/target/j-redis-server-1.0-SNAPSHOT-shaded.jar [-options]`. The available options are:
+
+	-h	--help	Display this information.
+	-n	--name	Set the name of this server.
+	-p	--port	Set the port of this server.
+
+For example if you want to run a server named "hello_world" running on port 4000, you should run the 
+following command from the root directory: 
+`java -jar jredisserver/target/j-redis-server-1.0-SNAPSHOT-shaded.jar -n "hello_world" -p 4000`. You should be greeted by
+the following message: `Hello. I am server "hello_world" and I'm running on port 40000`.    
+
+#### generate javadoc
+
+The code is documented. If you want to generate the javadoc, just run `mvn javadoc:javadoc`. You can then access the 
+javadoc by going into `{module}/target/site/apidocs/` and opening `index.html`.
+
+#### miscellaneous
+
+Note that using the non-shaded jars while not work properly. You might still be able to launch the client, 
+but some features will not work. You need to run the shaded jar. Still, it should be possible to run the
+non-shaded jar by adding on your own the classpath in the java command-line.
+
+#### example
+
+Here is an example showing how to launch everything, connect the client to a server and work on that server.
+
+![example](http://i.imgur.com/LzPMTmn.png)
 
 ## What has been tested
 
@@ -98,8 +155,8 @@ Either tested manually or still in experimental stage:
 any kind of heuristic behind it, so it might be way off sometimes
 
 - One server with multiple clients accessing to the storage at the same time, thought: a) the server 
-uses RMI registry, so a new thread should be created for each new client and b) the storage uses a
-concurrent hashmap from <a href="https://github.com/google/guava">Guava</a> so everything _should_ 
+uses RMI registry, so a new thread should be created for each new client and b) the storage uses synchronized methods
+and a concurrent hashmap from <a href="https://github.com/google/guava">Guava</a> so everything _should_ 
 be thread-safe.
 
 ## What could be improved
@@ -113,6 +170,11 @@ they should never break anything, it could still be improved with a bit of refac
 to allow multi-buck replies.
 
 - Tests: bash script to test the client interface, make them easier to navigate and refactor, etc
+
+- Consistency in the code base, e.g we have both doStuff and dostuff (simple enough with refactoring tools,
+but not important enough right now)
+
+- One README per module with more detailed information.
 
 ## Feedback
 

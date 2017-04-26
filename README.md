@@ -128,6 +128,7 @@ run (from the root directory) `./launch_rmiregistry.sh`.
 Once rmiregistry is running, you should be able to connect your client to a server by using the command 
 `SET_SERVER host_ip server_name`. You can use the `HELP` command in the client if you need more information.
 
+(Note: you can also launch the client by running `mvn exec:java` in the client module directory.)
 
 ### run a server
 
@@ -156,6 +157,8 @@ javadoc by going into `{module}/target/site/apidocs/` and opening `index.html`.
 Note that using the non-shaded jars while not work properly. You might still be able to launch the client, 
 but some features will not work. You need to run the shaded jar. Still, it should be possible to run the
 non-shaded jar by adding on your own the classpath in the java command-line.
+
+Code coverage can be seen by going into `{module}/target/site/jacodo/` and opening `index.html`.
 
 ### example
 

@@ -1,5 +1,30 @@
 <h1 align="center"><a href="https://github.com/DumbCoconut/J-REDIS">J-REDIS</a></h1>
 
+**Table of Contents**
+
+- [J-REDIS](#)
+  - [Overview](#)
+  - [Features](#)
+	  - [Overview](#)
+	  - [Client commands](#)
+	  - [String and integers](#)
+	  - [Lists](#)
+	  - [Sets](#)
+  - [Getting started](#)
+	- [Requirements](#)
+	- [build](#)
+	- [run a client](#)
+	- [run a server](#)
+	- [generate javadoc](#)
+	- [miscellaneous](#)
+	- [example](#)
+  - [What has been tested](#)
+  - [What has NOT been (automatically) tested](#)
+  - [What could be improved](#)
+  - [Feedback](#)
+    - [Travis](#)
+	- [Projet](#)
+		
 ## Overview
 
 J-REDIS is a simple redis-like console application. It was made as a toy-project for the DEVOPS course

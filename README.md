@@ -1,5 +1,8 @@
 <h1 align="center"><a href="https://github.com/DumbCoconut/J-REDIS">J-REDIS</a></h1>
 
+
+[![Build Status](https://travis-ci.org/DumbCoconut/J-REDIS.svg?branch=master)](https://travis-ci.org/DumbCoconut/J-REDIS)
+
 **Table of Contents**
 
 - [J-REDIS](#)

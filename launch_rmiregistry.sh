@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=./target/classes;
+DIR=./jredisserver/target/classes;
 
 if [ ! -d ${DIR} ]; then 
 	echo "${DIR} does not exist. Please run 'mvn install' to generate classes.";

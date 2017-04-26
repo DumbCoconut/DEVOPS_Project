@@ -19,7 +19,7 @@
 	- [miscellaneous](#miscellaneous)
 	- [example](#example)
   - [What has been tested](#what-has-been-tested)
-  - [What has NOT been (automatically) tested](#what-has-not-been-automatically -tested)
+  - [What has NOT been (automatically) tested](#what-has-not-been-automatically-tested)
   - [What could be improved](#what-could-be-improved)
   - [Feedback](#feedback)
     - [Travis](#travis)

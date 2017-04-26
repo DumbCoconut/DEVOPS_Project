@@ -17,20 +17,20 @@ The connection between the two is done using
 
 ## Features
 
-#### Overview
+### Overview
 
 J-REDIS provides a subset of redis features. Not everything is supported, e.g negative indexes are not.
 You can't put quotes inside quotes yet - "my name is" would work but "my "name" is" would produce an error.
 The "integer" type has been introduced, e.g "3" will be an integer and not a string. 
 
-#### Client commands 
+### Client commands 
 
 - SET_SERVER _host\_ip server\_name_
 - HELP _[cmd1, cmd2, ..., cmdN]_
 - QUIT
 - EXIT
 
-#### String and integers
+### String and integers
 
 - DECR _key_
 - DECRBY _key integer_
@@ -41,7 +41,7 @@ The "integer" type has been introduced, e.g "3" will be an integer and not a str
 - SET _key value_
 - TYPE _key_
 
-#### Lists
+### Lists
 
 - LINDEX _key index_
 - LLEN _key_
@@ -55,7 +55,7 @@ The "integer" type has been introduced, e.g "3" will be an integer and not a str
 - RPUSH _key value_
 
 
-#### Sets
+### Sets
 
 - SADD _key member_
 - SCARD _key_
@@ -76,7 +76,7 @@ For more explanations, use the HELP command directly in the client.
 
 ## Getting started
 
-#### Requirements
+### Requirements
 
 To build and run the application you need:
 
@@ -84,13 +84,13 @@ To build and run the application you need:
 - maven 3
 - A linux distribution, as nothing has been tested under Windows
 
-#### build
+### build
 
 To build both the server and the client, run (at the root directory) `mvn install`.
 
 If you want to build only one of both, go into the module directory and run `mvn install`.
 
-#### run a client
+### run a client
 
 To run a client, from the root directory, run `java -jar jredisclient/target/j-redis-client-1.0-SNAPSHOT-shaded.jar`.
 
@@ -101,7 +101,7 @@ Once rmiregistry is running, you should be able to connect your client to a serv
 `SET_SERVER host_ip server_name`. You can use the `HELP` command in the client if you need more information.
 
 
-#### run a server
+### run a server
 
 To run a server, first make sure that you've already launched rmiregistry (if not, run from the root directory 
 `./launch_rmiregistry.sh`). 
@@ -118,18 +118,18 @@ following command from the root directory:
 `java -jar jredisserver/target/j-redis-server-1.0-SNAPSHOT-shaded.jar -n "hello_world" -p 4000`. You should be greeted by
 the following message: `Hello. I am server "hello_world" and I'm running on port 40000`.    
 
-#### generate javadoc
+### generate javadoc
 
 The code is documented. If you want to generate the javadoc, just run `mvn javadoc:javadoc`. You can then access the 
 javadoc by going into `{module}/target/site/apidocs/` and opening `index.html`.
 
-#### miscellaneous
+### miscellaneous
 
 Note that using the non-shaded jars while not work properly. You might still be able to launch the client, 
 but some features will not work. You need to run the shaded jar. Still, it should be possible to run the
 non-shaded jar by adding on your own the classpath in the java command-line.
 
-#### example
+### example
 
 Here is an example showing how to launch everything, connect the client to a server and work on that server.
 
